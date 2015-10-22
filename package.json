@@ -14,7 +14,7 @@
     "node-red",
     "suncalc"
   ],
-  "node_red": {
+  "node-red": {
     "nodes": {
       "blind": "blindcontroller/blindcontroller.js"
     }
