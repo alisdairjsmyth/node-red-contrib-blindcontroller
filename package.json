@@ -1,0 +1,26 @@
+{
+  "name": "node-red-contrib-blindcontroller",
+  "version": "0.0.1",
+  "description": "A Node-RED node that sets a roller blind position",
+  "dependencies": {
+    "suncalc": "1.6.*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alisdairjsmyth/node-red-contrib-blindcontroller.git"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "node-red",
+    "suncalc"
+  ],
+  "node_red": {
+    "nodes": {
+      "blind": "blindcontroller/blindcontroller.js"
+    }
+  },
+  "author": {
+    "name": "Alisdair Smyth",
+    "email": "alisdair.smyth@gmail.com"
+  }
+}
