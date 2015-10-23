@@ -86,20 +86,22 @@ module.exports = function(RED) {
      * Function to calculate the appropriate blind position based on the altitude of the sun, characteristics of
      * the window, with the target of restricting the extent to which direct sunlight enters the room
      */
-    function calcBlindPosition (blind, altitudeRadians) {
+    function calcBlindPosition (blind, sunPosition) {
         /*
          * For the given altitude of the sun, calculate the minimum height of an object that casts a shadow to the
          * specified depth. Convert this height into a blind position based on the dimensions of the window
          */
         var blindPosition = 0;
-        var height = Math.tan(altitudeRadians) * blind.depth;
-        if (height <= blind.bottom) {
-            blindPosition = 100;
-        } else if (height >= blind.top) {
-            blindPosition = 0;
-        } else {
-            var requiredCoverage = 100*(1 - (height - blind.bottom)/(blind.top - blind.bottom));
-            blindPosition = Math.ceil(requiredCoverage/25)*25;
+        if (sunPosition.altitude > blind.altitudethreshold) {
+            var height = Math.tan(sun.Position.altitudeRadians) * blind.depth;
+            if (height <= blind.bottom) {
+                blindPosition = 100;
+            } else if (height >= blind.top) {
+                blindPosition = 0;
+            } else {
+                var requiredCoverage = 100*(1 - (height - blind.bottom)/(blind.top - blind.bottom));
+                blindPosition = Math.ceil(requiredCoverage/25)*25;
+            }
         }
         return blindPosition;
     }
@@ -154,7 +156,7 @@ module.exports = function(RED) {
                 var sunInWindow = isSunInWindow(blind, sunPosition.azimuth);
 
                 if (sunInWindow) {
-                    blindPosition = calcBlindPosition(blind, sunPosition.altitudeRadians);
+                    blindPosition = calcBlindPosition(blind, sunPosition);
                 }
                 statusFill  = "yellow";
                 statusShape = "dot";
@@ -165,11 +167,21 @@ module.exports = function(RED) {
             }
 
             if (blindPosition != previousBlindPosition) {
-                msg.payload = { channel : blind.channel, blindPosition : blindPosition};
-                previousBlindPosition = blindPosition;
-
+                msg.payload = {
+                    channel       : blind.channel,
+                    blindPosition : blindPosition
+                };
+                msg.data    = {
+                    channel       : blind.channel,
+                    altitude      : sunPosition.altitude,
+                    azimuth       : sunPosition.azimuth,
+                    sunInWindow   : sunInWindow,
+                    blindPosition : blindPosition
+                };
                 msg.topic = "blind";
                 node.send(msg);
+
+                previousBlindPosition = blindPosition;
             }
             this.status({fill: statusFill, shape: statusShape, text: blindPosition +"%"})
         });

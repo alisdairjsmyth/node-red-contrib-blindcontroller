@@ -14,6 +14,12 @@ Usage
 This node emits a <b>msg.payload</b> with the following properties:
 * <b>channel</b>: identifier of the blind.  A typical flow is likely to include multiple instances of this node, and this is the mechanism to distinguish blind in subsequent processing.
 * <b>blindPosition</b>: calculated position of the blind where 0 is fully open and 100 is fully closed
+This fragment of the msg is intended to be used to control the blind hardware.
+
+<b>msg.data</b> is set with values to debug and/or monitor the process.  In addition the values included in the payload, it also includes:
+* <b>altitude</b>: altitude of the sun
+* <b>azimuth</b>: azimuth of the sun
+* <b>sunInWindow</b>: is the sun in the window
 
 It also sets the <b>msg.topic</b> to "blind".
 
