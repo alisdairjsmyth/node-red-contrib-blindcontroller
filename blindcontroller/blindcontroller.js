@@ -41,7 +41,13 @@ module.exports = function(RED) {
             sunInSky = false;
         }
 
-        return {sunInSky: sunInSky, altitude: altitudeDegrees, azimuth: azimuthDegrees}
+        return {
+            sunInSky: sunInSky,
+            altitude: altitudeDegrees,
+            azimuth: azimuthDegrees,
+            altitudeRadians: sunPosition.altitude,
+            azimuthRadians: sunPosition.azimuth
+        };
     }
 
     /*
@@ -78,17 +84,20 @@ module.exports = function(RED) {
      * Function to calculate the appropriate blind position based on the altitude of the sun, characteristics of
      * the window, with the target of restricting the extent to which direct sunlight enters the room
      */
-    function calcBlindPosition (blind, altitude) {
+    function calcBlindPosition (blind, altitudeRadians) {
         /*
-         * For the given altitude of the sun, calculate the maximum height of an object that casts a shadow to the
-         * specified depth
+         * For the given altitude of the sun, calculate the minimum height of an object that casts a shadow to the
+         * specified depth. Convert this height into a blind position based on the dimensions of the window
          */
         var blindPosition = 0;
-        var height = Math.tan(altitude) * blind.depth;
+        var height = Math.tan(altitudeRadians) * blind.depth;
         if (height <= blind.bottom) {
             blindPosition = 100;
+        } else if (height >= blind.top) {
+            blindPosition = 0;
         } else {
-            blindPosition = ((100*(1-(height - blind.bottom)/(blind.top - blind.bottom)))%25)*25;
+            var requiredCoverage = 100*(1 - (height - blind.bottom)/(blind.top - blind.bottom));
+            blindPosition = Math.ceil(requiredCoverage/25)*25;
         }
         return blindPosition;
     }
@@ -116,7 +125,7 @@ module.exports = function(RED) {
         var location = {
             lat: config.lat,
             lon: config.lon
-        }
+        };
 
         var blind = {
             channel:     config.channel,
@@ -125,10 +134,11 @@ module.exports = function(RED) {
             bottom:      config.bottom,
             depth:       config.depth
         };
+
         var sunTimeConfig = {
             start: config.start,
             end:   config.end
-        }
+        };
 
         /*
          * Registers a listener on the input event to receive messages from the up-stream nodes in a flow.  This
@@ -136,12 +146,15 @@ module.exports = function(RED) {
          */
         this.on("input", function(msg) {
             var blindPosition         = 0;
-            var previousBlindPosition = 0;
+            var previousBlindPosition = -1;
             var sunPosition = getSunPosition(location, sunTimeConfig);
 
             if (sunPosition.sunInSky) {
-                if (isSunInWindow(blind, sunPosition.azimuth)) {
-                    blindPosition = calcBlindPosition(blind, sunPosition.altitude);
+                var sunInWindow = isSunInWindow(blind, sunPosition.azimuth);
+
+                this.log("sunInWindow :"+ sunInWindow);
+                if (sunInWindow) {
+                    blindPosition = calcBlindPosition(blind, sunPosition.altitudeRadians);
                 }
             } else {
                 blindPosition = 100;
@@ -159,4 +172,4 @@ module.exports = function(RED) {
     }
 
     RED.nodes.registerType("blind", setBlindPosition);
-}
+};
