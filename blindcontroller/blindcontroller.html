@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<script type="text/x-red" data-template-name="blind">
+<script type="text/x-red" data-template-name="blindcontroller">
     <div class="form-row">
         <label for="node-input-lat"><i class="fa fa-globe"></i> Latitude</label>
         <input type="text" id="node-input-lat" placeholder="51.025">
@@ -82,7 +82,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="blind">
+<script type="text/x-red" data-help-name="blindccontroller">
     <p>This node controls roller blind height based on the position of the sun in the sky.</p>
     <ul>
         <li><b>Orientation</b>: the perpendicular bearing of the window</li>
@@ -96,7 +96,7 @@
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType("blind",{
+    RED.nodes.registerType("blindcontroller",{
         category: "advanced-input",
         color:"#FFCC66",
         defaults: {

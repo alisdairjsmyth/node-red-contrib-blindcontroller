@@ -187,5 +187,5 @@ module.exports = function(RED) {
         });
     }
 
-    RED.nodes.registerType("blind", setBlindPosition);
+    RED.nodes.registerType("blindcontroller", setBlindPosition);
 };
