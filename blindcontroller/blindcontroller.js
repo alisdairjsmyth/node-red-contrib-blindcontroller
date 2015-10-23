@@ -93,7 +93,7 @@ module.exports = function(RED) {
          */
         var blindPosition = 0;
         if (sunPosition.altitude > blind.altitudethreshold) {
-            var height = Math.tan(sun.Position.altitudeRadians) * blind.depth;
+            var height = Math.tan(sunPosition.altitudeRadians) * blind.depth;
             if (height <= blind.bottom) {
                 blindPosition = 100;
             } else if (height >= blind.top) {
@@ -147,23 +147,21 @@ module.exports = function(RED) {
          */
         var previousBlindPosition = -1;
         this.on("input", function(msg) {
-            var blindPosition         = 0;
+            var blindPosition = 0;
             var statusFill;
-            var statusShape;
-            var sunPosition = getSunPosition(location, sunTimeConfig);
+            var sunInWindow   = false;
+            var sunPosition   = getSunPosition(location, sunTimeConfig);
 
             if (sunPosition.sunInSky) {
-                var sunInWindow = isSunInWindow(blind, sunPosition.azimuth);
+                sunInWindow = isSunInWindow(blind, sunPosition.azimuth);
 
                 if (sunInWindow) {
                     blindPosition = calcBlindPosition(blind, sunPosition);
                 }
                 statusFill  = "yellow";
-                statusShape = "dot";
             } else {
                 blindPosition = 100;
                 statusFill  = "blue";
-                statusShape = "ring";
             }
 
             if (blindPosition != previousBlindPosition) {
@@ -183,7 +181,7 @@ module.exports = function(RED) {
 
                 previousBlindPosition = blindPosition;
             }
-            this.status({fill: statusFill, shape: statusShape, text: blindPosition +"%"})
+            this.status({fill: statusFill, shape: (blindPosition == 100) ? "dot" : "ring", text: blindPosition +"%"})
         });
     }
 
