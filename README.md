@@ -28,10 +28,13 @@ The location is identified with geospatial coordinates:
 
 The following details about the blind are used to identify and then determine the appropriate position of the blind:
 * <b>channel</b>: identifier of the blind - which is used in the emitted <b>msg.payload</b>
+* <b>orientation</b>: the bearing representing the perpendicular to the of the window
+* <b>negative offset</b>: (optional) anti-clockwise offset from orientation for determination of whether the sun is coming through window
+* <b>positive offset</b>: (optional) clockwise offset from orientation for determination of whether the sun is coming through window
 * <b>top</b>: measurement from the floor to top of the window covered by the blind
 * <b>bottom</b>: measurement from the floor to bottom of the window covered by the blind
-* <b>orientation</b>: the bearing representing the perpendicular to the of the window
-* <b>depth</b>: the extent to which direct sunlight is to be allowed in the room through the window, defined as a length on the floor
+* <b>depth</b>: the extent to which direct sunlight is to be allowed into the room through the window, defined as a length on the floor
+* <b>altitude threshold</b>: (optional) minimum altitude of the sun for determination of blind position
 
 The properties define the bounds of daylight hours using the times of day values of the suncalc module.
 * <b>start</b>: time of day that constitutes the start of daylight hours

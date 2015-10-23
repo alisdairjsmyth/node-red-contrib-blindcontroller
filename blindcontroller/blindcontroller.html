@@ -28,19 +28,31 @@
     </div>
     <div class="form-row">
         <label for="node-input-orientation"><i class="fa fa-compass"></i> Orientation</label>
-        <input type="text" id="node-input-orientation" placeholder="1">
+        <input type="text" id="node-input-orientation" placeholder="0">
     </div>
     <div class="form-row">
-        <label for="node-input-top"><i class="fa fa-arrows-v"></i> Top</label>
+        <label for="node-input-noffset"><i class="fa fa-undo"></i> Negative Offset</label>
+        <input type="text" id="node-input-noffset" placeholder="90">
+    </div>
+    <div class="form-row">
+        <label for="node-input-poffset"><i class="fa fa-repeat"></i> Positive Offset</label>
+        <input type="text" id="node-input-poffset" placeholder="90">
+    </div>
+    <div class="form-row">
+        <label for="node-input-top"><i class="fa fa-angle-up"></i> Top</label>
         <input type="text" id="node-input-top" placeholder="1">
     </div>
     <div class="form-row">
-        <label for="node-input-bottom"><i class="fa fa-arrows-v"></i> Bottom</label>
+        <label for="node-input-bottom"><i class="fa fa-angle-down"></i> Bottom</label>
         <input type="text" id="node-input-bottom" placeholder="1">
     </div>
     <div class="form-row">
         <label for="node-input-depth"><i class="fa fa-arrows-h"></i> Depth</label>
         <input type="text" id="node-input-depth" placeholder="1">
+    </div>
+    <div class="form-row">
+        <label for="node-input-altitudethreshold"><i class="fa fa-angle-up"></i> Altitude Threshold</label>
+        <input type="text" id="node-input-altitudethreshold" placeholder="0">
     </div>
     <div class="form-row">
         <label for="node-input-start"><i class="fa fa-clock-o"></i> Start</label>
@@ -74,9 +86,12 @@
     <p>This node controls roller blind height based on the position of the sun in the sky.</p>
     <ul>
         <li><b>Orientation</b>: the perpendicular bearing of the window</li>
+        <li><b>Negative Offset</b>: anti-clockwise offset from orientation for determination of whether the sun is coming through window</li>
+        <li><b>Positive Offset</b>: clockwise offset from orientation for determination of whether the sun is coming through window</li>
         <li><b>Top</b>: the top of the window (in centimetres) from floor level</li>
         <li><b>Bottom</b>: the bottom of the window (in centimetres) from floor level</li>
-        <li><b>Depth</b>: how far in the room (in centimetres), the direct sunlight is to be allowed</li>
+        <li><b>Depth</b>: how far into the room (in centimetres), the direct sunlight is to be allowed</li>
+        <li><b>Altitude Threshold</b>: minimum altitude of the sun for determination of blind position</li>
     </ul>
 </script>
 
@@ -90,9 +105,12 @@
             lon: {value:"", required:true, validate:RED.validators.number()},
             channel: {value:"", required:true, validate:RED.validators.number()},
             orientation: {value:"", required:true, validate:RED.validators.number()},
+            noffset: {value:"", validate:RED.validators.number()},
+            poffset: {value:"", validate:RED.validators.number()},
             top: {value:"", required:true, validate:RED.validators.number()},
             bottom: {value:"", required:true, validate:RED.validators.number()},
             depth: {value:"", required:true, validate:RED.validators.number()},
+            altitudethreshold: {value:"", validate:RED.validators.number()},
             start: {value:"sunrise", required:true},
             end: {value:"sunset", required:true}
         },

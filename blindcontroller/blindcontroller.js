@@ -55,25 +55,27 @@ module.exports = function(RED) {
      * window and the azimuth of the sun
      */
     function isSunInWindow(blind, azimuth) {
-        var offset = 90;
+        var noffset = blind.noffset ? blind.noffset : 90;
+        var poffset = blind.poffset ? blind.poffset : 90;
+
         var sunInWindow = false;
 
         /*
          * Checks the sun azimuth is between window orientation +/- offset.  Where the range includes ranges each
          * side of north, separate checks need to be performed either side of north
          */
-        if (blind.orientation - offset < 0) {
-            if ((((360 - blind.orientation - offset) <= azimuth) & (azimuth <= 360)) |
-                ((0 <= azimuth) & (azimuth <= blind.orientation + offset))) {
+        if (blind.orientation - noffset < 0) {
+            if ((((360 - blind.orientation - noffset) <= azimuth) & (azimuth <= 360)) |
+                ((0 <= azimuth) & (azimuth <= blind.orientation + poffset))) {
                 sunInWindow = true;
             }
-        } else if (blind.orientation + offset > 360) {
-            if (((0 <= azimuth) & (azimuth <= (blind.orientation + offset - 360))) |
-                (((blind.orientation - offset) <= azimuth) & (azimuth <= 360))) {
+        } else if (blind.orientation + poffset > 360) {
+            if (((0 <= azimuth) & (azimuth <= (blind.orientation + poffset - 360))) |
+                (((blind.orientation - noffset) <= azimuth) & (azimuth <= 360))) {
                 sunInWindow = true;
             }
         } else {
-            if (((blind.orientation - offset) <= azimuth) & (azimuth <= (blind.orientation + offset))) {
+            if (((blind.orientation - noffset) <= azimuth) & (azimuth <= (blind.orientation + poffset))) {
                 sunInWindow = true;
             }
         }
@@ -111,16 +113,6 @@ module.exports = function(RED) {
          * Initialise node with value of configurable properties
          */
         this.name     = config.name;
-        this.lat      = config.lat;
-        this.lon      = config.lon;
-        this.channel  = config.channel;
-        this.orientation = config.orientation;
-        this.top      = config.top;
-        this.bottom   = config.bottom;
-        this.depth    = config.depth;
-        this.start    = config.start;
-        this.end      = config.end;
-        var node      = this;
 
         var location = {
             lat: config.lat,
@@ -129,45 +121,57 @@ module.exports = function(RED) {
 
         var blind = {
             channel:     config.channel,
-            orientation: config.orientation,
-            top:         config.top,
-            bottom:      config.bottom,
-            depth:       config.depth
+            orientation: Number(config.orientation),
+            noffset:     Number(config.noffset),
+            poffset:     Number(config.poffset),
+            top:         Number(config.top),
+            bottom:      Number(config.bottom),
+            depth:       Number(config.depth),
+            altitudethreshold: Number(config.altitudethreshold)
         };
 
         var sunTimeConfig = {
             start: config.start,
             end:   config.end
         };
+        this.location = location;
+        this.blind    = blind;
+        this.sunTimeConfig = sunTimeConfig;
+        var node      = this;
 
         /*
          * Registers a listener on the input event to receive messages from the up-stream nodes in a flow.  This
          * function does not any values from the input message.
          */
+        var previousBlindPosition = -1;
         this.on("input", function(msg) {
             var blindPosition         = 0;
-            var previousBlindPosition = -1;
+            var statusFill;
+            var statusShape;
             var sunPosition = getSunPosition(location, sunTimeConfig);
 
             if (sunPosition.sunInSky) {
                 var sunInWindow = isSunInWindow(blind, sunPosition.azimuth);
 
-                this.log("sunInWindow :"+ sunInWindow);
                 if (sunInWindow) {
                     blindPosition = calcBlindPosition(blind, sunPosition.altitudeRadians);
                 }
+                statusFill  = "yellow";
+                statusShape = "dot";
             } else {
                 blindPosition = 100;
+                statusFill  = "blue";
+                statusShape = "ring";
             }
 
             if (blindPosition != previousBlindPosition) {
                 msg.payload = { channel : blind.channel, blindPosition : blindPosition};
                 previousBlindPosition = blindPosition;
-            } else {
-                msg.payload = {};
+
+                msg.topic = "blind";
+                node.send(msg);
             }
-            msg.topic = "blind";
-            node.send(msg);
+            this.status({fill: statusFill, shape: statusShape, text: blindPosition +"%"})
         });
     }
 
