@@ -12,11 +12,15 @@
   "license": "Apache-2.0",
   "keywords": [
     "node-red",
-    "suncalc"
+    "suncalc",
+    "home+automation",
+    "qmotion"
   ],
   "node-red": {
     "nodes": {
-      "blind": "blindcontroller/blindcontroller.js"
+      "blindcontroller": "blindcontroller/blindcontroller.js",
+      "sunpos":          "sunpos/sunpos.js",
+      "qmotion":         "qmotion/qmotion.js"
     }
   },
   "author": {

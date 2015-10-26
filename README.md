@@ -1,5 +1,5 @@
 # node-red-contrib-blindcontroller
-<a href="http://nodered.org" target="_new">Node-RED</a> node that determines blind position based on the position of the sun.
+Collection of <a href="http://nodered.org" target="_new">Node-RED</a> nodes that can be control roller blind height based on the current position of the sun.
 
 Install
 -------
@@ -8,31 +8,34 @@ Run the following command in the root directory of your Node-RED install
 
     npm install node-red-contrib-blindcontroller
 
-Usage
------
+A collection of nodes that control the blinds based on the position of the sun.
 
-This node emits a <b>msg.payload</b> with the following properties:
-* <b>channel</b>: identifier of the blind.  A typical flow is likely to include multiple instances of this node, and this is the mechanism to distinguish blind in subsequent processing.
-* <b>blindPosition</b>: calculated position of the blind where 0 is fully open and 100 is fully closed
-This fragment of the msg is intended to be used to control the blind hardware.
+Sun Position
+------------
 
-<b>msg.data</b> is set with values to debug and/or monitor the process.  In addition the values included in the payload, it also includes:
-* <b>altitude</b>: altitude of the sun
-* <b>azimuth</b>: azimuth of the sun
-* <b>sunInWindow</b>: is the sun in the window
-
-It also sets the <b>msg.topic</b> to "blind".
-
-Properties
-----------
-
-This node is configured with a number of properties, that define the location, details of the blind, and the bounds of daylight hours.
-
-The location is identified with geospatial coordinates:
+This node calculates the position of the sun at a given location.  It is configured with the following properties:
 * <b>lat</b>: latitude of the location
 * <b>lon</b>: longitude of the location
+* <b>start</b>: time of day that constitutes the start of daylight hours
+* <b>end</b>: time of day that constitutes the end of daylight hours
 
-The following details about the blind are used to identify and then determine the appropriate position of the blind:
+This node emits a <b>msg.payload</b> with the following properties:
+* <b>sunInSky</b>: boolean value indicating whether it is currently considered daylight hours
+* <b>altitude</b>: altitude of the sun above the horizon in degrees
+* <b>azimuth</b>: azimuth of the sun in degrees, where 0 is North
+* <b>altitudeRadians</b>: altitude of the sun above the horizon in radians
+* <b>azimuthRadians</b>: azimuth of the sun in radians, where 0 is South, a positive value is in the west and negative value in the east
+
+The node also sets <b>msg.location</b> with the coordinates of the location and <b>msg.topic</b> to "sun".
+
+The node also reports its status within the Node-RED flow editor, using colour to indicate whether it is currently considered daylight hours.
+
+Blind Controller
+----------------
+
+This node calculates the appropriate blind position to restrict direct sunlight through the associated window.  This node receives the output of the <b>Sun Position</b> Node.
+
+The node itself has a number of properties:
 * <b>channel</b>: identifier of the blind - which is used in the emitted <b>msg.payload</b>
 * <b>orientation</b>: the bearing representing the perpendicular to the of the window
 * <b>negative offset</b>: (optional) anti-clockwise offset from orientation for determination of whether the sun is coming through window
@@ -41,17 +44,40 @@ The following details about the blind are used to identify and then determine th
 * <b>bottom</b>: measurement from the floor to bottom of the window covered by the blind
 * <b>depth</b>: the extent to which direct sunlight is to be allowed into the room through the window, defined as a length on the floor
 * <b>altitude threshold</b>: (optional) minimum altitude of the sun for determination of blind position
+* <b>increment</b>: the degree to which the blind position can be controlled
 
-The properties define the bounds of daylight hours using the times of day values of the suncalc module.
-* <b>start</b>: time of day that constitutes the start of daylight hours
-* <b>end</b>: time of day that constitutes the end of daylight hours
+The node calculates the appropriate blind position to restrict the amount of direct sunlight entering the room.  This calculation includes:
+* determination of whether direct sunlight is entering the room based on the orientation of the blind and the azimuth of the sun - taking into account the negative and positive offset properties; and
+![sunInWindow](./docs/sunInWindow.jpg)
+* dimensions of the window and the current altitude of the sun.
+![sunInRoom](./docs/sunInRoom.jpg)
 
-Behaviour
----------
+In the event the node determines a blind position change is required, it will emit a <b>msg.payload</b> with the following properties:
+* <b>channel</b>: identifier of the blind
+* <b>blindPosition</b>: the new position of the blind
 
-The blindPosition in the <b>msg.payload</b> is set as follows:
-* Outside the bounds of the daylight hours the blindPosition is set to 100 i.e. fully closed
-* During daylight hours, the blindPosition is set to 0 i.e. fully open, if the sun's azimuth means direct sunlight is not passing through the window
-* Otherwise the blindPosition is set restrict direct sunlight into the room based on the depth property.
+In addition, <b>msg.data</b> includes information useful for monitoring:
+* <b>altitude</b>: altitude of the sun in degrees
+* <b>azimuth</b>: azimuth of the sun in degrees
+* <b>sunInWindow</b>: boolean value indicating whether direct sunlight is entering the room based on the orientation of the blind and the azimuth of the sun - taking into account the negative and positive offset properties
 
-The author has implemented this node to automate QMotion motorised blinds.
+<b>msg.topic</b> is set to "blind".
+
+The node also reports its status within the Node-RED flow editor:
+* colour indicates whether it is currently considered daylight hours;
+* shape indicates whether the blind is fully closed or not;
+* text reports current blind position.
+
+Qmotion
+-------
+
+This node prepares a command for Qmotion motorised blinds based the required blind position.  It consumes the <b>msg.payload</b> emitted from the <b>Blind Controller</b> node and then emits a message with the following properties:
+* <b>channel</b>: identifier of the blind
+* <b>command</b>: the command in decimal representation associated with the required blind position
+
+Sample Flow
+-----------
+
+The figure below represents a sample flow how the nodes within this modules can be used to control 6 Qmotion blinds at the one location.  The flow is initiated controlled by an Injector node configured to run periodically.
+
+![Screenshot](./docs/sample-flow.png)

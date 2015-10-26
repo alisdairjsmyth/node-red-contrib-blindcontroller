@@ -15,39 +15,46 @@
  **/
 module.exports = function(RED) {
     "use strict";
-    var SunCalc = require('suncalc');
-
-    function CalculateMillis(t) {
-        return Date.UTC(t.getUTCFullYear(),t.getUTCMonth(),t.getUTCDate(),t.getUTCHours(),t.getUTCMinutes());
-    }
 
     /*
-     * Function to calculate the current position of the sun based on a specified location
+     * Tests the validity of the input msg.payload before using this payload to run the calculation
      */
-    function getSunPosition(location, stConfig) {
-        var now             = new Date();
-        var sunPosition     = SunCalc.getPosition(now, location.lat, location.lon);
-        var sunTimes        = SunCalc.getTimes(now, location.lat, location.lon);
-        var altitudeDegrees = 180/Math.PI*sunPosition.altitude;
-        var azimuthDegrees  = 180 + 180/Math.PI*sunPosition.azimuth;
-        var sunInSky;
-
-        var nowMillis   = CalculateMillis(now);
-        var startMillis = CalculateMillis(sunTimes[stConfig.start]);
-        var endMillis   = CalculateMillis(sunTimes[stConfig.end]);
-        if ((nowMillis > startMillis) & (nowMillis < endMillis)) {
-            sunInSky = true;
+    function validateMsg(node, msg, callback) {
+        var sunProperty = [
+            "sunInSky",
+            "azimuth",
+            "altitude",
+            "altitudeRadians"
+        ];
+        if (typeof msg.payload === "object") {
+            var i;
+            for (i in sunProperty) {
+                if (!(sunProperty[i] in msg.payload)) {
+                    node.error(RED._("blindcontroller.error.property-" + sunProperty[i] + "-missing"), msg);
+                    return;
+                }
+            }
         } else {
-            sunInSky = false;
+            node.error(RED._("blindcontroller.error.invalid-payload"), msg);
+            return;
         }
-
-        return {
-            sunInSky: sunInSky,
-            altitude: altitudeDegrees,
-            azimuth: azimuthDegrees,
-            altitudeRadians: sunPosition.altitude,
-            azimuthRadians: sunPosition.azimuth
-        };
+        if (typeof msg.payload.sunInSky != "boolean") {
+            node.error(RED._("blindcontroller.error.invalid-sunInSky"), msg);
+            return;
+        }
+        if (msg.payload.altitude > 90) {
+            node.error(RED._("blindcontroller.error.invalid-altitude"), msg);
+            return;
+        }
+        if ((msg.payload.azimuth < 0) || (msg.payload.azimuth > 360)) {
+            node.error(RED._("blindcontroller.error.invalid-azimuth"), msg);
+            return;
+        }
+        if ((msg.payload.increment <0) || (msg.payload.increment > 100)) {
+            node.error(RED._("blindcontroller.error.invalid-increment"), msg);
+            return;
+        }
+        callback();
     }
 
     /*
@@ -65,17 +72,17 @@ module.exports = function(RED) {
          * side of north, separate checks need to be performed either side of north
          */
         if (blind.orientation - noffset < 0) {
-            if ((((360 - blind.orientation - noffset) <= azimuth) & (azimuth <= 360)) |
-                ((0 <= azimuth) & (azimuth <= blind.orientation + poffset))) {
+            if ((((360 - blind.orientation - noffset) <= azimuth) & (azimuth <= 360)) ||
+                ((0 <= azimuth) && (azimuth <= blind.orientation + poffset))) {
                 sunInWindow = true;
             }
         } else if (blind.orientation + poffset > 360) {
-            if (((0 <= azimuth) & (azimuth <= (blind.orientation + poffset - 360))) |
-                (((blind.orientation - noffset) <= azimuth) & (azimuth <= 360))) {
+            if (((0 <= azimuth) & (azimuth <= (blind.orientation + poffset - 360))) ||
+                (((blind.orientation - noffset) <= azimuth) && (azimuth <= 360))) {
                 sunInWindow = true;
             }
         } else {
-            if (((blind.orientation - noffset) <= azimuth) & (azimuth <= (blind.orientation + poffset))) {
+            if (((blind.orientation - noffset) <= azimuth) && (azimuth <= (blind.orientation + poffset))) {
                 sunInWindow = true;
             }
         }
@@ -99,8 +106,8 @@ module.exports = function(RED) {
             } else if (height >= blind.top) {
                 blindPosition = 0;
             } else {
-                var requiredCoverage = 100*(1 - (height - blind.bottom)/(blind.top - blind.bottom));
-                blindPosition = Math.ceil(requiredCoverage/25)*25;
+                blindPosition = Math.ceil(100*(1 - (height - blind.bottom)/(blind.top - blind.bottom)));
+                blindPosition = Math.ceil(blindPosition/blind.increment)*blind.increment;
             }
         }
         return blindPosition;
@@ -116,11 +123,6 @@ module.exports = function(RED) {
          */
         this.name     = config.name;
 
-        var location = {
-            lat: config.lat,
-            lon: config.lon
-        };
-
         var blind = {
             channel:     config.channel,
             orientation: Number(config.orientation),
@@ -129,16 +131,11 @@ module.exports = function(RED) {
             top:         Number(config.top),
             bottom:      Number(config.bottom),
             depth:       Number(config.depth),
-            altitudethreshold: Number(config.altitudethreshold)
+            altitudethreshold: Number(config.altitudethreshold),
+            increment:   Number(config.increment)
         };
 
-        var sunTimeConfig = {
-            start: config.start,
-            end:   config.end
-        };
-        this.location = location;
         this.blind    = blind;
-        this.sunTimeConfig = sunTimeConfig;
         var node      = this;
 
         /*
@@ -147,41 +144,49 @@ module.exports = function(RED) {
          */
         var previousBlindPosition = -1;
         this.on("input", function(msg) {
-            var blindPosition = 0;
-            var statusFill;
-            var sunInWindow   = false;
-            var sunPosition   = getSunPosition(location, sunTimeConfig);
 
-            if (sunPosition.sunInSky) {
-                sunInWindow = isSunInWindow(blind, sunPosition.azimuth);
+            validateMsg(node, msg, function () {
+                var blindPosition = -1;
+                var statusFill;
+                var sunInWindow = false;
+                var sunPosition = msg.payload;
+                if (sunPosition.sunInSky) {
+                    sunInWindow = isSunInWindow(blind, sunPosition.azimuth);
 
-                if (sunInWindow) {
-                    blindPosition = calcBlindPosition(blind, sunPosition);
+                    if (sunInWindow) {
+                        blindPosition = calcBlindPosition(blind, sunPosition);
+                    } else {
+                        blindPosition = 0;
+                    }
+                    statusFill = "yellow";
+                } else {
+                    blindPosition = 100;
+                    statusFill = "blue";
                 }
-                statusFill  = "yellow";
-            } else {
-                blindPosition = 100;
-                statusFill  = "blue";
-            }
 
-            if (blindPosition != previousBlindPosition) {
-                msg.payload = {
-                    channel       : blind.channel,
-                    blindPosition : blindPosition
-                };
-                msg.data    = {
-                    channel       : blind.channel,
-                    altitude      : sunPosition.altitude,
-                    azimuth       : sunPosition.azimuth,
-                    sunInWindow   : sunInWindow,
-                    blindPosition : blindPosition
-                };
-                msg.topic = "blind";
-                node.send(msg);
+                if (blindPosition != previousBlindPosition) {
+                    msg.payload = {
+                        channel:       blind.channel,
+                        blindPosition: blindPosition
+                    };
+                    msg.data = {
+                        channel:       blind.channel,
+                        altitude:      sunPosition.altitude,
+                        azimuth:       sunPosition.azimuth,
+                        sunInWindow:   sunInWindow,
+                        blindPosition: blindPosition
+                    };
+                    msg.topic = "blind";
+                    node.send(msg);
 
-                previousBlindPosition = blindPosition;
-            }
-            this.status({fill: statusFill, shape: (blindPosition == 100) ? "dot" : "ring", text: blindPosition +"%"})
+                    previousBlindPosition = blindPosition;
+                }
+                node.status({
+                    fill:  statusFill,
+                    shape: (blindPosition == 100) ? "dot" : "ring",
+                    text:  blindPosition + "%"
+                });
+            });
         });
     }
 
