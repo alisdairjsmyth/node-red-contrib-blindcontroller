@@ -1,5 +1,5 @@
 # node-red-contrib-blindcontroller
-Collection of <a href="http://nodered.org" target="_new">Node-RED</a> nodes that can be control roller blind height based on the current position of the sun.
+Is a collection of <a href="http://nodered.org" target="_new">Node-RED</a> nodes that can be used to automated the control of  household roller blinds based on the current position of the sun.
 
 Install
 -------
@@ -8,12 +8,11 @@ Run the following command in the root directory of your Node-RED install
 
     npm install node-red-contrib-blindcontroller
 
-A collection of nodes that control the blinds based on the position of the sun.
-
 Sun Position
 ------------
 
-This node calculates the position of the sun at a given location.  It is configured with the following properties:
+This node calculates the position of the sun at a given geo location.  
+It is configured with the following properties:
 * <b>lat</b>: latitude of the location
 * <b>lon</b>: longitude of the location
 * <b>start</b>: time of day that constitutes the start of daylight hours
@@ -26,7 +25,7 @@ This node emits a <b>msg.payload</b> with the following properties:
 * <b>altitudeRadians</b>: altitude of the sun above the horizon in radians
 * <b>azimuthRadians</b>: azimuth of the sun in radians, where 0 is South, a positive value is in the west and negative value in the east
 
-The node also sets <b>msg.location</b> with the coordinates of the location and <b>msg.topic</b> to "sun".
+The node sets <b>msg.location</b> with the coordinates of the location and <b>msg.topic</b> to "sun".
 
 The node also reports its status within the Node-RED flow editor, using colour to indicate whether it is currently considered daylight hours.
 
@@ -35,7 +34,7 @@ Blind Controller
 
 This node calculates the appropriate blind position to restrict direct sunlight through the associated window.  This node receives the output of the <b>Sun Position</b> Node.
 
-The node itself has a number of properties:
+It is configured with the following properties:
 * <b>channel</b>: identifier of the blind - which is used in the emitted <b>msg.payload</b>
 * <b>orientation</b>: the bearing representing the perpendicular to the of the window
 * <b>negative offset</b>: (optional) anti-clockwise offset from orientation for determination of whether the sun is coming through window
@@ -71,13 +70,13 @@ The node also reports its status within the Node-RED flow editor:
 Qmotion
 -------
 
-This node prepares a command for Qmotion motorised blinds based the required blind position.  It consumes the <b>msg.payload</b> emitted from the <b>Blind Controller</b> node and then emits a message with the following properties:
+This node prepares a command for Qmotion motorised blinds based on the required blind position.  It consumes the <b>msg.payload</b> emitted from the <b>Blind Controller</b> node and then emits a message with the following properties:
 * <b>channel</b>: identifier of the blind
 * <b>command</b>: the command in decimal representation associated with the required blind position
 
 Sample Flow
 -----------
 
-The figure below represents a sample flow how the nodes within this modules can be used to control 6 Qmotion blinds at the one location.  The flow is initiated controlled by an Injector node configured to run periodically.
+The figure below represents a sample flow of how the nodes within this modules can be used to control 6 Qmotion blinds at the one geo location.  The flow is initiated by an Injector node configured to run periodically.
 
 ![Screenshot](./docs/sample-flow.png)
