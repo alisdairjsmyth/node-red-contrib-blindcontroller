@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-blindcontroller",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A Node-RED node that sets a roller blind position",
   "dependencies": {
     "suncalc": "1.6.*"
@@ -19,8 +19,8 @@
   "node-red": {
     "nodes": {
       "blindcontroller": "blindcontroller/blindcontroller.js",
-      "sunpos":          "sunpos/sunpos.js",
-      "qmotion":         "qmotion/qmotion.js"
+      "sunpos": "sunpos/sunpos.js",
+      "qmotion": "qmotion/qmotion.js"
     }
   },
   "author": {
