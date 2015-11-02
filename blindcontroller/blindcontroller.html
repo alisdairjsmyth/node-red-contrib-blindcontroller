@@ -51,6 +51,14 @@
         <input type="text" id="node-input-increment" placeholder="0">
     </div>
     <div class="form-row">
+        <label for="node-input-temperaturethreshold"><i class="fa fa-tachometer"></i> Temperature Threshold</label>
+        <input type="text" id="node-input-temperaturethreshold" placeholder="0">
+    </div>
+    <div class="form-row">
+        <label for="node-input-cloudsthreshold"><i class="fa fa-cloud"></i> Cloud Threshold</label>
+        <input type="text" id="node-input-cloudsthreshold" placeholder="0">
+    </div>
+    <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
@@ -66,7 +74,9 @@
         <li><b>Bottom</b>: the bottom of the window (in centimetres) from floor level</li>
         <li><b>Depth</b>: how far into the room (in centimetres), the direct sunlight is to be allowed</li>
         <li><b>Altitude Threshold</b>: minimum altitude of the sun for determination of blind position</li>
-        <li><b>increment</b>: increment in which the blind height can be controlled</li>
+        <li><b>Increment</b>: increment in which the blind height can be controlled</li>
+        <li><b>Temperature Threshold</b>: temperature at which the blind will be fully closed while the sun is in the window.  This setting overrides <b>altitudethreshold</b> and <b>depth</b> in the calculation</li>
+        <li><b>Clouds Threshold</b>: A numerical value between 0 and 1 (inclusive) representing the percentage of sky occluded by clouds. A value of 0 corresponds to clear sky, 0.4 to scattered clouds, 0.75 to broken cloud cover, and 1 to completely overcast skies.</li>
     </ul>
 </script>
 
@@ -75,22 +85,54 @@
         category: "advanced-input",
         color:"#FFCC66",
         defaults: {
-            name:              {value:""},
-            channel:           {value:"", required:true, validate:RED.validators.number()},
-            orientation:       {value:"", required:true, validate:RED.validators.number()},
-            noffset:           {value:"",                validate:RED.validators.number()},
-            poffset:           {value:"",                validate:RED.validators.number()},
-            top:               {value:"", required:true, validate:RED.validators.number()},
-            bottom:            {value:"", required:true, validate:RED.validators.number()},
-            depth:             {value:"", required:true, validate:RED.validators.number()},
-            altitudethreshold: {value:"",                validate:RED.validators.number()},
-            increment:         {value:"",                validate:RED.validators.number()}
+            name:                 {value:""},
+            channel:              {value:"", required:true, validate:RED.validators.number()},
+            orientation:          {value:"", required:true, validate:RED.validators.number()},
+            noffset:              {value:"",                validate:RED.validators.number()},
+            poffset:              {value:"",                validate:RED.validators.number()},
+            top:                  {value:"", required:true, validate:RED.validators.number()},
+            bottom:               {value:"", required:true, validate:RED.validators.number()},
+            depth:                {value:"", required:true, validate:RED.validators.number()},
+            altitudethreshold:    {value:"",                validate:RED.validators.number()},
+            increment:            {value:"",                validate:RED.validators.number()},
+            temperaturethreshold: {value:"",                validate:RED.validators.number()},
+            cloudsthreshold:      {value:"",                validate:RED.validators.number()}
         },
         inputs: 1,
         outputs: 1,
         icon: "sun.png",
         label: function() {
             return this.name||"Blind Controller";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="multiblindcontroller">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="multiblindcontroller">
+    <p>This node controls the height of mutliple roller blinds based on the position of the sun in the sky.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType("multiblindcontroller",{
+        category: "advanced-input",
+        color:"#FFCC66",
+        defaults: {
+            name:              {value:""}
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "sun.png",
+        label: function() {
+            return this.name||"Multi Blind Controller";
         },
         labelStyle: function() {
             return this.name?"node_label_italic":"";

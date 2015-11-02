@@ -18,11 +18,11 @@ module.exports = function(RED) {
 
     function validateMsg(node, msg, callback) {
         if (typeof msg.payload != "object") {
-            node.error(RED._("qmotion.error.invalid-payload"), msg);
+            node.error("qmotion.error.invalid-payload", msg);
             return;
         }
         if ((msg.payload.blindPosition <0) || (msg.payload.blindPosition >100)) {
-            node.error(RED._("qmotion.error.invalid-blindPosition"), msg);
+            node.error("qmotion.error.invalid-blindPosition: "+ msg.payload.blindPosition, msg);
             return;
         }
         callback();

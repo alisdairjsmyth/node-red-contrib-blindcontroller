@@ -19,42 +19,145 @@ module.exports = function(RED) {
     /*
      * Tests the validity of the input msg.payload before using this payload to run the calculation
      */
-    function validateMsg(node, msg, callback) {
+    function validateMsg(node, msg) {
+        var validMsg = true;
+
+        if (!(typeof msg.payload === "object")) {
+            node.error("blindcontroller.error.invalid-msg-payload", msg);
+            validMsg = false;;
+        } else {
+            switch (msg.topic) {
+                case "sun":
+                    validMsg = validateSunPositionMsg (node, msg);
+                    break;
+                case "blind":
+                    validMsg = validateBlindMsg (node, msg);
+                    break;
+                case "weather":
+                    validMsg = validateWeatherMsg (node, msg);
+                    break;
+                default:
+                    node.error("blindcontroller.error.unknown-msg-topic: "+ msg.topic, msg);
+                    validMsg = false;
+            }
+        }
+        return validMsg;
+    }
+
+    /*
+     * Validate Sun Position message
+     */
+    function validateSunPositionMsg (node, msg) {
+        var validMsg = true;
         var sunProperty = [
             "sunInSky",
             "azimuth",
             "altitude",
             "altitudeRadians"
         ];
-        if (typeof msg.payload === "object") {
-            var i;
-            for (i in sunProperty) {
-                if (!(sunProperty[i] in msg.payload)) {
-                    node.error(RED._("blindcontroller.error.property-" + sunProperty[i] + "-missing"), msg);
-                    return;
-                }
+        var i;
+
+        for (i in sunProperty) {
+            if (!(sunProperty[i] in msg.payload)) {
+                node.error("blindcontroller.error.property-" + sunProperty[i] + "-missing", msg);
+                validMsg = false;
             }
-        } else {
-            node.error(RED._("blindcontroller.error.invalid-payload"), msg);
-            return;
         }
-        if (typeof msg.payload.sunInSky != "boolean") {
-            node.error(RED._("blindcontroller.error.invalid-sunInSky"), msg);
-            return;
+        if (validMsg) {
+            if (typeof msg.payload.sunInSky != "boolean") {
+                node.error("blindcontroller.error.invalid-sunInSky: "+ msg.payload.sunInSky, msg);
+                validMsg = false;
+            }
+            if (msg.payload.altitude > 90) {
+                node.error("blindcontroller.error.invalid-altitude: "+ msg.payload.altitude, msg);
+                validMsg = false;
+            }
+            if ((msg.payload.azimuth < 0) || (msg.payload.azimuth > 360)) {
+                node.error("blindcontroller.error.invalid-azimuth: "+ msg.payload.azimuth, msg);
+                validMsg = false;
+            }
+            if ((msg.payload.increment <0) || (msg.payload.increment > 100)) {
+                node.error("blindcontroller.error.invalid-increment: "+ msg.payload.increment, msg);
+                validMsg = false;
+            }
         }
-        if (msg.payload.altitude > 90) {
-            node.error(RED._("blindcontroller.error.invalid-altitude"), msg);
-            return;
+        return validMsg;
+    }
+
+    /*
+     * Validate Blind message
+     */
+    function validateBlindMsg (node, msg) {
+        var validMsg = true;
+        var blindProperty = [
+            "channel",
+            "orientation",
+            "noffset",
+            "poffset",
+            "top",
+            "bottom",
+            "depth",
+            "increment"
+        ];
+        var i;
+
+        for (i in blindProperty) {
+            if (!(blindProperty[i] in msg.payload)) {
+                node.error("blindcontroller.error.property-" + blindProperty[i] + "-missing", msg);
+                validMsg = false;
+            }
         }
-        if ((msg.payload.azimuth < 0) || (msg.payload.azimuth > 360)) {
-            node.error(RED._("blindcontroller.error.invalid-azimuth"), msg);
-            return;
+        if (validMsg) {
+            if ((msg.payload.orientation < 0) || (msg.payload.orienation > 360)) {
+                node.error("blindcontroller.error.invalid-orientation: "+ msg.payload.orienation, msg);
+                validMsg = false;
+            }
+            if ((msg.payload.noffset < 0) || (msg.payload.noffset > 90)) {
+                node.error("blindcontroller.error.invalid-altitude: "+ msg.payload.noffset, msg);
+                validMsg = false;
+            }
+            if ((msg.payload.poffset < 0) || (msg.payload.poffset > 90)) {
+                node.error("blindcontroller.error.invalid-azimuth: "+ msg.payload.poffset, msg);
+                validMsg = false;
+            }
+            if (msg.payload.top < 0) {
+                node.error("blindcontroller.error.invalid-top: "+ msg.payload.top, msg);
+                validMsg = false;
+            }
+            if (msg.payload.bottom < 0) {
+                node.error("blindcontroller.error.invalid-bottom: "+ msg.payload.bottom, msg);
+                validMsg = false;
+            }
+            if (msg.payload.depth < 0) {
+                node.error("blindcontroller.error.invalid-depth: "+ msg.payload.depth, msg);
+                validMsg = false;
+            }
+            if (msg.payload.top < msg.payload.bottom) {
+                node.error("blindcontroller.error.invalid-dimensions: "+ msg.payload.top +" "+ msg.payload.bottom, msg);
+                validMsg = false;
+            }
+            if ((msg.payload.increment < 0) || (msg.payload.increment > 100)) {
+                node.error("blindcontroller.error.invalid-increment: "+ msg.payload.increment, msg);
+                validMsg = false;
+            }
+            if ((msg.payload.cloudsthreshold < 0) || (msg.payload.cloudsthreshold > 1)) {
+                node.error("blindcontroller.error.invalid-cloudsthreshold: "+ msg.payload.cloudsthreshold, msg);
+                validMsg = false;
+            }
         }
-        if ((msg.payload.increment <0) || (msg.payload.increment > 100)) {
-            node.error(RED._("blindcontroller.error.invalid-increment"), msg);
-            return;
+        return validMsg;
+    }
+
+    /*
+     * Validate Blind message
+     */
+    function validateWeatherMsg (node, msg) {
+        var validMsg = true;
+        if ((msg.payload.clouds < 0) || (msg.payload.clouds > 1)) {
+            node.error("blindscontroller.error.invalid-clouds: "+ msg.payload.clouds, msg);
+            validMsg = false;
         }
-        callback();
+        return validMsg;
     }
 
     /*
@@ -93,50 +196,130 @@ module.exports = function(RED) {
      * Function to calculate the appropriate blind position based on the altitude of the sun, characteristics of
      * the window, with the target of restricting the extent to which direct sunlight enters the room
      */
-    function calcBlindPosition (blind, sunPosition) {
+    function calcBlindPosition (blind, sunPosition, weather) {
         /*
          * For the given altitude of the sun, calculate the minimum height of an object that casts a shadow to the
          * specified depth. Convert this height into a blind position based on the dimensions of the window
          */
         var blindPosition = 0;
-        if (sunPosition.altitude > blind.altitudethreshold) {
-            var height = Math.tan(sunPosition.altitudeRadians) * blind.depth;
-            if (height <= blind.bottom) {
+        var isTemperatureAConcern = ((weather.maxtemp) && (blind.temperaturethreshold)) ? (weather.maxtemp > blind.temperaturethreshold) : false;
+        var isOvercast = ((weather.clouds) && (blind.cloudsthreshold)) ? (weather.clouds > blind.cloudsthreshold) : false;
+
+        if (sunPosition.sunInSky) {
+            if (isTemperatureAConcern) {
                 blindPosition = 100;
-            } else if (height >= blind.top) {
-                blindPosition = 0;
             } else {
-                blindPosition = Math.ceil(100*(1 - (height - blind.bottom)/(blind.top - blind.bottom)));
-                blindPosition = Math.ceil(blindPosition/blind.increment)*blind.increment;
+                blind.sunInWindow = isSunInWindow(blind, sunPosition.azimuth);
+                if (blind.sunInWindow) {
+                    if (sunPosition.altitude > blind.altitudethreshold && !isOvercast) {
+                        var height = Math.tan(sunPosition.altitudeRadians) * blind.depth;
+                        if (height <= blind.bottom) {
+                            blindPosition = 100;
+                        } else if (height >= blind.top) {
+                            blindPosition = 0;
+                        } else {
+                            blindPosition = Math.ceil(100 * (1 - (height - blind.bottom) / (blind.top - blind.bottom)));
+                            blindPosition = Math.ceil(blindPosition / blind.increment) * blind.increment;
+                        }
+                    }
+                }
             }
+        } else {
+            blindPosition = 100;
         }
         return blindPosition;
+    }
+
+    function runCalc (node, msg, blinds, sunPosition, weather) {
+        var i;
+        for (i in blinds) {
+            var previousBlindPosition = blinds[i].blindPosition;
+            blinds[i].blindPosition = calcBlindPosition(blinds[i], sunPosition, weather);
+            if (blinds[i].blindPosition != previousBlindPosition) {
+                msg.payload = {
+                    channel: blinds[i].channel,
+                    blindPosition: blinds[i].blindPosition
+                };
+                msg.data = {
+                    channel: blinds[i].channel,
+                    altitude: sunPosition.altitude,
+                    azimuth: sunPosition.azimuth,
+                    blindPosition: blinds[i].blindPosition
+                };
+                msg.topic = "blind";
+                node.send(msg);
+            }
+        }
+    }
+
+    function BlindControllerWithoutConfig(config) {
+        RED.nodes.createNode(this, config);
+        /*
+         * Initialise node with value of configurable properties
+         */
+        this.name       = config.name;
+        var node        = this;
+        var blinds      = [];
+        var weather     = {};
+        var sunPosition = {};
+
+        /*
+         * Registers a listener on the input event to receive messages from the up-stream nodes in a flow.  This
+         * function does not any values from the input message.
+         */
+        this.on("input", function(msg) {
+            var validMsg = validateMsg(node, msg);
+
+            if (validMsg) {
+                switch (msg.topic) {
+                    case "sun":
+                        sunPosition = msg.payload;
+                        runCalc(node, msg, blinds, sunPosition, weather);
+                        break;
+                    case "blind":
+                        var channel = msg.payload.channel;
+                        blinds[channel] = msg.payload;
+                        break;
+                    case "weather":
+                        weather = msg.payload;
+                        runCalc(node, msg, blinds, sunPosition, weather);
+                        break;
+                    default:
+                        break;
+                };
+            }
+        });
     }
 
     /*
      * Function which is exported when the node-RED runtime loads the node on start-up.
      */
-    function setBlindPosition(config) {
+    function BlindControllerWithConfig(config) {
         RED.nodes.createNode(this, config);
         /*
          * Initialise node with value of configurable properties
          */
         this.name     = config.name;
-
-        var blind = {
-            channel:     config.channel,
-            orientation: Number(config.orientation),
-            noffset:     Number(config.noffset),
-            poffset:     Number(config.poffset),
-            top:         Number(config.top),
-            bottom:      Number(config.bottom),
-            depth:       Number(config.depth),
-            altitudethreshold: Number(config.altitudethreshold),
-            increment:   Number(config.increment)
+        var channel   = config.channel;
+        var blinds      = [];
+        blinds[channel] = {
+            channel:              channel,
+            orientation:          Number(config.orientation),
+            noffset:              Number(config.noffset),
+            poffset:              Number(config.poffset),
+            top:                  Number(config.top),
+            bottom:               Number(config.bottom),
+            depth:                Number(config.depth),
+            altitudethreshold:    Number(config.altitudethreshold),
+            increment:            Number(config.increment),
+            temperaturethreshold: config.temperaturethreshold,
+            cloudsthreshold:      config.cloudsthreshold
         };
 
-        this.blind    = blind;
-        var node      = this;
+        this.blind      = blinds[channel];
+        var node        = this;
+        var sunPosition = {};
+        var weather     = {};
 
         /*
          * Registers a listener on the input event to receive messages from the up-stream nodes in a flow.  This
@@ -144,51 +327,47 @@ module.exports = function(RED) {
          */
         var previousBlindPosition = -1;
         this.on("input", function(msg) {
+            var validMsg = validateMsg(node, msg);
 
-            validateMsg(node, msg, function () {
-                var blindPosition = -1;
-                var statusFill;
-                var sunInWindow = false;
-                var sunPosition = msg.payload;
-                if (sunPosition.sunInSky) {
-                    sunInWindow = isSunInWindow(blind, sunPosition.azimuth);
-
-                    if (sunInWindow) {
-                        blindPosition = calcBlindPosition(blind, sunPosition);
-                    } else {
-                        blindPosition = 0;
-                    }
-                    statusFill = "yellow";
-                } else {
-                    blindPosition = 100;
-                    statusFill = "blue";
+            if (validMsg) {
+                switch (msg.topic) {
+                    case "sun":
+                        sunPosition = msg.payload;
+                        runCalc(node, msg, blinds, sunPosition, weather);
+                        break;
+                    case "weather":
+                        weather = msg.payload;
+                        runCalc(node, msg, blinds, sunPosition, weather);
+                        break;
+                    default:
+                        break;
                 }
 
-                if (blindPosition != previousBlindPosition) {
+                if (blinds[channel].blindPosition != previousBlindPosition) {
                     msg.payload = {
-                        channel:       blind.channel,
-                        blindPosition: blindPosition
+                        channel:       channel,
+                        blindPosition: blinds[channel].blindPosition
                     };
                     msg.data = {
-                        channel:       blind.channel,
+                        channel:       channel,
                         altitude:      sunPosition.altitude,
                         azimuth:       sunPosition.azimuth,
-                        sunInWindow:   sunInWindow,
-                        blindPosition: blindPosition
+                        blindPosition: blinds[channel].blindPosition
                     };
                     msg.topic = "blind";
                     node.send(msg);
 
-                    previousBlindPosition = blindPosition;
+                    previousBlindPosition = blinds[channel].blindPosition;
                 }
                 node.status({
-                    fill:  statusFill,
-                    shape: (blindPosition == 100) ? "dot" : "ring",
-                    text:  blindPosition + "%"
+                    fill:  (sunPosition.sunInSky) ? "yellow" : "blue",
+                    shape: (blinds[channel].blindPosition == 100) ? "dot" : "ring",
+                    text:  blinds[channel].blindPosition + "%"
                 });
-            });
+            }
         });
     }
 
-    RED.nodes.registerType("blindcontroller", setBlindPosition);
+    RED.nodes.registerType("multiblindcontroller", BlindControllerWithoutConfig);
+    RED.nodes.registerType("blindcontroller", BlindControllerWithConfig);
 };
