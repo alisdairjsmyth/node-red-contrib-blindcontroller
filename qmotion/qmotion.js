@@ -16,23 +16,25 @@
 module.exports = function(RED) {
     "use strict";
 
-    function validateMsg(node, msg, callback) {
+    function validateMsg(node, msg) {
+        var validMsg = true;
         if (typeof msg.payload != "object") {
             node.error("qmotion.error.invalid-payload", msg);
-            return;
+            validMsg = false;
         }
-        if ((msg.payload.blindPosition <0) || (msg.payload.blindPosition >100)) {
+        if ((validMsg) && ((msg.payload.blindPosition <0) || (msg.payload.blindPosition >100))) {
             node.error("qmotion.error.invalid-blindPosition: "+ msg.payload.blindPosition, msg);
-            return;
+            validMsg = false;
         }
-        callback();
+        return validMsg();
     }
 
     function sendQmotionCommand (config) {
         RED.nodes.createNode(this, config);
         this.on("input", function(msg) {
             var node  = this;
-            validateMsg(node, msg, function() {
+            var validMsg = validateMsg(node, msg);
+            if (validMsg) {
                 var QmotionCommands = {
                     0:    1,
                     25:   4,
@@ -50,7 +52,7 @@ module.exports = function(RED) {
                 };
                 msg.topic   = "blind";
                 node.send(msg);
-            });
+            };
         });
     }
     RED.nodes.registerType("qmotion", sendQmotionCommand);
