@@ -26,7 +26,7 @@ module.exports = function(RED) {
             node.error("qmotion.error.invalid-blindPosition: "+ msg.payload.blindPosition, msg);
             validMsg = false;
         }
-        return validMsg();
+        return validMsg;
     }
 
     function sendQmotionCommand (config) {
