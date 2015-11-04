@@ -46,6 +46,7 @@ module.exports = function(RED) {
 
                 var blindPosition = Math.ceil((input.blindPosition)/25)*25;
                 var command = QmotionCommands[blindPosition];
+                msg.data    = msg.payload;
                 msg.payload = {
                     channel: input.channel,
                     command: command
