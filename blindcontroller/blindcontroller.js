@@ -331,10 +331,10 @@ module.exports = function(RED) {
      * Calculates the expiry timestamp to be 2 hours after the current time
      */
     function calcBlindPositionExpiry () {
-        var now      = new Date();
-        var twoHours = 2*60*60*1000;
+        var expiryTimestamp      = new Date();
+        expiryTimestamp.setHours(expiryTimestamp.getHours()+ 2)
 
-        return now+twoHours;
+        return expiryTimestamp;
     }
 
     /*
