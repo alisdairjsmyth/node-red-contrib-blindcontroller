@@ -94,6 +94,7 @@ This node calculates the appropriate blind position to restrict direct sunlight 
 * current weather conditions, such as that from forecastio or weather underground.  <b>msg.topic</b> should be set to weather, and <b>msg.payload</b> either or both of the following properties:
     * maxtemp
     * clouds
+* a specified blind position, which will remain in effect for 2 hours
 
 When processing either a Sun Position or Weather message, the blind position calculation is performed for each blind for which a configuration message has previously been received.  Emitted messages from this node have the same properties as those emitted from the <b>Blind Controller</b> node.
 
