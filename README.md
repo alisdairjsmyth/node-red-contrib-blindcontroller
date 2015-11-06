@@ -11,7 +11,7 @@ Run the following command in the root directory of your Node-RED install
 Sun Position
 ------------
 
-![Sun Position](./docs/sunpos.jpg)
+![Sun Position](./docs/sunpos.png)
 
 This node calculates the position of the sun at a given geo location.  
 It is configured with the following properties:
@@ -34,7 +34,7 @@ The node also reports its status within the Node-RED flow editor, using colour t
 Blind Controller
 ----------------
 
-![Blind Controller](./docs/blindcontroller.jpg)
+![Blind Controller](./docs/blindcontroller.png)
 
 This node calculates the appropriate blind position to restrict direct sunlight through the associated window.
 
@@ -81,7 +81,7 @@ The node also reports its status within the Node-RED flow editor:
 Multi Blind Controller
 ----------------------
 
-![Multi Blind Controller](./docs/multiblindcontroller.jpg)
+![Multi Blind Controller](./docs/multiblindcontroller.png)
 
 This node calculates the appropriate blind position to restrict direct sunlight through a number of windows.  This node processes three types of input messages:
 * blind configuration where <b>msg.topic</b> equals blind, and <b>msg.payload</b> contains the following properties:
@@ -109,7 +109,7 @@ This node does not report status within the Node-RED flow editor.
 Qmotion
 -------
 
-![Qmotion](./docs/qmotion.jpg)
+![Qmotion](./docs/qmotion.png)
 
 This node prepares a command for Qmotion motorised blinds based on the required blind position.  It consumes the <b>msg.payload</b> emitted from the <b>Blind Controller</b> node and then emits a message with the following properties:
 * <b>channel</b>: identifier of the blind
