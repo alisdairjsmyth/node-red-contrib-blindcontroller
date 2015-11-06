@@ -51,7 +51,7 @@ module.exports = function(RED) {
                     channel: input.channel,
                     command: command
                 };
-                msg.topic   = "blind";
+                msg.topic   = "blindCommand";
                 node.send(msg);
             };
         });

@@ -263,10 +263,11 @@ module.exports = function(RED) {
             if (sunPosition.sunInSky) {
                 if (isTemperatureAConcern) {
                     blindPosition = 100;
+                    blind.blindPositionReason = "Temperature forecast above threshold";
                 } else {
                     blind.sunInWindow = isSunInWindow(blind, sunPosition.azimuth);
                     if (blind.sunInWindow) {
-                        if ((blind.altitudethreshold) && sunPosition.altitude > blind.altitudethreshold && !isOvercast) {
+                        if ((blind.altitudethreshold) && sunPosition.altitude >= blind.altitudethreshold && !isOvercast) {
                             var height = Math.tan(sunPosition.altitudeRadians) * blind.depth;
                             if (height <= blind.bottom) {
                                 blindPosition = 100;
@@ -276,10 +277,19 @@ module.exports = function(RED) {
                                 blindPosition = Math.ceil(100 * (1 - (height - blind.bottom) / (blind.top - blind.bottom)));
                                 blindPosition = Math.ceil(blindPosition / blind.increment) * blind.increment;
                             }
+                            blind.blindPositionReason = "Sun in window";
+                        } else if ((blind.altitudethreshold) && sunPosition.altitude < blind.altitudethreshold){
+                            blind.blindPositionReason = "Sun below altitude threshold";
+                        } else if (isOvercast) {
+                            blind.blindPositionReason = "Overcast conditions";
                         }
+                    } else {
+                        blind.blindPositionReason = "Sun not in window";
                     }
                 }
             } else {
+                blind.blindPositionReason = "Sun below horizon";
+                blind.sunInWindow = false;
                 blindPosition = 100;
             }
             if (blind.blindPositionExpiry) {
@@ -287,6 +297,7 @@ module.exports = function(RED) {
             }
         } else {
             blindPosition = blind.blindPosition;
+            blind.blindPositionReason = "Manually set";
         }
 
         return blindPosition;
@@ -300,8 +311,9 @@ module.exports = function(RED) {
         var i;
         for (i in blinds) {
             var previousBlindPosition = blinds[i].blindPosition;
+            var previousSunInWindow   = blinds[i].sunInWindow;
             blinds[i].blindPosition = calcBlindPosition(blinds[i], sunPosition, weather);
-            if (blinds[i].blindPosition != previousBlindPosition) {
+            if ((blinds[i].blindPosition != previousBlindPosition) || (blinds[i].sunInWindow != previousSunInWindow)) {
                 msg.payload = blinds[i];
                 msg.data = {
                     channel: blinds[i].channel,
@@ -322,6 +334,7 @@ module.exports = function(RED) {
     function setPosition (node, msg, blind) {
         blind.blindPosition       = msg.payload.blindPosition;
         blind.blindPositionExpiry = calcBlindPositionExpiry ();
+        blind.blindPositionReason = "Manually set";
         msg.payload               = blind;
         msg.topic                 = "blind";
         node.send(msg);
