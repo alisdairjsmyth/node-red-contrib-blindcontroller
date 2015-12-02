@@ -263,7 +263,8 @@ module.exports = function(RED) {
             if (sunPosition.sunInSky) {
                 if (isTemperatureAConcern) {
                     blindPosition = 100;
-                    blind.blindPositionReason = "Temperature forecast above threshold";
+                    blind.blindPositionReasonCode = "07";
+                    blind.blindPositionReasonDesc = "Temperature forecast above threshold";
                 } else {
                     blind.sunInWindow = isSunInWindow(blind, sunPosition.azimuth);
                     if (blind.sunInWindow) {
@@ -277,18 +278,23 @@ module.exports = function(RED) {
                                 blindPosition = Math.ceil(100 * (1 - (height - blind.bottom) / (blind.top - blind.bottom)));
                                 blindPosition = Math.ceil(blindPosition / blind.increment) * blind.increment;
                             }
-                            blind.blindPositionReason = "Sun in window";
+                            blind.blindPositionReasonCode = "05";
+                            blind.blindPositionReasonDesc = "Sun in window";
                         } else if ((blind.altitudethreshold) && sunPosition.altitude < blind.altitudethreshold){
-                            blind.blindPositionReason = "Sun below altitude threshold";
+                            blind.blindPositionReasonCode = "03";
+                            blind.blindPositionReasonDesc = "Sun below altitude threshold";
                         } else if (isOvercast) {
-                            blind.blindPositionReason = "Overcast conditions";
+                            blind.blindPositionReasonCode = "06";
+                            blind.blindPositionReasonDesc = "Overcast conditions";
                         }
                     } else {
-                        blind.blindPositionReason = "Sun not in window";
+                        blind.blindPositionReasonCode = "04";
+                        blind.blindPositionReasonDesc = "Sun not in window";
                     }
                 }
             } else {
-                blind.blindPositionReason = "Sun below horizon";
+                blind.blindPositionReasonCode = "02";
+                blind.blindPositionReasonDesc = "Sun below horizon";
                 blind.sunInWindow = false;
                 blindPosition = 100;
             }
@@ -297,7 +303,6 @@ module.exports = function(RED) {
             }
         } else {
             blindPosition = blind.blindPosition;
-            blind.blindPositionReason = "Manually set";
         }
 
         return blindPosition;
@@ -332,11 +337,12 @@ module.exports = function(RED) {
      * timestamp.
      */
     function setPosition (node, msg, blind) {
-        blind.blindPosition       = msg.payload.blindPosition;
-        blind.blindPositionExpiry = calcBlindPositionExpiry ();
-        blind.blindPositionReason = "Manually set";
-        msg.payload               = blind;
-        msg.topic                 = "blind";
+        blind.blindPosition           = msg.payload.blindPosition;
+        blind.blindPositionExpiry     = calcBlindPositionExpiry ();
+        blind.blindPositionReasonCode = "01";
+        blind.blindPositionReasonDesc = "Manually set";
+        msg.payload                   = blind;
+        msg.topic                     = "blind";
         node.send(msg);
     }
 

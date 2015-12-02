@@ -64,7 +64,15 @@ The node calculates the appropriate blind position to restrict the amount of dir
 
 In the event the node determines a blind position change is required, it will emit a <b>msg.payload</b> with the properties of the blind including:
 * <b>blindPosition</b>: the new position of the blind
-* <b>blindPositionReason</b>: rational of the new position
+* <b>blindPositionReasonCode</b>: code of rationale of the new position
+    * <b>01</b> - Manually set
+    * <b>02</b> - Sun below horizon
+    * <b>03</b> - Sun below altitude threshold
+    * <b>04</b> - Sun not in window
+    * <b>05</b> - Sun in window
+    * <b>06</b> - Overcast conditions
+    * <b>07</b> - Temperature forecast above threshold
+* <b>blindPositionReasonDesc</b>: description of rationale of the new position (as above)
 
 In addition, <b>msg.data</b> includes information useful for monitoring:
 * <b>altitude</b>: altitude of the sun in degrees
