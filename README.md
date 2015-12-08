@@ -1,5 +1,5 @@
 # node-red-contrib-blindcontroller
-Is a collection of <a href="http://nodered.org" target="_new">Node-RED</a> nodes that can be used to automated the control of  household roller blinds based on the current position of the sun.
+A collection of <a href="http://nodered.org" target="_new">Node-RED</a> nodes that can be used to automate the control of  household roller blinds based on the current position of the sun.
 
 Install
 -------
