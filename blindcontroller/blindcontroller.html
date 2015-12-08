@@ -93,14 +93,14 @@
             top:                  {value:"", required:true, validate:RED.validators.number()},
             bottom:               {value:"", required:true, validate:RED.validators.number()},
             depth:                {value:"", required:true, validate:RED.validators.number()},
-            altitudethreshold:    {value:"",                validate:RED.validators.number()},
+            altitudethreshold:    {value:""},
             increment:            {value:"",                validate:RED.validators.number()},
-            temperaturethreshold: {value:"",                validate:RED.validators.number()},
-            cloudsthreshold:      {value:"",                validate:RED.validators.number()}
+            temperaturethreshold: {value:""},
+            cloudsthreshold:      {value:""}
         },
         inputs: 1,
         outputs: 1,
-        icon: "sun.png",
+        icon: "icons/sun.png",
         label: function() {
             return this.name||"Blind Controller";
         },
@@ -130,7 +130,7 @@
         },
         inputs: 1,
         outputs: 1,
-        icon: "sun.png",
+        icon: "icons/sun.png",
         label: function() {
             return this.name||"Multi Blind Controller";
         },
