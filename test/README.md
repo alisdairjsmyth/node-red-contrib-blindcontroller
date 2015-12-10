@@ -17,6 +17,8 @@ configuration.  The tests can be run with differing climatic conditions:
     * Overcast
     * Extreme heat
     * Overcast and extreme heat
+* **Manual**: tests to validate the setting of the blind position in an input
+message and the expiry of that position.
 
 The tests are manually invoked, and the results manually checked using the
 output in the **debug** tab.
