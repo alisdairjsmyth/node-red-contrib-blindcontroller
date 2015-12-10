@@ -1,1 +1,4704 @@
-[{"type":"tab","id":"ceb00bdc.314ff8","label":"Negative Test Cases"},{"type":"tab","id":"1355ff96.ecaa","label":"Orientation"},{"type":"tab","id":"c5633b36.3a9cc8","label":"Increments"},{"type":"tab","id":"e7db3953.1824c8","label":"Home"},{"type":"tab","id":"75b12ad1.8a4ed4","label":"Manual"},{"id":"5ac09ee3.a53f6","type":"subflow","name":"Get blind Config","in":[{"x":47.5,"y":53,"wires":[{"id":"6198a580.9e675c"}]}],"out":[{"x":555,"y":53,"wires":[{"id":"93985833.6c67a8","port":0}]}]},{"id":"ef1a7757.10e588","type":"subflow","name":"Persist blindPosition Change","in":[{"x":59,"y":190,"wires":[{"id":"fd002d80.02ffd"},{"id":"9bb64167.6449c"},{"id":"fb4643c5.04b9c"}]}],"out":[{"x":510,"y":297,"wires":[{"id":"e5884be0.1a77b8","port":0}]}]},{"id":"46a3b08b.b95c5","type":"subflow","name":"Set blindPosition","in":[{"x":739.5,"y":128,"wires":[{"id":"6d6b0c0c.9294f4"}]}],"out":[]},{"id":"e8bf0b06.1740f8","type":"subflow","name":"Get blind Config (2)","in":[{"x":47.5,"y":53,"wires":[{"id":"6198a580.9e675c"}]}],"out":[{"x":555,"y":53,"wires":[{"id":"93985833.6c67a8","port":0}]}]},{"id":"f9c01197.063ff","type":"subflow","name":"Handle blindPosition Request","in":[{"x":71,"y":134,"wires":[{"id":"16293a47.e9d6c6"},{"id":"5d8e6bd5.a27194"}]}],"out":[{"x":1094,"y":132,"wires":[{"id":"49823ee8.b67dc","port":0}]},{"x":658,"y":311,"wires":[{"id":"f1b15d25.0e4ea","port":0}]}]},{"id":"c1b403b4.3e4c","type":"cloudant","host":"8ed30357-a867-489a-90e4-e09e594d20a5-bluemix.cloudant.com","name":"blindcontroller-cloudantNoSQLDB"},{"id":"b8675472.4798a8","type":"inject","name":"Invalid Topic","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":109,"y":85,"z":"ceb00bdc.314ff8","wires":[["a60be318.59f42","b1c27ca0.4e3d8"]]},{"id":"a60be318.59f42","type":"function","name":"Invalid Topic","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"invalid\";\nreturn msg;","outputs":1,"noerr":0,"x":290,"y":85,"z":"ceb00bdc.314ff8","wires":[["8d75d47a.728a28","1ae53766.e51ac9"]]},{"id":"8d75d47a.728a28","type":"multiblindcontroller","name":"","x":500,"y":85,"z":"ceb00bdc.314ff8","wires":[["f3f44624.0c0bb8"]]},{"id":"f3f44624.0c0bb8","type":"debug","name":"","active":true,"console":"false","complete":"false","x":715,"y":105,"z":"ceb00bdc.314ff8","wires":[]},{"id":"b1c27ca0.4e3d8","type":"function","name":"No Topic","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nreturn msg;","outputs":1,"noerr":0,"x":290,"y":133,"z":"ceb00bdc.314ff8","wires":[["8d75d47a.728a28","1ae53766.e51ac9"]]},{"id":"b0794531.4f86b8","type":"comment","name":"Invalid Topic","info":"Output message should report error \"blindcontroller.error.unknown-msg-topic\"\n* msg.topic is an unknown value\n* no msg.topic","x":112,"y":30,"z":"ceb00bdc.314ff8","wires":[]},{"id":"1ae53766.e51ac9","type":"blindcontroller","name":"","channel":"1","orientation":"0","noffset":"90","poffset":"90","top":"1","bottom":"0","depth":".5","altitudethreshold":"","increment":"1","temperaturethreshold":"","cloudsthreshold":"","x":498,"y":131,"z":"ceb00bdc.314ff8","wires":[["f3f44624.0c0bb8"]]},{"id":"5cf33fde.a30cc","type":"comment","name":"Invalid Blind Payload","info":"Test cases for blind message:\n* Mandatory attribute missing\n    * channel\n    * orientation\n    * noffset\n    * poffset\n    * top\n    * bottom\n    * depth\n    * increment\n* More than one attribute missing\n* Orientation < 0\n* Orientation > 360\n* Negative Offset < 0\n* Negative Offset > 90\n* Positive Offset < 0\n* Positive Offset > 90\n* Top < 0\n* Bottom < 0\n* Depth < 0\n* Top < Bottom\n* Increment < 0\n* Increment > 100\n* AltitudeThreshold < 0\n* AltitudeThreshold > 90\n* CloudsThreshold < 0\n* CloudsThreshold > 1","x":105,"y":181,"z":"ceb00bdc.314ff8","wires":[]},{"id":"69d0314e.962fd","type":"function","name":"Missing Channel","func":"msg.payload = {orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":308,"y":219,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"70f23d05.8f0dc4","type":"multiblindcontroller","name":"","x":608,"y":869,"z":"ceb00bdc.314ff8","wires":[["d118f2dd.2ee71"]]},{"id":"d118f2dd.2ee71","type":"debug","name":"","active":true,"console":"false","complete":"false","x":847,"y":556,"z":"ceb00bdc.314ff8","wires":[]},{"id":"87620f10.789df","type":"inject","name":"Missing channel","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":114,"y":219,"z":"ceb00bdc.314ff8","wires":[["69d0314e.962fd"]]},{"id":"31a2b690.ce5d4a","type":"function","name":"Missing Orientation","func":"msg.payload = {channel: 1, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":315,"y":255,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"c4dbe98f.3b2418","type":"function","name":"Missing noffset","func":"msg.payload = {channel: 1, orientation: 45, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":301,"y":291,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"85c1a2a2.7a3e6","type":"function","name":"Missing poffset","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":301,"y":327,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"75165832.8ae9a8","type":"function","name":"Missing top","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":289,"y":362,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"7840a840.87bf58","type":"function","name":"Missing bottom","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":301,"y":397,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"4bb63400.b449cc","type":"function","name":"Missing depth","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":296,"y":432,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"6d49b2e9.92b64c","type":"function","name":"Missing increment","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":310,"y":465,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"328ee6.ffcd711a","type":"inject","name":"Missing orientation","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":122,"y":256,"z":"ceb00bdc.314ff8","wires":[["31a2b690.ce5d4a"]]},{"id":"df8d6142.2072a","type":"inject","name":"Missing noffset","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":108,"y":293,"z":"ceb00bdc.314ff8","wires":[["c4dbe98f.3b2418"]]},{"id":"9ca354ae.635ca8","type":"inject","name":"Missing poffset","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":107,"y":328,"z":"ceb00bdc.314ff8","wires":[["85c1a2a2.7a3e6"]]},{"id":"1d8ad23b.e2752e","type":"inject","name":"Missing top","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":95,"y":362,"z":"ceb00bdc.314ff8","wires":[["75165832.8ae9a8"]]},{"id":"986499f7.679b68","type":"inject","name":"Missing bottom","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":106,"y":397,"z":"ceb00bdc.314ff8","wires":[["7840a840.87bf58"]]},{"id":"db188ce6.24e77","type":"inject","name":"Missing depth","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":103,"y":431,"z":"ceb00bdc.314ff8","wires":[["4bb63400.b449cc"]]},{"id":"de3c8130.21c38","type":"inject","name":"Missing increment","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":117,"y":464,"z":"ceb00bdc.314ff8","wires":[["6d49b2e9.92b64c"]]},{"id":"220e4c2b.ddf1b4","type":"inject","name":"All missing","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":94,"y":498,"z":"ceb00bdc.314ff8","wires":[["b328b683.4cd748"]]},{"id":"b328b683.4cd748","type":"function","name":"All missing","func":"msg.payload = {};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":287,"y":499,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"f48eb6b2.0b7148","type":"comment","name":"Invalid Sun","info":"","x":93,"y":1412,"z":"ceb00bdc.314ff8","wires":[]},{"id":"1a4d75f6.e5b28a","type":"inject","name":"Missing sunInSky","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":112.5,"y":1450,"z":"ceb00bdc.314ff8","wires":[["fbb9bf02.04464"]]},{"id":"9e5e28f5.61a1d8","type":"inject","name":"Missing azimuth","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":108.5,"y":1488,"z":"ceb00bdc.314ff8","wires":[["fcdd6616.032298"]]},{"id":"c7a0df08.385f2","type":"inject","name":"Missing altitude","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":107.5,"y":1521,"z":"ceb00bdc.314ff8","wires":[["552c93d9.aad36c"]]},{"id":"b2511162.4daef","type":"inject","name":"All missing","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":90.5,"y":1594,"z":"ceb00bdc.314ff8","wires":[["e679ed97.19861"]]},{"id":"fbb9bf02.04464","type":"function","name":"Missing sunInSky","func":"msg = { \"topic\": \"sun\", \"payload\": { \"altitude\": 56.80029967413457, \"azimuth\": 72.73564171779199, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" };\nreturn msg;","outputs":1,"noerr":0,"x":342.5,"y":1451,"z":"ceb00bdc.314ff8","wires":[["e968965f.169768","85f13fad.7a0ec"]]},{"id":"f08c81a0.0f738","type":"debug","name":"","active":true,"console":"false","complete":"false","x":790.5,"y":1507,"z":"ceb00bdc.314ff8","wires":[]},{"id":"e968965f.169768","type":"multiblindcontroller","name":"","x":597.5,"y":1507,"z":"ceb00bdc.314ff8","wires":[["f08c81a0.0f738"]]},{"id":"fcdd6616.032298","type":"function","name":"Missing azimuth","func":"msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": true, \"altitude\": 56.80029967413457, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" }\nreturn msg;","outputs":1,"noerr":0,"x":337.5,"y":1486,"z":"ceb00bdc.314ff8","wires":[["e968965f.169768","85f13fad.7a0ec"]]},{"id":"552c93d9.aad36c","type":"function","name":"Missing altitude","func":"msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": true, \"azimuth\": 72.73564171779199, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" }\nreturn msg;","outputs":1,"noerr":0,"x":335.5,"y":1522,"z":"ceb00bdc.314ff8","wires":[["e968965f.169768","85f13fad.7a0ec"]]},{"id":"e679ed97.19861","type":"function","name":"All missing","func":"msg = { \"topic\": \"sun\", \"payload\": { \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" }\nreturn msg;","outputs":1,"noerr":0,"x":320.5,"y":1595,"z":"ceb00bdc.314ff8","wires":[["e968965f.169768","85f13fad.7a0ec"]]},{"id":"356cb655.ca934a","type":"inject","name":"Orientation < 0","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":106,"y":532,"z":"ceb00bdc.314ff8","wires":[["1a16254a.e5e9db"]]},{"id":"bbd01ee3.442fe","type":"inject","name":"Orientation > 360","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":114,"y":567,"z":"ceb00bdc.314ff8","wires":[["60bb243e.9f44dc"]]},{"id":"a212c1f6.5ded4","type":"inject","name":"noffset < 0","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":93,"y":601,"z":"ceb00bdc.314ff8","wires":[["b987d277.46783"]]},{"id":"c367ff52.3c98","type":"inject","name":"noffset > 90","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":96,"y":636,"z":"ceb00bdc.314ff8","wires":[["bc9e5740.4361a8"]]},{"id":"4cd8460b.b327b8","type":"inject","name":"poffset < 0","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":91,"y":671,"z":"ceb00bdc.314ff8","wires":[["72ee3ff9.8d11c"]]},{"id":"4a927a8a.b56d84","type":"inject","name":"poffset > 90","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":95,"y":707,"z":"ceb00bdc.314ff8","wires":[["aa287e59.55d78"]]},{"id":"be00a1d.f41ff6","type":"inject","name":"top < 0","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":83,"y":743,"z":"ceb00bdc.314ff8","wires":[["2cce0697.d331fa"]]},{"id":"6ec4bb05.913b44","type":"inject","name":"bottom < 0","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":90,"y":779,"z":"ceb00bdc.314ff8","wires":[["c354eb35.3cab18"]]},{"id":"337c8ac1.cc8376","type":"inject","name":"depth < 0","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":86,"y":814,"z":"ceb00bdc.314ff8","wires":[["f26b4c74.0d94b"]]},{"id":"25c1e2a8.da3e1e","type":"inject","name":"top < bottom","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":95,"y":850,"z":"ceb00bdc.314ff8","wires":[["a1b62042.5e49e"]]},{"id":"d18c52d.f2e73b","type":"inject","name":"increment < 0","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":97,"y":884,"z":"ceb00bdc.314ff8","wires":[["82e58633.7d1a78"]]},{"id":"3ab3af50.c54c5","type":"inject","name":"increment > 100","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":105,"y":919,"z":"ceb00bdc.314ff8","wires":[["8e3cd1d.f71c33"]]},{"id":"2e84570a.d17ba8","type":"inject","name":"altitudethreshold < 0","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":121,"y":954,"z":"ceb00bdc.314ff8","wires":[["78dbc98.f872438"]]},{"id":"24deb5ff.db214a","type":"inject","name":"altitudethreshold > 90","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":124,"y":989,"z":"ceb00bdc.314ff8","wires":[["cf084e0c.30f7b"]]},{"id":"983046b0.67cfb8","type":"inject","name":"cloudsThreshold < 0","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":118,"y":1024,"z":"ceb00bdc.314ff8","wires":[["27832d4f.d87cd2"]]},{"id":"8ec464da.713b98","type":"inject","name":"cloudsThreshold > 1","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":118,"y":1059,"z":"ceb00bdc.314ff8","wires":[["53f316e.fac0ce8"]]},{"id":"1a16254a.e5e9db","type":"function","name":"Orientation < 0","func":"msg.payload = {channel: 1, orientation: -1, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":299,"y":533,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"60bb243e.9f44dc","type":"function","name":"Orientation > 360","func":"msg.payload = {channel: 1, orientation: 361, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":307,"y":566,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"b987d277.46783","type":"function","name":"noffset < 0","func":"msg.payload = {channel: 1, orientation: 45, noffset:-1, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":285,"y":601,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"bc9e5740.4361a8","type":"function","name":"noffset > 90","func":"msg.payload = {channel: 1, orientation: 45, noffset:91, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":289,"y":636,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"72ee3ff9.8d11c","type":"function","name":"poffset < 0","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: -1,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":285,"y":672,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"aa287e59.55d78","type":"function","name":"poffset > 90","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 91,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":288,"y":707,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"2cce0697.d331fa","type":"function","name":"top < 0","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:-1, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":273,"y":744,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"c354eb35.3cab18","type":"function","name":"bottom < 0","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:-1, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":285,"y":779,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"f26b4c74.0d94b","type":"function","name":"depth < 0","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:-1, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":281,"y":814,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"a1b62042.5e49e","type":"function","name":"top < bottom","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:3, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":290,"y":849,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"82e58633.7d1a78","type":"function","name":"increment < 0","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:-1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":293,"y":884,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"8e3cd1d.f71c33","type":"function","name":"Increment > 100","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:3, depth:10, increment:101};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":301,"y":918,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"78dbc98.f872438","type":"function","name":"altitudethreshold < 0","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1, altitudethreshold: -1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":326,"y":954,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"cf084e0c.30f7b","type":"function","name":"altitudethreshold > 90","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1, altitudethreshold: 91};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":330,"y":988,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"27832d4f.d87cd2","type":"function","name":"cloudsthreshold < 0","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1, cloudsthreshold: -1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":324,"y":1023,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"53f316e.fac0ce8","type":"function","name":"cloudsthreshold > 1","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1, cloudsthreshold: 2};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":321,"y":1060,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"85f13fad.7a0ec","type":"blindcontroller","name":"","channel":"1","orientation":"0","noffset":"90","poffset":"90","top":"1","bottom":"0","depth":".5","altitudethreshold":"","increment":"1","temperaturethreshold":"","cloudsthreshold":"","x":581,"y":1548,"z":"ceb00bdc.314ff8","wires":[["f08c81a0.0f738"]]},{"id":"74ff89d7.8b0078","type":"inject","name":"Orientation (invalid type)","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":130,"y":1096,"z":"ceb00bdc.314ff8","wires":[["246b9d1a.db9462"]]},{"id":"246b9d1a.db9462","type":"function","name":"Orientation (invalid type)","func":"msg.payload = {channel: 1, orientation: \"abc\", noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":352,"y":1096,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"82a5d6b.f7d5a28","type":"inject","name":"noffset (invalid type)","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":112,"y":1131,"z":"ceb00bdc.314ff8","wires":[["811d982.f7ee268"]]},{"id":"811d982.f7ee268","type":"function","name":"noffset (invalid type)","func":"msg.payload = {channel: 1, orientation: 360, noffset:\"abc\", poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":338,"y":1131,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"1f8d8b04.e07275","type":"inject","name":"poffset (invalid type)","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":111,"y":1166,"z":"ceb00bdc.314ff8","wires":[["1ecebf56.e13141"]]},{"id":"1ecebf56.e13141","type":"function","name":"poffset (invalid type)","func":"msg.payload = {channel: 1, orientation: 360, noffset:90, poffset: \"abc\",top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":337,"y":1166,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"993228b1.66cdd8","type":"inject","name":"top (invalid type)","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":100,"y":1201,"z":"ceb00bdc.314ff8","wires":[["87f5ac88.780a5"]]},{"id":"87f5ac88.780a5","type":"function","name":"top (invalid type)","func":"msg.payload = {channel: 1, orientation: 360, noffset:90, poffset: 90,top:\"abc\", bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":326,"y":1200,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"936b5abc.6c94a8","type":"inject","name":"bottom (invalid type)","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":111,"y":1236,"z":"ceb00bdc.314ff8","wires":[["bf61586f.409ea8"]]},{"id":"bf61586f.409ea8","type":"function","name":"bottom (invalid type)","func":"msg.payload = {channel: 1, orientation: 360, noffset:90, poffset: 90,top:2, bottom:\"abc\", depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":338,"y":1237,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"ea3ce8b6.15c318","type":"inject","name":"depth (invalid type)","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":106,"y":1273,"z":"ceb00bdc.314ff8","wires":[["426e0488.bd91fc"]]},{"id":"426e0488.bd91fc","type":"function","name":"depth (invalid type)","func":"msg.payload = {channel: 1, orientation: 360, noffset:90, poffset: 90,top:2, bottom:0, depth:\"abc\", increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":334,"y":1272,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"dfb5df0e.204a2","type":"inject","name":"altitudethreshold (invalid type)","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":140,"y":1308,"z":"ceb00bdc.314ff8","wires":[["b00c5f4c.4ff3a"]]},{"id":"b00c5f4c.4ff3a","type":"function","name":"altitudethreshold (invalid type)","func":"msg.payload = {channel: 1, orientation: 360, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1, altitudethreshold:\"abc\"};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":403,"y":1307,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"2ab353ff.d54cac","type":"inject","name":"cloudsthreshold (invalid type)","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":136,"y":1343,"z":"ceb00bdc.314ff8","wires":[["7b591959.84a6e8"]]},{"id":"7b591959.84a6e8","type":"function","name":"cloudsthreshold (invalid type)","func":"msg.payload = {channel: 1, orientation: 360, noffset:90, poffset: 90,top:2, bottom:\"abc\", depth:10, increment:1, cloudsthreshold: \"abc\"};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":400,"y":1343,"z":"ceb00bdc.314ff8","wires":[["70f23d05.8f0dc4"]]},{"id":"61fda4e3.9e025c","type":"inject","name":"sunInSky (invalid type)","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":127,"y":1630,"z":"ceb00bdc.314ff8","wires":[["17718ee3.e88e71"]]},{"id":"6aa55f67.955aa","type":"inject","name":"azimuth (invalid type)","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":122,"y":1666,"z":"ceb00bdc.314ff8","wires":[["fbd1894d.042e78"]]},{"id":"bdb6e42.f424918","type":"inject","name":"altitude (invalid type)","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":120,"y":1701,"z":"ceb00bdc.314ff8","wires":[["6040f12f.9fbf1"]]},{"id":"17718ee3.e88e71","type":"function","name":"sunInSky (invalid type)","func":"msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": \"abc\", \"altitude\": 56.80029967413457, \"azimuth\": 72.73564171779199, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" };\nreturn msg;","outputs":1,"noerr":0,"x":358,"y":1629,"z":"ceb00bdc.314ff8","wires":[["e968965f.169768","85f13fad.7a0ec"]]},{"id":"fbd1894d.042e78","type":"function","name":"azimuth (invalid type)","func":"msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": true, \"altitude\": 56.80029967413457, \"azimuth\": \"abc\", \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" };\nreturn msg;","outputs":1,"noerr":0,"x":356,"y":1661,"z":"ceb00bdc.314ff8","wires":[["e968965f.169768","85f13fad.7a0ec"]]},{"id":"6040f12f.9fbf1","type":"function","name":"altitude (invalid type)","func":"msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": false, \"altitude\": \"abc\", \"azimuth\": 72.73564171779199, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" };\nreturn msg;","outputs":1,"noerr":0,"x":353,"y":1700,"z":"ceb00bdc.314ff8","wires":[["e968965f.169768","85f13fad.7a0ec"]]},{"id":"20c7a9ba.df3856","type":"inject","name":"azimuth < 0","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":91,"y":1772,"z":"ceb00bdc.314ff8","wires":[["4492c07.fbb6d4"]]},{"id":"99fdc557.660238","type":"inject","name":"azimuth > 360","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":98,"y":1807,"z":"ceb00bdc.314ff8","wires":[["e8412337.17bee"]]},{"id":"61ba406d.9e45c","type":"inject","name":"altitude > 90","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":92,"y":1842,"z":"ceb00bdc.314ff8","wires":[["931b7a65.6ce488"]]},{"id":"4492c07.fbb6d4","type":"function","name":"azimuth < 0","func":"msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": true, \"altitude\": 56.80029967413457, \"azimuth\": -1, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" }\nreturn msg;","outputs":1,"noerr":0,"x":325,"y":1772,"z":"ceb00bdc.314ff8","wires":[["e968965f.169768","85f13fad.7a0ec"]]},{"id":"e8412337.17bee","type":"function","name":"azimuth > 360","func":"msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": true, \"altitude\": 56.80029967413457, \"azimuth\": 360.73564171779199, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" }\nreturn msg;","outputs":1,"noerr":0,"x":333,"y":1808,"z":"ceb00bdc.314ff8","wires":[["e968965f.169768","85f13fad.7a0ec"]]},{"id":"931b7a65.6ce488","type":"function","name":"altitude > 90","func":"msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": true, \"altitude\": 90.80029967413457, \"azimuth\": 72.73564171779199, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" }\nreturn msg;","outputs":1,"noerr":0,"x":327,"y":1845,"z":"ceb00bdc.314ff8","wires":[["e968965f.169768","85f13fad.7a0ec"]]},{"id":"d77f174a.2880e8","type":"comment","name":"Invalid Weather","info":"","x":103,"y":1924,"z":"ceb00bdc.314ff8","wires":[]},{"id":"7b0a7265.84f58c","type":"inject","name":"clouds < 0","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":86,"y":1961,"z":"ceb00bdc.314ff8","wires":[["a5df8397.5a208"]]},{"id":"d595c890.2a6a38","type":"inject","name":"clouds > 1","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":85,"y":1998,"z":"ceb00bdc.314ff8","wires":[["7a945a12.856ba4"]]},{"id":"a5df8397.5a208","type":"function","name":"clouds < 0","func":"msg = { \"topic\": \"weather\", \"payload\": { \"weather\": \"rain\", \"detail\": \"Light rain in the morning.\", \"humidity\": 0.65, \"maxtemp\": 29.14, \"mintemp\": 18.04, \"windspeed\": 0.44, \"winddirection\": 43, \"lon\": -37.93723, \"lat\": 145.01148, \"clouds\": -0.59, \"precipitation\": 0.57, \"sunrise\": 1449514333, \"sunset\": 1449567223, \"units\": \"si\" }};\nreturn msg;","outputs":1,"noerr":0,"x":303,"y":1960,"z":"ceb00bdc.314ff8","wires":[["513a5b9d.aec5a4","e4a51634.1b5ae8"]]},{"id":"7a945a12.856ba4","type":"function","name":"clouds > 1","func":"msg = { \"topic\": \"weather\", \"payload\": { \"weather\": \"rain\", \"detail\": \"Light rain in the morning.\", \"humidity\": 0.65, \"maxtemp\": 29.14, \"mintemp\": 18.04, \"windspeed\": 0.44, \"winddirection\": 43, \"lon\": -37.93723, \"lat\": 145.01148, \"clouds\": 1.59, \"precipitation\": 0.57, \"sunrise\": 1449514333, \"sunset\": 1449567223, \"units\": \"si\" }};\nreturn msg;","outputs":1,"noerr":0,"x":302,"y":1997,"z":"ceb00bdc.314ff8","wires":[["513a5b9d.aec5a4","e4a51634.1b5ae8"]]},{"id":"513a5b9d.aec5a4","type":"multiblindcontroller","name":"","x":538,"y":1959,"z":"ceb00bdc.314ff8","wires":[["733e8f02.8cc17"]]},{"id":"e4a51634.1b5ae8","type":"blindcontroller","name":"","channel":"1","orientation":"0","noffset":"90","poffset":"90","top":"1","bottom":"0","depth":"0","altitudethreshold":"","increment":"1","temperaturethreshold":"","cloudsthreshold":"","x":535,"y":1995,"z":"ceb00bdc.314ff8","wires":[["733e8f02.8cc17"]]},{"id":"733e8f02.8cc17","type":"debug","name":"","active":true,"console":"false","complete":"false","x":753,"y":1980,"z":"ceb00bdc.314ff8","wires":[]},{"id":"b78bd458.487428","type":"comment","name":"Invalid Blind Position","info":"","x":116,"y":2040,"z":"ceb00bdc.314ff8","wires":[]},{"id":"ff6ee8c3.009118","type":"inject","name":"channel missing","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":101,"y":2081,"z":"ceb00bdc.314ff8","wires":[["b0b27455.4f4d88"]]},{"id":"7c29fc3.f83d604","type":"inject","name":"blindPosition missing","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":117,"y":2118,"z":"ceb00bdc.314ff8","wires":[["b8a8b85b.475748"]]},{"id":"a7a2ba48.585d48","type":"inject","name":"All missing","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":85,"y":2155,"z":"ceb00bdc.314ff8","wires":[["78cc0ef2.8733f"]]},{"id":"55be41a7.aa41c","type":"inject","name":"blindPosition < 0","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":103,"y":2192,"z":"ceb00bdc.314ff8","wires":[["e275a941.1d8a58"]]},{"id":"f9c24694.063db8","type":"inject","name":"blindPosition > 100","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":111,"y":2229,"z":"ceb00bdc.314ff8","wires":[["6d810417.927efc"]]},{"id":"74f257bd.8b0da8","type":"inject","name":"blindPosition (invalid type)","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":132,"y":2265,"z":"ceb00bdc.314ff8","wires":[["91bbfce9.6e44"]]},{"id":"b0b27455.4f4d88","type":"function","name":"channel missing","func":"msg = {topic: \"blindPosition\", payload: {blindPosition: 0}};\nreturn msg;","outputs":1,"noerr":0,"x":340,"y":2082,"z":"ceb00bdc.314ff8","wires":[["de7acddf.21853"]]},{"id":"b8a8b85b.475748","type":"function","name":"blindPosition missing","func":"msg = {topic: \"blindPosition\", payload: {channel: 1}};\nreturn msg;","outputs":1,"noerr":0,"x":354,"y":2118,"z":"ceb00bdc.314ff8","wires":[["de7acddf.21853"]]},{"id":"78cc0ef2.8733f","type":"function","name":"All missing","func":"msg = {topic: \"blindPosition\", payload: {}};\nreturn msg;","outputs":1,"noerr":0,"x":322,"y":2154,"z":"ceb00bdc.314ff8","wires":[["de7acddf.21853"]]},{"id":"e275a941.1d8a58","type":"function","name":"blindPosition < 0","func":"msg = {topic: \"blindPosition\", payload: {channel: 1, blindPosition: -1}};\nreturn msg;","outputs":1,"noerr":0,"x":340,"y":2190,"z":"ceb00bdc.314ff8","wires":[["de7acddf.21853"]]},{"id":"6d810417.927efc","type":"function","name":"blindPosition > 100","func":"msg = {topic: \"blindPosition\", payload: {channel: 1, blindPosition: 101}};\nreturn msg;","outputs":1,"noerr":0,"x":347,"y":2227,"z":"ceb00bdc.314ff8","wires":[["de7acddf.21853"]]},{"id":"91bbfce9.6e44","type":"function","name":"blindPosition (invalid type)","func":"msg = {topic: \"blindPosition\", payload: {channel: 1, blindPosition: \"abc\"}};\nreturn msg;","outputs":1,"noerr":0,"x":371,"y":2264,"z":"ceb00bdc.314ff8","wires":[["de7acddf.21853"]]},{"id":"de7acddf.21853","type":"multiblindcontroller","name":"","x":613,"y":2176,"z":"ceb00bdc.314ff8","wires":[["1c836f21.e37c91"]]},{"id":"1c836f21.e37c91","type":"debug","name":"","active":true,"console":"false","complete":"false","x":809,"y":2175,"z":"ceb00bdc.314ff8","wires":[]},{"id":"4f7f98ab.b08068","type":"inject","name":"Initialise Blind","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":106,"y":75,"z":"1355ff96.ecaa","wires":[["ea6a0cd3.1595f","ec50dd55.13af2","95d7a676.6a2858","6d652340.929adc"]]},{"id":"ea6a0cd3.1595f","type":"function","name":"Initialise Blind 1 - 45","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":282,"y":75,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"cb6a48aa.3495b8","type":"comment","name":"Orientation","info":"This test is to validate the \"sun in window\" aspect of the controller, which is based on the azimuth of the sun and the orientation of the window.\n\nSimulates the movement of the sun in Melbourne on 8 December 2015.  The test includes 4 identical blinds at different orientations, 45, 135, 225, and 315.\nThe blinds have the following properties:\n* Top: 2 metres\n* Bottom: 1 metre\n* Negative Offset: 90 degrees\n* Positive Offset: 90 degrees\n* Depth: 1 metre\n\nOn 8 December 2015:\n* Sunrise was at 05:52 at a azimuth of 119.52\n* Sun peak level was at 13:12 at a azimuth of virtually north\n* Sunset was at 20:33 at a azimuth of 240.47\n\nIn the morning, the control is of the blinds at the orientation of 45 and 135, with the blinds rising as the sun progressively gets higher in the sky.\n\nIn the evening, the control is of the blinds at the orientation of 225 and 315, with the blinds being progressively close as the sun gets lower in the sky.","x":109,"y":27,"z":"1355ff96.ecaa","wires":[]},{"id":"a40974f6.5bf688","type":"debug","name":"","active":true,"console":"false","complete":"false","x":724,"y":211,"z":"1355ff96.ecaa","wires":[]},{"id":"29d481e3.d62b7e","type":"multiblindcontroller","name":"","x":560,"y":534,"z":"1355ff96.ecaa","wires":[["a40974f6.5bf688"]]},{"id":"1e393815.e1c6c8","type":"inject","name":"Night time","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":98,"y":250,"z":"1355ff96.ecaa","wires":[["9e0019e2.61ffe8"]]},{"id":"9e0019e2.61ffe8","type":"function","name":"05:19 (-6.21, 125.11)","func":"msg.payload = { \"sunInSky\": false, \"altitude\": -6.21, \"azimuth\": 125.11};\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":303,"y":251,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"ec50dd55.13af2","type":"function","name":"Initialise Blind 2 - 135","func":"msg.payload = {channel: 2, orientation: 135, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":283,"y":117,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"95d7a676.6a2858","type":"function","name":"Initialise Blind 3 - 225","func":"msg.payload = {channel: 3, orientation: 225, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":282,"y":157,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"6d652340.929adc","type":"function","name":"Initialise Blind 4 - 315","func":"msg.payload = {channel: 4, orientation: 315, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":282,"y":197,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"c89fd327.37603","type":"inject","name":"05:59","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":89.5,"y":295,"z":"1355ff96.ecaa","wires":[["cc6a9ee1.33956"]]},{"id":"cc6a9ee1.33956","type":"function","name":"05:59 (0.48, 118.75)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 0.48, \"azimuth\": 118.75};\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":305,"y":297,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"8bd3165.f742ce8","type":"function","name":"East (39.26, 89.59)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 39.26, \"azimuth\": 89.59};\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":306,"y":484,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"a7736c0d.588c9","type":"inject","name":"East","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":103,"y":481,"z":"1355ff96.ecaa","wires":[["8bd3165.f742ce8"]]},{"id":"67d1bd32.982e44","type":"inject","name":"10:35","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":102,"y":524,"z":"1355ff96.ecaa","wires":[["efdff675.102008"]]},{"id":"efdff675.102008","type":"function","name":"10:35 (53.15, 76.92)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 53.15, \"azimuth\": 76.92};\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":306,"y":529,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"286150b6.d79eb","type":"inject","name":"11:34","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":100,"y":568,"z":"1355ff96.ecaa","wires":[["21ac05ad.de53fa"]]},{"id":"21ac05ad.de53fa","type":"function","name":"11:34 (64.01, 60.97)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 64.01, \"azimuth\": 60.97 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":302,"y":570,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"8b04d17d.74fb3","type":"inject","name":"12:14","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":99,"y":607,"z":"1355ff96.ecaa","wires":[["dcfb3f78.2304c"]]},{"id":"dcfb3f78.2304c","type":"function","name":"12:14 (70.27, 43.3)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 70.27, \"azimuth\": 43.3 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":297,"y":616,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"bc18fe64.43e7","type":"inject","name":"Peak - 13.12","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":97,"y":656,"z":"1355ff96.ecaa","wires":[["9f1bbad1.60e448"]]},{"id":"9f1bbad1.60e448","type":"function","name":"13.12 - Peak (74.71, 0.11)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 74.71, \"azimuth\": 0.11 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":286,"y":657,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"f359bf39.0ca64","type":"inject","name":"14:09","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":95,"y":709,"z":"1355ff96.ecaa","wires":[["1203e7c3.edfc18"]]},{"id":"1203e7c3.edfc18","type":"function","name":"14:09 (70.45, 317.38)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 70.45, \"azimuth\": 317.38 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":288,"y":707,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"d23d2ad9.2dc2d8","type":"inject","name":"14:54","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":95,"y":750,"z":"1355ff96.ecaa","wires":[["92a25be.f6d5da8"]]},{"id":"92a25be.f6d5da8","type":"function","name":"14:54 (63.97, 270.1)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 63.97, \"azimuth\": 270.1 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":291,"y":749,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"a5e3731a.5a1c9","type":"inject","name":"17:02","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":92,"y":830,"z":"1355ff96.ecaa","wires":[["5c0feaf4.a3f014"]]},{"id":"5c0feaf4.a3f014","type":"function","name":"17:02 (38.94, 270.1)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 38.94, \"azimuth\": 270.1 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":291,"y":829,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"d615df01.29ea2","type":"inject","name":"08:12","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":99,"y":340,"z":"1355ff96.ecaa","wires":[["d4598bf2.2ba678"]]},{"id":"d4598bf2.2ba678","type":"function","name":"08:12 (25.14, 99.96)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 25.14, \"azimuth\": 99.96 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":301,"y":339,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"cf23040e.30dcf8","type":"inject","name":"08:37","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":98,"y":385,"z":"1355ff96.ecaa","wires":[["cd75d8b0.328a28"]]},{"id":"cd75d8b0.328a28","type":"function","name":"08:37 (30.02, 96.49)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 30.02, \"azimuth\": 96.49 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":299,"y":383,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"7f42e279.80bd1c","type":"inject","name":"09:00","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":98,"y":431,"z":"1355ff96.ecaa","wires":[["f2e26ddc.0d1d9"]]},{"id":"f2e26ddc.0d1d9","type":"function","name":"09:00 (34.53, 93.2)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 34.53, \"azimuth\": 93.2 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":303,"y":431,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"4c1e4efd.b3e1b","type":"inject","name":"16:33","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":99,"y":789,"z":"1355ff96.ecaa","wires":[["2bb6f3be.d4490c"]]},{"id":"2bb6f3be.d4490c","type":"function","name":"16:33 (44.65, 274.78)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 44.65, \"azimuth\": 274.78 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":306,"y":788,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"a125057c.5edaf8","type":"inject","name":"17.19","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":95,"y":873,"z":"1355ff96.ecaa","wires":[["67ec895b.981378"]]},{"id":"67ec895b.981378","type":"function","name":"17:19 (35.59, 267.53)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 35.59, \"azimuth\": 267.53 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":296,"y":872,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"5bbd896b.a44278","type":"inject","name":"17:45","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":104,"y":916,"z":"1355ff96.ecaa","wires":[["35cdda5e.ca3226"]]},{"id":"35cdda5e.ca3226","type":"function","name":"17:45 (30.48, 263.79)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 30.48, \"azimuth\": 263.79 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":323,"y":919,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"4553be12.baac4","type":"inject","name":"20:39","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":102,"y":960,"z":"1355ff96.ecaa","wires":[["8a779090.75887"]]},{"id":"8a779090.75887","type":"function","name":"20:39 (-1.82, 239.07)","func":"msg.payload = { \"sunInSky\": false, \"altitude\": -1.82, \"azimuth\": 239.07 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":318,"y":959,"z":"1355ff96.ecaa","wires":[["29d481e3.d62b7e"]]},{"id":"1c34b648.e3cb4a","type":"inject","name":"Initialise Blind","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":107,"y":83,"z":"c5633b36.3a9cc8","wires":[["7c709514.838f6c","8afd7396.75029","1ab4ec82.e54b13","d7956285.286aa","813a7ec7.7ec58","72767fac.8d898"]]},{"id":"7c709514.838f6c","type":"function","name":"Initialise Blind 1 - 45 (1)","func":"msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:1};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":341,"y":31,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"1fe2cc07.e01d34","type":"comment","name":"Increments","info":"This test is to validate the \"increment\" logic of the controller.  A feature intended to support blinds with different degrees of control fidelity.\n\nSimulates the movement of the sun in Melbourne on 8 December 2015.  The test includes 6 identical blinds that can be controlled at different increments (1,5,20,25,50,100).\nThe blinds have the following properties:\n* Orientation: 45 degrees\n* Top: 2 metres\n* Bottom: 1 metre\n* Negative Offset: 90 degrees\n* Positive Offset: 90 degrees\n* Depth: 1 metre\n\nOn 8 December 2015:\n* Sunrise was at 05:52 at a azimuth of 119.52\n* Sun peak level was at 13:12 at a azimuth of virtually north\n* Sunset was at 20:33 at a azimuth of 240.47\n","x":110,"y":35,"z":"c5633b36.3a9cc8","wires":[]},{"id":"a158f2f7.5ea71","type":"debug","name":"","active":true,"console":"false","complete":"false","x":725,"y":219,"z":"c5633b36.3a9cc8","wires":[]},{"id":"6c950a66.936af4","type":"multiblindcontroller","name":"","x":561,"y":542,"z":"c5633b36.3a9cc8","wires":[["a158f2f7.5ea71"]]},{"id":"92692ce5.6d96d","type":"inject","name":"Night time","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":99,"y":258,"z":"c5633b36.3a9cc8","wires":[["bcfd3fcb.4302c"]]},{"id":"bcfd3fcb.4302c","type":"function","name":"05:19 (-6.21, 125.11)","func":"msg.payload = { \"sunInSky\": false, \"altitude\": -6.21, \"azimuth\": 125.11};\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":304,"y":259,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"8afd7396.75029","type":"function","name":"Initialise Blind 2 - 45 (5)","func":"msg.payload = {channel: 2, orientation: 45, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:5};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":341,"y":65,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"1ab4ec82.e54b13","type":"function","name":"Initialise Blind 3 - 45 (20)","func":"msg.payload = {channel: 3, orientation: 45, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:20};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":345,"y":99,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"d7956285.286aa","type":"function","name":"Initialise Blind 4 - 45 (25)","func":"msg.payload = {channel: 4, orientation: 45, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:25};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":346,"y":133,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"675ebdf7.98a144","type":"inject","name":"05:59","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":90.5,"y":303,"z":"c5633b36.3a9cc8","wires":[["59b311e2.a64cf"]]},{"id":"59b311e2.a64cf","type":"function","name":"05:59 (0.48, 118.75)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 0.48, \"azimuth\": 118.75};\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":306,"y":305,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"995ae0db.66a52","type":"function","name":"East (39.26, 89.59)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 39.26, \"azimuth\": 89.59};\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":307,"y":492,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"995973e9.66a69","type":"inject","name":"East","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":104,"y":489,"z":"c5633b36.3a9cc8","wires":[["995ae0db.66a52"]]},{"id":"646e1968.9b91e8","type":"inject","name":"10:35","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":103,"y":532,"z":"c5633b36.3a9cc8","wires":[["65742d0b.9a8bd4"]]},{"id":"65742d0b.9a8bd4","type":"function","name":"10:35 (53.15, 76.92)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 53.15, \"azimuth\": 76.92};\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":307,"y":537,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"6b79b7d8.948648","type":"inject","name":"11:34","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":101,"y":576,"z":"c5633b36.3a9cc8","wires":[["5fe70100.a019"]]},{"id":"5fe70100.a019","type":"function","name":"11:34 (64.01, 60.97)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 64.01, \"azimuth\": 60.97 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":303,"y":578,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"7cd3d0b5.832c3","type":"inject","name":"12:14","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":100,"y":615,"z":"c5633b36.3a9cc8","wires":[["6f0c6acd.90f394"]]},{"id":"6f0c6acd.90f394","type":"function","name":"12:14 (70.27, 43.3)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 70.27, \"azimuth\": 43.3 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":298,"y":624,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"217f93d0.de806c","type":"inject","name":"Peak - 13.12","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":98,"y":664,"z":"c5633b36.3a9cc8","wires":[["3d1fdc8f.c2e024"]]},{"id":"3d1fdc8f.c2e024","type":"function","name":"13.12 - Peak (74.71, 0.11)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 74.71, \"azimuth\": 0.11 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":287,"y":665,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"c6893a08.3976c8","type":"inject","name":"14:09","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":96,"y":717,"z":"c5633b36.3a9cc8","wires":[["d5aec9b3.2a5138"]]},{"id":"d5aec9b3.2a5138","type":"function","name":"14:09 (70.45, 317.38)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 70.45, \"azimuth\": 317.38 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":289,"y":715,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"9b628b27.649d78","type":"inject","name":"14:54","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":96,"y":758,"z":"c5633b36.3a9cc8","wires":[["cae574c6.351a88"]]},{"id":"cae574c6.351a88","type":"function","name":"14:54 (63.97, 270.1)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 63.97, \"azimuth\": 270.1 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":292,"y":757,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"f72593b5.08da7","type":"inject","name":"17:02","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":93,"y":838,"z":"c5633b36.3a9cc8","wires":[["87b7a71c.784858"]]},{"id":"87b7a71c.784858","type":"function","name":"17:02 (38.94, 270.1)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 38.94, \"azimuth\": 270.1 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":292,"y":837,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"9ea09dce.615f6","type":"inject","name":"08:12","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":100,"y":348,"z":"c5633b36.3a9cc8","wires":[["e16f7c2.f1e908"]]},{"id":"e16f7c2.f1e908","type":"function","name":"08:12 (25.14, 99.96)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 25.14, \"azimuth\": 99.96 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":302,"y":347,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"3d181796.c2e7e8","type":"inject","name":"08:37","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":99,"y":393,"z":"c5633b36.3a9cc8","wires":[["d4309849.2bcf68"]]},{"id":"d4309849.2bcf68","type":"function","name":"08:37 (30.02, 96.49)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 30.02, \"azimuth\": 96.49 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":300,"y":391,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"5d6e933f.a2916c","type":"inject","name":"09:00","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":99,"y":439,"z":"c5633b36.3a9cc8","wires":[["73a42abe.8c5bd4"]]},{"id":"73a42abe.8c5bd4","type":"function","name":"09:00 (34.53, 93.2)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 34.53, \"azimuth\": 93.2 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":304,"y":439,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"a22cbafe.5dd348","type":"inject","name":"16:33","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":100,"y":797,"z":"c5633b36.3a9cc8","wires":[["d6b8aa4a.294758"]]},{"id":"d6b8aa4a.294758","type":"function","name":"16:33 (44.65, 274.78)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 44.65, \"azimuth\": 274.78 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":307,"y":796,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"bfade1d5.40522","type":"inject","name":"17.19","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":96,"y":881,"z":"c5633b36.3a9cc8","wires":[["e568d06c.1a973"]]},{"id":"e568d06c.1a973","type":"function","name":"17:19 (35.59, 267.53)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 35.59, \"azimuth\": 267.53 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":297,"y":880,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"376bbbb0.c89444","type":"inject","name":"17:45","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":105,"y":924,"z":"c5633b36.3a9cc8","wires":[["511770c2.aee89"]]},{"id":"511770c2.aee89","type":"function","name":"17:45 (30.48, 263.79)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 30.48, \"azimuth\": 263.79 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":324,"y":927,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"3121c972.cede36","type":"inject","name":"20:39","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":103,"y":968,"z":"c5633b36.3a9cc8","wires":[["387dff5d.c782"]]},{"id":"387dff5d.c782","type":"function","name":"20:39 (-1.82, 239.07)","func":"msg.payload = { \"sunInSky\": false, \"altitude\": -1.82, \"azimuth\": 239.07 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":319,"y":967,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"813a7ec7.7ec58","type":"function","name":"Initialise Blind 5 - 45 (50)","func":"msg.payload = {channel: 5, orientation: 45, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:50};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":346,"y":167,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"72767fac.8d898","type":"function","name":"Initialise Blind 6 - 45 (100)","func":"msg.payload = {channel: 6, orientation: 45, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:100};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":351,"y":201,"z":"c5633b36.3a9cc8","wires":[["6c950a66.936af4"]]},{"id":"96416510.69be98","type":"inject","name":"Initialise Blind","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":107,"y":91,"z":"e7db3953.1824c8","wires":[["756bbb95.8a9444","ddf9e9d0.220618","7d756d28.828a94","2357c94d.dca836","60640c3e.9f9bf4","fdf705db.0208f8"]]},{"id":"756bbb95.8a9444","type":"function","name":"Initialise Blind 1 - 45","func":"msg.payload = {channel: 1, orientation: 45, noffset:45, poffset: 45,top:2.5, bottom:0, depth:5, increment:25, altitudethreshold:20, cloudsthreshold: 0.5, temperaturethreshold: 30};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":341,"y":39,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"df50f91f.20af08","type":"comment","name":"Home","info":"This test uses the author's home configuration.  This configuration uses the **altitudethreshold** and differing offset values.\n\nGlobal Settings:\n* Cloud Threshold: 0.5\n* Max Temp: 30\n\nBlind 1 and 2\n* Orientation: 45 degrees\n* Negative Offset: 45 degrees\n* Positive Offset: 45 degrees\n* Top: 2.5 metres\n* Bottom: 0 metres (i.e. floor level)\n* Depth: 5 metres\n* Altitude Threshold: 20 degrees\n\nBlind 3 and 4\n* Orientation: 0 degrees\n* Negative Offset: 45 degrees\n* Positive Offset: 90 degrees\n* Top: 2.5 metres\n* Bottom: 0 metres\n* Depth: 2 metres\n\nBlind 5 and 6\n* Orientation: 90 degrees\n* Negative Offset: 90 degrees\n* Positive Offset: 10 degrees\n* Top: 1.5 metres\n* Bottom: 0 metres\n* Depth: 0 metres\n* Altitude Threshold: 10 degrees\n\nOn 8 December 2015:\n* Sunrise was at 05:52 at a azimuth of 119.52\n* Sun peak level was at 13:12 at a azimuth of virtually north\n* Sunset was at 20:33 at a azimuth of 240.47\n","x":87,"y":20,"z":"e7db3953.1824c8","wires":[]},{"id":"f4ad0787.0b52f8","type":"debug","name":"","active":true,"console":"false","complete":"false","x":725,"y":227,"z":"e7db3953.1824c8","wires":[]},{"id":"adc592e7.523a7","type":"multiblindcontroller","name":"","x":561,"y":550,"z":"e7db3953.1824c8","wires":[["f4ad0787.0b52f8"]]},{"id":"cbf634fe.3409c8","type":"inject","name":"Night time","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":95,"y":453,"z":"e7db3953.1824c8","wires":[["1782ef0c.e87d11"]]},{"id":"1782ef0c.e87d11","type":"function","name":"05:19 (-6.21, 125.11)","func":"msg.payload = { \"sunInSky\": false, \"altitude\": -6.21, \"azimuth\": 125.11};\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":303,"y":452,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"ddf9e9d0.220618","type":"function","name":"Initialise Blind 2 - 45","func":"msg.payload = {channel: 2, orientation: 45, noffset:45, poffset: 45,top:2.5, bottom:0, depth:5, increment:25, altitudethreshold: 20, cloudsthreshold: 0.5, temperaturethreshold: 30};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":341,"y":73,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"7d756d28.828a94","type":"function","name":"Initialise Blind 3 - 0","func":"msg.payload = {channel: 3, orientation: 0, noffset:45, poffset: 90,top:2.5, bottom:0, depth:2, increment:25, cloudsthreshold: 0.5, temperaturethreshold: 30};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":345,"y":107,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"2357c94d.dca836","type":"function","name":"Initialise Blind 4 - 0","func":"msg.payload = {channel: 4, orientation: 0, noffset:45, poffset: 90,top:2.5, bottom:0, depth:2, increment:25, cloudsthreshold: 0.5, temperaturethreshold: 30};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":346,"y":141,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"1be61e28.e419e2","type":"inject","name":"05:59","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":88.5,"y":500,"z":"e7db3953.1824c8","wires":[["ea8d4ff6.1572b"]]},{"id":"ea8d4ff6.1572b","type":"function","name":"05:59 (0.48, 118.75)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 0.48, \"azimuth\": 118.75};\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":301,"y":498,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"5e423ce9.a1bdc4","type":"function","name":"East (39.26, 89.59)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 39.26, \"azimuth\": 89.59};\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":297,"y":676,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"cce338ac.331cc8","type":"inject","name":"East","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":90,"y":677,"z":"e7db3953.1824c8","wires":[["5e423ce9.a1bdc4"]]},{"id":"357820e8.ca87e","type":"inject","name":"10:35","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":91,"y":721,"z":"e7db3953.1824c8","wires":[["1ee1f20.fe11e0e"]]},{"id":"1ee1f20.fe11e0e","type":"function","name":"10:35 (53.15, 76.92)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 53.15, \"azimuth\": 76.92};\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":301,"y":720,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"f6fad6b0.090528","type":"inject","name":"11:34","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":91,"y":762,"z":"e7db3953.1824c8","wires":[["7bf31fbe.840ce"]]},{"id":"7bf31fbe.840ce","type":"function","name":"11:34 (64.01, 60.97)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 64.01, \"azimuth\": 60.97 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":302,"y":761,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"f85c5e09.07a3a","type":"inject","name":"12:14","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":92,"y":803,"z":"e7db3953.1824c8","wires":[["1a1b399.fe5e4c6"]]},{"id":"1a1b399.fe5e4c6","type":"function","name":"12:14 (70.27, 43.3)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 70.27, \"azimuth\": 43.3 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":297,"y":801,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"fd82eecc.027d1","type":"inject","name":"Peak - 13.12","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":107,"y":844,"z":"e7db3953.1824c8","wires":[["7a4e16fb.85b1e8"]]},{"id":"7a4e16fb.85b1e8","type":"function","name":"13.12 - Peak (74.71, 0.11)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 74.71, \"azimuth\": 0.11 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":319,"y":843,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"274223a8.d8bddc","type":"inject","name":"14:09","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":93,"y":884,"z":"e7db3953.1824c8","wires":[["c022cdf.f3fdd3"]]},{"id":"c022cdf.f3fdd3","type":"function","name":"14:09 (70.45, 317.38)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 70.45, \"azimuth\": 317.38 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":304,"y":883,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"bfa9eb94.405618","type":"inject","name":"14:54","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":92,"y":926,"z":"e7db3953.1824c8","wires":[["93ebf903.6c1408"]]},{"id":"93ebf903.6c1408","type":"function","name":"14:54 (63.97, 270.1)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 63.97, \"azimuth\": 270.1 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":301,"y":927,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"5b4571e.fa4ba9","type":"inject","name":"17:02","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":91,"y":1008,"z":"e7db3953.1824c8","wires":[["d40a27c6.2bf5d8"]]},{"id":"d40a27c6.2bf5d8","type":"function","name":"17:02 (38.94, 270.1)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 38.94, \"azimuth\": 270.1 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":302,"y":1007,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"d9dde15b.26222","type":"inject","name":"08:12","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":89,"y":543,"z":"e7db3953.1824c8","wires":[["454bb4c2.bab44c"]]},{"id":"454bb4c2.bab44c","type":"function","name":"08:12 (25.14, 99.96)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 25.14, \"azimuth\": 99.96 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":301,"y":542,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"842ac2b1.7bd54","type":"inject","name":"08:37","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":90,"y":587,"z":"e7db3953.1824c8","wires":[["591cd090.a6e33"]]},{"id":"591cd090.a6e33","type":"function","name":"08:37 (30.02, 96.49)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 30.02, \"azimuth\": 96.49 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":301,"y":586,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"1664f8e3.e99b07","type":"inject","name":"09:00","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":91,"y":631,"z":"e7db3953.1824c8","wires":[["f7c3ac1.f083c5"]]},{"id":"f7c3ac1.f083c5","type":"function","name":"09:00 (34.53, 93.2)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 34.53, \"azimuth\": 93.2 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":297,"y":631,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"9571358f.6a8ec8","type":"inject","name":"16:33","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":92,"y":967,"z":"e7db3953.1824c8","wires":[["20d088cc.df2f78"]]},{"id":"20d088cc.df2f78","type":"function","name":"16:33 (44.65, 274.78)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 44.65, \"azimuth\": 274.78 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":305,"y":966,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"227df9e2.dd8206","type":"inject","name":"17.19","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":91,"y":1050,"z":"e7db3953.1824c8","wires":[["8bdeadc.f74215"]]},{"id":"8bdeadc.f74215","type":"function","name":"17:19 (35.59, 267.53)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 35.59, \"azimuth\": 267.53 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":308,"y":1050,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"78b3a131.874c6","type":"inject","name":"17:45","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":93,"y":1094,"z":"e7db3953.1824c8","wires":[["d1513195.2eaed"]]},{"id":"d1513195.2eaed","type":"function","name":"17:45 (30.48, 263.79)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 30.48, \"azimuth\": 263.79 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":311,"y":1094,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"3802810b.c7fd7e","type":"inject","name":"20:39","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":93,"y":1138,"z":"e7db3953.1824c8","wires":[["d672397b.298dc8"]]},{"id":"d672397b.298dc8","type":"function","name":"20:39 (-1.82, 239.07)","func":"msg.payload = { \"sunInSky\": false, \"altitude\": -1.82, \"azimuth\": 239.07 };\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":310,"y":1138,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"60640c3e.9f9bf4","type":"function","name":"Initialise Blind 5 - 90","func":"msg.payload = {channel: 5, orientation: 90, noffset:90, poffset: 10,top:1.5, bottom:0, depth:0, increment:25, altitudethreshold: 10, cloudsthreshold: 0.5, temperaturethreshold: 30};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":346,"y":175,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"fdf705db.0208f8","type":"function","name":"Initialise Blind 6 - 90","func":"msg.payload = {channel: 6, orientation: 90, noffset:90, poffset: 10,top:1.5, bottom:0, depth:0, increment:25, altitudethreshold: 10, cloudsthreshold: 0.5, temperaturethreshold: 30};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":351,"y":209,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"c4a69dbb.3b596","type":"inject","name":"Normal Weather Conditions","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":140,"y":261,"z":"e7db3953.1824c8","wires":[["fb859be0.047a68"]]},{"id":"2932e500.d6cd1c","type":"inject","name":"Overcast - normal temperature","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":149,"y":300,"z":"e7db3953.1824c8","wires":[["88bf1568.7740e8"]]},{"id":"959645f9.6a69b8","type":"inject","name":"Overcast and extreme temperature","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":163,"y":338,"z":"e7db3953.1824c8","wires":[["41449f96.bebb6"]]},{"id":"55c9444f.aa36bc","type":"inject","name":"Clear and extreme temperature","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":152,"y":375,"z":"e7db3953.1824c8","wires":[["c8d7e099.37282"]]},{"id":"fb859be0.047a68","type":"function","name":"","func":"msg = { \"topic\": \"weather\", \"payload\": { \"weather\": \"rain\", \"detail\": \"Light rain in the morning.\", \"humidity\": 0.65, \"maxtemp\": 29.14, \"mintemp\": 18.04, \"windspeed\": 0.44, \"winddirection\": 43, \"lon\": -37.93723, \"lat\": 145.01148, \"clouds\": 0.25, \"precipitation\": 0.57, \"sunrise\": 1449514333, \"sunset\": 1449567223, \"units\": \"si\" }};\nreturn msg;","outputs":1,"noerr":0,"x":384,"y":262,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"88bf1568.7740e8","type":"function","name":"","func":"msg = { \"topic\": \"weather\", \"payload\": { \"weather\": \"rain\", \"detail\": \"Light rain in the morning.\", \"humidity\": 0.65, \"maxtemp\": 29.14, \"mintemp\": 18.04, \"windspeed\": 0.44, \"winddirection\": 43, \"lon\": -37.93723, \"lat\": 145.01148, \"clouds\": 0.6, \"precipitation\": 0.57, \"sunrise\": 1449514333, \"sunset\": 1449567223, \"units\": \"si\" }};\nreturn msg;","outputs":1,"noerr":0,"x":382,"y":300,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"41449f96.bebb6","type":"function","name":"","func":"msg = { \"topic\": \"weather\", \"payload\": { \"weather\": \"rain\", \"detail\": \"Light rain in the morning.\", \"humidity\": 0.65, \"maxtemp\": 35.14, \"mintemp\": 18.04, \"windspeed\": 0.44, \"winddirection\": 43, \"lon\": -37.93723, \"lat\": 145.01148, \"clouds\": 0.51, \"precipitation\": 0.57, \"sunrise\": 1449514333, \"sunset\": 1449567223, \"units\": \"si\" }};\nreturn msg;","outputs":1,"noerr":0,"x":384,"y":337,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"c8d7e099.37282","type":"function","name":"","func":"msg = { \"topic\": \"weather\", \"payload\": { \"weather\": \"rain\", \"detail\": \"Light rain in the morning.\", \"humidity\": 0.65, \"maxtemp\": 35.14, \"mintemp\": 18.04, \"windspeed\": 0.44, \"winddirection\": 43, \"lon\": -37.93723, \"lat\": 145.01148, \"clouds\": 0.49, \"precipitation\": 0.57, \"sunrise\": 1449514333, \"sunset\": 1449567223, \"units\": \"si\" }};\nreturn msg;","outputs":1,"noerr":0,"x":382,"y":375,"z":"e7db3953.1824c8","wires":[["adc592e7.523a7"]]},{"id":"f8d5a941.072a58","type":"inject","name":"Initialise","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":138,"y":70,"z":"75b12ad1.8a4ed4","wires":[["49e613d0.b619ec","9a7bbcbf.65844"]]},{"id":"49e613d0.b619ec","type":"function","name":"Initialise Blind 1 - 45","func":"msg.payload = {channel: 1, orientation: 45, noffset:45, poffset: 45,top:2.5, bottom:0, depth:5, increment:25, altitudethreshold:20, cloudsthreshold: 0.5, temperaturethreshold: 30, blindPosition: 0};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":353,"y":70,"z":"75b12ad1.8a4ed4","wires":[["e9497fca.16b68"]]},{"id":"e9497fca.16b68","type":"multiblindcontroller","name":"","x":597,"y":116,"z":"75b12ad1.8a4ed4","wires":[["47b21507.b84dec"]]},{"id":"47b21507.b84dec","type":"debug","name":"","active":true,"console":"false","complete":"false","x":786,"y":203,"z":"75b12ad1.8a4ed4","wires":[]},{"id":"baaad7f5.455528","type":"inject","name":"Set Blind Position","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":120,"y":215,"z":"75b12ad1.8a4ed4","wires":[["c4c56f59.3b3a9"]]},{"id":"c4c56f59.3b3a9","type":"function","name":"Set Channel 1 to 25%","func":"msg.payload = {channel: 1, blindPosition: 25};\nmsg.topic   = \"blindPosition\";\nreturn msg;","outputs":1,"noerr":0,"x":344,"y":215,"z":"75b12ad1.8a4ed4","wires":[["e9497fca.16b68"]]},{"id":"9a7bbcbf.65844","type":"function","name":"Initialise Blind 2 (with expiry)","func":"var ts = new Date();\nmsg.payload = {channel: 2, orientation: 45, noffset:90, poffset: 90,top:2.5, bottom:0, depth:2, increment:25, altitudethreshold:20, cloudsthreshold: 0.5, temperaturethreshold: 30, blindPosition: 0, blindPositionExpiry: ts};\nmsg.topic = \"blind\";\nreturn msg;","outputs":1,"noerr":0,"x":337,"y":150,"z":"75b12ad1.8a4ed4","wires":[["e9497fca.16b68"]]},{"id":"85d61c1.f7a29e","type":"inject","name":"Recalculate Position","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":115,"y":279,"z":"75b12ad1.8a4ed4","wires":[["307612a2.cf89ee"]]},{"id":"307612a2.cf89ee","type":"function","name":"East (39.26, 89.59)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 39.26, \"azimuth\": 89.59};\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":347,"y":279,"z":"75b12ad1.8a4ed4","wires":[["e9497fca.16b68"]]},{"id":"1901fb97.e6fe04","type":"inject","name":"Set Blind Position","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":123,"y":336,"z":"75b12ad1.8a4ed4","wires":[["11c32b71.ee3cd5"]]},{"id":"11c32b71.ee3cd5","type":"function","name":"Set Channel 2 to 25%","func":"msg.payload = {channel: 2, blindPosition: 25};\nmsg.topic   = \"blindPosition\";\nreturn msg;","outputs":1,"noerr":0,"x":341,"y":336,"z":"75b12ad1.8a4ed4","wires":[["e9497fca.16b68"]]},{"id":"faabef45.05541","type":"inject","name":"Recalculate Position","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"x":116,"y":394,"z":"75b12ad1.8a4ed4","wires":[["7c5c0bce.83a3f4"]]},{"id":"7c5c0bce.83a3f4","type":"function","name":"East (39.26, 89.59)","func":"msg.payload = { \"sunInSky\": true, \"altitude\": 39.26, \"azimuth\": 89.59};\nmsg.topic   = \"sun\";\nreturn msg;","outputs":1,"noerr":0,"x":340,"y":393,"z":"75b12ad1.8a4ed4","wires":[["e9497fca.16b68"]]},{"id":"3d5f1c56.c2a0e4","type":"cloudant in","service":"blindcontroller-cloudantNoSQLDB","cloudant":"","name":"blind - all documents","database":"blind","search":"_all_","design":"","index":"","x":220,"y":53,"z":"e8bf0b06.1740f8","wires":[["93985833.6c67a8"]]},{"id":"5fe980e4.a0168","type":"function","name":"Split Array","func":"var blinds = msg.payload;\nvar i;\nfor (i in blinds) {\n    msg.payload = blinds[i];\n    msg.topic   = \"blind\";\n    node.send(msg);\n}\n","outputs":1,"noerr":0,"x":414,"y":53,"z":"e8bf0b06.1740f8","wires":[[]]},{"id":"fd002d80.02ffd","type":"function","name":"Prepare blind update","func":"\nreturn msg;","outputs":1,"noerr":0,"x":233,"y":145,"z":"ef1a7757.10e588","wires":[["d062f235.2f9d1"]]},{"id":"d062f235.2f9d1","type":"cloudant out","service":"_ext_","cloudant":"c1b403b4.3e4c","name":"Update doc","database":"blind","payonly":true,"operation":"insert","x":464,"y":145,"z":"ef1a7757.10e588","wires":[]},{"id":"9bb64167.6449c","type":"delay","name":"","pauseType":"delay","timeout":"10","timeoutUnits":"seconds","rate":"1","rateUnits":"second","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":false,"x":191,"y":297,"z":"ef1a7757.10e588","wires":[["e5884be0.1a77b8"]]},{"id":"e5884be0.1a77b8","type":"subflow:e8bf0b06.1740f8","name":"","x":365,"y":297,"z":"ef1a7757.10e588","wires":[[]]},{"id":"fb4643c5.04b9c","type":"function","name":"Prepare blindPosition post","func":"var MSG = { payload:\n    {\n        \"channel\": msg.payload.channel,\n        \"blindPosition\": msg.payload.blindPosition,\n        \"timestamp\": msg.time\n    }\n};\nreturn MSG;","outputs":1,"noerr":0,"x":247,"y":221,"z":"ef1a7757.10e588","wires":[["5b39c69a.a4c638"]]},{"id":"5b39c69a.a4c638","type":"cloudant out","service":"_ext_","cloudant":"c1b403b4.3e4c","name":"","database":"blindposition","payonly":true,"operation":"insert","x":459,"y":221,"z":"ef1a7757.10e588","wires":[]},{"id":"d9f3b64.f260c48","type":"debug","name":"","active":true,"console":"false","complete":"true","x":1323,"y":128,"z":"46a3b08b.b95c5","wires":[]},{"id":"6d6b0c0c.9294f4","type":"multiblindcontroller","name":"","x":914,"y":128,"z":"46a3b08b.b95c5","wires":[["49b9d26d.b6462c","d9f3b64.f260c48"]]},{"id":"49b9d26d.b6462c","type":"subflow:ef1a7757.10e588","name":"","x":914,"y":259,"z":"46a3b08b.b95c5","wires":[["6d6b0c0c.9294f4"]]},{"id":"6198a580.9e675c","type":"cloudant in","service":"_ext_","cloudant":"c1b403b4.3e4c","name":"blind - all documents","database":"blind","search":"_all_","design":"","index":"","x":220,"y":53,"z":"e8bf0b06.1740f8","wires":[["93985833.6c67a8"]]},{"id":"93985833.6c67a8","type":"function","name":"Split Array","func":"var blinds = msg.payload;\nvar i;\nfor (i in blinds) {\n    msg.payload = blinds[i];\n    msg.topic   = \"blind\";\n    node.send(msg);\n}\n","outputs":1,"noerr":0,"x":414,"y":53,"z":"e8bf0b06.1740f8","wires":[[]]},{"id":"16293a47.e9d6c6","type":"cloudant in","service":"_ext_","cloudant":"c1b403b4.3e4c","name":"Search by channel","database":"blind","search":"_idx_","design":"channel","index":"channel","x":264,"y":211,"z":"f9c01197.063ff","wires":[["e43908e0.1bc6f8"]]},{"id":"e43908e0.1bc6f8","type":"function","name":"Mediate cloudant response","func":"var MSG = msg;\nvar i;\nfor (i in msg.payload) {\n    MSG.payload = msg.payload[i];\n}\nMSG.topic = \"cloudant\";\nreturn MSG;","outputs":1,"noerr":0,"x":517,"y":211,"z":"f9c01197.063ff","wires":[["ac96c4c0.536938"]]},{"id":"ac96c4c0.536938","type":"function","name":"Combine flow","func":"msg.time = new Date();\n\nswitch (msg.topic) {\n    case \"blindPosition\":\n        if ((context.blindpayload) && (msg.payload.channel == context.blindpayload.channel)) {\n            context.blindpayload.blindPosition = msg.payload.blindPosition;\n            msg.payload = context.blindpayload;\n            context.blindpayload = {};\n            return msg;\n        } else {\n            context.blindpayload = {channel: msg.payload.channel, blindPosition: msg.payload.blindPosition};\n        }\n        break;\n    case \"cloudant\":\n        if (typeof msg.payload.channel === \"undefined\") {\n            context.blindpayload = {};\n            node.error(\"blindcontroller.error.invalid-channel\", msg);\n        } else if ((context.blindpayload) && (msg.payload.channel == context.blindpayload.channel)) {\n            msg.payload.blindPosition = context.blindpayload.blindPosition;\n            context.blindpayload = {};\n            return msg;\n        } else {\n            context.blindpayload = msg.payload;\n        }\n        break;\n    default:\n        node.error(\"blindcontroller.error.invalid-topic\", msg);\n        break;\n}\n","outputs":1,"noerr":0,"x":762,"y":136,"z":"f9c01197.063ff","wires":[["49823ee8.b67dc"]]},{"id":"6b3db7c1.94c248","type":"catch","name":"","x":264,"y":311,"z":"f9c01197.063ff","wires":[["f1b15d25.0e4ea"]]},{"id":"f1b15d25.0e4ea","type":"function","name":"Mediate error","func":"msg.statusCode = 400;\nmsg.payload = {};\nmsg.payload.error = msg.error.message;\nreturn msg;","outputs":1,"noerr":0,"x":469,"y":311,"z":"f9c01197.063ff","wires":[[]]},{"id":"5d8e6bd5.a27194","type":"function","name":"Set msg.topic","func":"msg.topic = \"blindPosition\";\nreturn msg;","outputs":1,"noerr":0,"x":263,"y":82,"z":"f9c01197.063ff","wires":[["ac96c4c0.536938"]]},{"id":"49823ee8.b67dc","type":"function","name":"","func":"msg.topic = \"blindPosition\";\nmsg.payload.blindPositionReasonCode = \"01\";\nmsg.payload.blindPositionReasonDesc = \"Manually set\";\nreturn msg;","outputs":1,"noerr":0,"x":945,"y":136,"z":"f9c01197.063ff","wires":[[]]}]
+[
+  {
+    "type": "tab",
+    "id": "ceb00bdc.314ff8",
+    "label": "Negative Test Cases"
+  },
+  {
+    "type": "tab",
+    "id": "1355ff96.ecaa",
+    "label": "Orientation"
+  },
+  {
+    "type": "tab",
+    "id": "c5633b36.3a9cc8",
+    "label": "Increments"
+  },
+  {
+    "type": "tab",
+    "id": "e7db3953.1824c8",
+    "label": "Home"
+  },
+  {
+    "type": "tab",
+    "id": "75b12ad1.8a4ed4",
+    "label": "Manual"
+  },
+  {
+    "id": "c1b403b4.3e4c",
+    "type": "cloudant",
+    "host": "8ed30357-a867-489a-90e4-e09e594d20a5-bluemix.cloudant.com",
+    "name": "blindcontroller-cloudantNoSQLDB"
+  },
+  {
+    "id": "b8675472.4798a8",
+    "type": "inject",
+    "name": "Invalid Topic",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 109,
+    "y": 85,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "a60be318.59f42",
+        "b1c27ca0.4e3d8"
+      ]
+    ]
+  },
+  {
+    "id": "a60be318.59f42",
+    "type": "function",
+    "name": "Invalid Topic",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"invalid\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 290,
+    "y": 85,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "8d75d47a.728a28",
+        "1ae53766.e51ac9"
+      ]
+    ]
+  },
+  {
+    "id": "8d75d47a.728a28",
+    "type": "multiblindcontroller",
+    "name": "",
+    "x": 500,
+    "y": 85,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "f3f44624.0c0bb8"
+      ]
+    ]
+  },
+  {
+    "id": "f3f44624.0c0bb8",
+    "type": "debug",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 715,
+    "y": 105,
+    "z": "ceb00bdc.314ff8",
+    "wires": []
+  },
+  {
+    "id": "b1c27ca0.4e3d8",
+    "type": "function",
+    "name": "No Topic",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 290,
+    "y": 133,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "8d75d47a.728a28",
+        "1ae53766.e51ac9"
+      ]
+    ]
+  },
+  {
+    "id": "b0794531.4f86b8",
+    "type": "comment",
+    "name": "Invalid Topic",
+    "info": "Output message should report error \"blindcontroller.error.unknown-msg-topic\"\n* msg.topic is an unknown value\n* no msg.topic",
+    "x": 112,
+    "y": 30,
+    "z": "ceb00bdc.314ff8",
+    "wires": []
+  },
+  {
+    "id": "1ae53766.e51ac9",
+    "type": "blindcontroller",
+    "name": "",
+    "channel": "1",
+    "orientation": "0",
+    "noffset": "90",
+    "poffset": "90",
+    "top": "1",
+    "bottom": "0",
+    "depth": ".5",
+    "altitudethreshold": "",
+    "increment": "1",
+    "temperaturethreshold": "",
+    "cloudsthreshold": "",
+    "x": 498,
+    "y": 131,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "f3f44624.0c0bb8"
+      ]
+    ]
+  },
+  {
+    "id": "5cf33fde.a30cc",
+    "type": "comment",
+    "name": "Invalid Blind Payload",
+    "info": "Test cases for blind message:\n* Mandatory attribute missing\n    * channel\n    * orientation\n    * noffset\n    * poffset\n    * top\n    * bottom\n    * depth\n    * increment\n* More than one attribute missing\n* Orientation < 0\n* Orientation > 360\n* Negative Offset < 0\n* Negative Offset > 90\n* Positive Offset < 0\n* Positive Offset > 90\n* Top < 0\n* Bottom < 0\n* Depth < 0\n* Top < Bottom\n* Increment < 0\n* Increment > 100\n* AltitudeThreshold < 0\n* AltitudeThreshold > 90\n* CloudsThreshold < 0\n* CloudsThreshold > 1",
+    "x": 105,
+    "y": 181,
+    "z": "ceb00bdc.314ff8",
+    "wires": []
+  },
+  {
+    "id": "69d0314e.962fd",
+    "type": "function",
+    "name": "Missing Channel",
+    "func": "msg.payload = {orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 308,
+    "y": 219,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "70f23d05.8f0dc4",
+    "type": "multiblindcontroller",
+    "name": "",
+    "x": 608,
+    "y": 869,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "d118f2dd.2ee71"
+      ]
+    ]
+  },
+  {
+    "id": "d118f2dd.2ee71",
+    "type": "debug",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 847,
+    "y": 556,
+    "z": "ceb00bdc.314ff8",
+    "wires": []
+  },
+  {
+    "id": "87620f10.789df",
+    "type": "inject",
+    "name": "Missing channel",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 114,
+    "y": 219,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "69d0314e.962fd"
+      ]
+    ]
+  },
+  {
+    "id": "31a2b690.ce5d4a",
+    "type": "function",
+    "name": "Missing Orientation",
+    "func": "msg.payload = {channel: 1, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 315,
+    "y": 255,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "c4dbe98f.3b2418",
+    "type": "function",
+    "name": "Missing noffset",
+    "func": "msg.payload = {channel: 1, orientation: 45, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 301,
+    "y": 291,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "85c1a2a2.7a3e6",
+    "type": "function",
+    "name": "Missing poffset",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 301,
+    "y": 327,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "75165832.8ae9a8",
+    "type": "function",
+    "name": "Missing top",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 289,
+    "y": 362,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "7840a840.87bf58",
+    "type": "function",
+    "name": "Missing bottom",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 301,
+    "y": 397,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "4bb63400.b449cc",
+    "type": "function",
+    "name": "Missing depth",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 296,
+    "y": 432,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "6d49b2e9.92b64c",
+    "type": "function",
+    "name": "Missing increment",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 310,
+    "y": 465,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "328ee6.ffcd711a",
+    "type": "inject",
+    "name": "Missing orientation",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 122,
+    "y": 256,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "31a2b690.ce5d4a"
+      ]
+    ]
+  },
+  {
+    "id": "df8d6142.2072a",
+    "type": "inject",
+    "name": "Missing noffset",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 108,
+    "y": 293,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "c4dbe98f.3b2418"
+      ]
+    ]
+  },
+  {
+    "id": "9ca354ae.635ca8",
+    "type": "inject",
+    "name": "Missing poffset",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 107,
+    "y": 328,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "85c1a2a2.7a3e6"
+      ]
+    ]
+  },
+  {
+    "id": "1d8ad23b.e2752e",
+    "type": "inject",
+    "name": "Missing top",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 95,
+    "y": 362,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "75165832.8ae9a8"
+      ]
+    ]
+  },
+  {
+    "id": "986499f7.679b68",
+    "type": "inject",
+    "name": "Missing bottom",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 106,
+    "y": 397,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "7840a840.87bf58"
+      ]
+    ]
+  },
+  {
+    "id": "db188ce6.24e77",
+    "type": "inject",
+    "name": "Missing depth",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 103,
+    "y": 431,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "4bb63400.b449cc"
+      ]
+    ]
+  },
+  {
+    "id": "de3c8130.21c38",
+    "type": "inject",
+    "name": "Missing increment",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 117,
+    "y": 464,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "6d49b2e9.92b64c"
+      ]
+    ]
+  },
+  {
+    "id": "220e4c2b.ddf1b4",
+    "type": "inject",
+    "name": "All missing",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 94,
+    "y": 498,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "b328b683.4cd748"
+      ]
+    ]
+  },
+  {
+    "id": "b328b683.4cd748",
+    "type": "function",
+    "name": "All missing",
+    "func": "msg.payload = {};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 287,
+    "y": 499,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "f48eb6b2.0b7148",
+    "type": "comment",
+    "name": "Invalid Sun",
+    "info": "",
+    "x": 93,
+    "y": 1412,
+    "z": "ceb00bdc.314ff8",
+    "wires": []
+  },
+  {
+    "id": "1a4d75f6.e5b28a",
+    "type": "inject",
+    "name": "Missing sunInSky",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 112.5,
+    "y": 1450,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "fbb9bf02.04464"
+      ]
+    ]
+  },
+  {
+    "id": "9e5e28f5.61a1d8",
+    "type": "inject",
+    "name": "Missing azimuth",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 108.5,
+    "y": 1488,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "fcdd6616.032298"
+      ]
+    ]
+  },
+  {
+    "id": "c7a0df08.385f2",
+    "type": "inject",
+    "name": "Missing altitude",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 107.5,
+    "y": 1521,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "552c93d9.aad36c"
+      ]
+    ]
+  },
+  {
+    "id": "b2511162.4daef",
+    "type": "inject",
+    "name": "All missing",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 90.5,
+    "y": 1594,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "e679ed97.19861"
+      ]
+    ]
+  },
+  {
+    "id": "fbb9bf02.04464",
+    "type": "function",
+    "name": "Missing sunInSky",
+    "func": "msg = { \"topic\": \"sun\", \"payload\": { \"altitude\": 56.80029967413457, \"azimuth\": 72.73564171779199, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" };\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 342.5,
+    "y": 1451,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "e968965f.169768",
+        "85f13fad.7a0ec"
+      ]
+    ]
+  },
+  {
+    "id": "f08c81a0.0f738",
+    "type": "debug",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 790.5,
+    "y": 1507,
+    "z": "ceb00bdc.314ff8",
+    "wires": []
+  },
+  {
+    "id": "e968965f.169768",
+    "type": "multiblindcontroller",
+    "name": "",
+    "x": 597.5,
+    "y": 1507,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "f08c81a0.0f738"
+      ]
+    ]
+  },
+  {
+    "id": "fcdd6616.032298",
+    "type": "function",
+    "name": "Missing azimuth",
+    "func": "msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": true, \"altitude\": 56.80029967413457, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" }\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 337.5,
+    "y": 1486,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "e968965f.169768",
+        "85f13fad.7a0ec"
+      ]
+    ]
+  },
+  {
+    "id": "552c93d9.aad36c",
+    "type": "function",
+    "name": "Missing altitude",
+    "func": "msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": true, \"azimuth\": 72.73564171779199, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" }\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 335.5,
+    "y": 1522,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "e968965f.169768",
+        "85f13fad.7a0ec"
+      ]
+    ]
+  },
+  {
+    "id": "e679ed97.19861",
+    "type": "function",
+    "name": "All missing",
+    "func": "msg = { \"topic\": \"sun\", \"payload\": { \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" }\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 320.5,
+    "y": 1595,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "e968965f.169768",
+        "85f13fad.7a0ec"
+      ]
+    ]
+  },
+  {
+    "id": "356cb655.ca934a",
+    "type": "inject",
+    "name": "Orientation < 0",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 106,
+    "y": 532,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "1a16254a.e5e9db"
+      ]
+    ]
+  },
+  {
+    "id": "bbd01ee3.442fe",
+    "type": "inject",
+    "name": "Orientation > 360",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 114,
+    "y": 567,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "60bb243e.9f44dc"
+      ]
+    ]
+  },
+  {
+    "id": "a212c1f6.5ded4",
+    "type": "inject",
+    "name": "noffset < 0",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 93,
+    "y": 601,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "b987d277.46783"
+      ]
+    ]
+  },
+  {
+    "id": "c367ff52.3c98",
+    "type": "inject",
+    "name": "noffset > 90",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 96,
+    "y": 636,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "bc9e5740.4361a8"
+      ]
+    ]
+  },
+  {
+    "id": "4cd8460b.b327b8",
+    "type": "inject",
+    "name": "poffset < 0",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 91,
+    "y": 671,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "72ee3ff9.8d11c"
+      ]
+    ]
+  },
+  {
+    "id": "4a927a8a.b56d84",
+    "type": "inject",
+    "name": "poffset > 90",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 95,
+    "y": 707,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "aa287e59.55d78"
+      ]
+    ]
+  },
+  {
+    "id": "be00a1d.f41ff6",
+    "type": "inject",
+    "name": "top < 0",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 83,
+    "y": 743,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "2cce0697.d331fa"
+      ]
+    ]
+  },
+  {
+    "id": "6ec4bb05.913b44",
+    "type": "inject",
+    "name": "bottom < 0",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 90,
+    "y": 779,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "c354eb35.3cab18"
+      ]
+    ]
+  },
+  {
+    "id": "337c8ac1.cc8376",
+    "type": "inject",
+    "name": "depth < 0",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 86,
+    "y": 814,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "f26b4c74.0d94b"
+      ]
+    ]
+  },
+  {
+    "id": "25c1e2a8.da3e1e",
+    "type": "inject",
+    "name": "top < bottom",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 95,
+    "y": 850,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "a1b62042.5e49e"
+      ]
+    ]
+  },
+  {
+    "id": "d18c52d.f2e73b",
+    "type": "inject",
+    "name": "increment < 0",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 97,
+    "y": 884,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "82e58633.7d1a78"
+      ]
+    ]
+  },
+  {
+    "id": "3ab3af50.c54c5",
+    "type": "inject",
+    "name": "increment > 100",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 105,
+    "y": 919,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "8e3cd1d.f71c33"
+      ]
+    ]
+  },
+  {
+    "id": "2e84570a.d17ba8",
+    "type": "inject",
+    "name": "altitudethreshold < 0",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 121,
+    "y": 954,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "78dbc98.f872438"
+      ]
+    ]
+  },
+  {
+    "id": "24deb5ff.db214a",
+    "type": "inject",
+    "name": "altitudethreshold > 90",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 124,
+    "y": 989,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "cf084e0c.30f7b"
+      ]
+    ]
+  },
+  {
+    "id": "983046b0.67cfb8",
+    "type": "inject",
+    "name": "cloudsThreshold < 0",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 118,
+    "y": 1024,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "27832d4f.d87cd2"
+      ]
+    ]
+  },
+  {
+    "id": "8ec464da.713b98",
+    "type": "inject",
+    "name": "cloudsThreshold > 1",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 118,
+    "y": 1059,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "53f316e.fac0ce8"
+      ]
+    ]
+  },
+  {
+    "id": "1a16254a.e5e9db",
+    "type": "function",
+    "name": "Orientation < 0",
+    "func": "msg.payload = {channel: 1, orientation: -1, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 299,
+    "y": 533,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "60bb243e.9f44dc",
+    "type": "function",
+    "name": "Orientation > 360",
+    "func": "msg.payload = {channel: 1, orientation: 361, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 307,
+    "y": 566,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "b987d277.46783",
+    "type": "function",
+    "name": "noffset < 0",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:-1, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 285,
+    "y": 601,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "bc9e5740.4361a8",
+    "type": "function",
+    "name": "noffset > 90",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:91, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 289,
+    "y": 636,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "72ee3ff9.8d11c",
+    "type": "function",
+    "name": "poffset < 0",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: -1,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 285,
+    "y": 672,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "aa287e59.55d78",
+    "type": "function",
+    "name": "poffset > 90",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 91,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 288,
+    "y": 707,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "2cce0697.d331fa",
+    "type": "function",
+    "name": "top < 0",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:-1, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 273,
+    "y": 744,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "c354eb35.3cab18",
+    "type": "function",
+    "name": "bottom < 0",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:-1, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 285,
+    "y": 779,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "f26b4c74.0d94b",
+    "type": "function",
+    "name": "depth < 0",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:-1, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 281,
+    "y": 814,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "a1b62042.5e49e",
+    "type": "function",
+    "name": "top < bottom",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:3, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 290,
+    "y": 849,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "82e58633.7d1a78",
+    "type": "function",
+    "name": "increment < 0",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:-1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 293,
+    "y": 884,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "8e3cd1d.f71c33",
+    "type": "function",
+    "name": "Increment > 100",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:3, depth:10, increment:101};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 301,
+    "y": 918,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "78dbc98.f872438",
+    "type": "function",
+    "name": "altitudethreshold < 0",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1, altitudethreshold: -1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 326,
+    "y": 954,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "cf084e0c.30f7b",
+    "type": "function",
+    "name": "altitudethreshold > 90",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1, altitudethreshold: 91};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 330,
+    "y": 988,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "27832d4f.d87cd2",
+    "type": "function",
+    "name": "cloudsthreshold < 0",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1, cloudsthreshold: -1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 324,
+    "y": 1023,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "53f316e.fac0ce8",
+    "type": "function",
+    "name": "cloudsthreshold > 1",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1, cloudsthreshold: 2};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 321,
+    "y": 1060,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "85f13fad.7a0ec",
+    "type": "blindcontroller",
+    "name": "",
+    "channel": "1",
+    "orientation": "0",
+    "noffset": "90",
+    "poffset": "90",
+    "top": "1",
+    "bottom": "0",
+    "depth": ".5",
+    "altitudethreshold": "",
+    "increment": "1",
+    "temperaturethreshold": "",
+    "cloudsthreshold": "",
+    "x": 581,
+    "y": 1548,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "f08c81a0.0f738"
+      ]
+    ]
+  },
+  {
+    "id": "74ff89d7.8b0078",
+    "type": "inject",
+    "name": "Orientation (invalid type)",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 130,
+    "y": 1096,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "246b9d1a.db9462"
+      ]
+    ]
+  },
+  {
+    "id": "246b9d1a.db9462",
+    "type": "function",
+    "name": "Orientation (invalid type)",
+    "func": "msg.payload = {channel: 1, orientation: \"abc\", noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 352,
+    "y": 1096,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "82a5d6b.f7d5a28",
+    "type": "inject",
+    "name": "noffset (invalid type)",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 112,
+    "y": 1131,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "811d982.f7ee268"
+      ]
+    ]
+  },
+  {
+    "id": "811d982.f7ee268",
+    "type": "function",
+    "name": "noffset (invalid type)",
+    "func": "msg.payload = {channel: 1, orientation: 360, noffset:\"abc\", poffset: 90,top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 338,
+    "y": 1131,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "1f8d8b04.e07275",
+    "type": "inject",
+    "name": "poffset (invalid type)",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 111,
+    "y": 1166,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "1ecebf56.e13141"
+      ]
+    ]
+  },
+  {
+    "id": "1ecebf56.e13141",
+    "type": "function",
+    "name": "poffset (invalid type)",
+    "func": "msg.payload = {channel: 1, orientation: 360, noffset:90, poffset: \"abc\",top:2, bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 337,
+    "y": 1166,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "993228b1.66cdd8",
+    "type": "inject",
+    "name": "top (invalid type)",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 100,
+    "y": 1201,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "87f5ac88.780a5"
+      ]
+    ]
+  },
+  {
+    "id": "87f5ac88.780a5",
+    "type": "function",
+    "name": "top (invalid type)",
+    "func": "msg.payload = {channel: 1, orientation: 360, noffset:90, poffset: 90,top:\"abc\", bottom:0, depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 326,
+    "y": 1200,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "936b5abc.6c94a8",
+    "type": "inject",
+    "name": "bottom (invalid type)",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 111,
+    "y": 1236,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "bf61586f.409ea8"
+      ]
+    ]
+  },
+  {
+    "id": "bf61586f.409ea8",
+    "type": "function",
+    "name": "bottom (invalid type)",
+    "func": "msg.payload = {channel: 1, orientation: 360, noffset:90, poffset: 90,top:2, bottom:\"abc\", depth:10, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 338,
+    "y": 1237,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "ea3ce8b6.15c318",
+    "type": "inject",
+    "name": "depth (invalid type)",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 106,
+    "y": 1273,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "426e0488.bd91fc"
+      ]
+    ]
+  },
+  {
+    "id": "426e0488.bd91fc",
+    "type": "function",
+    "name": "depth (invalid type)",
+    "func": "msg.payload = {channel: 1, orientation: 360, noffset:90, poffset: 90,top:2, bottom:0, depth:\"abc\", increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 334,
+    "y": 1272,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "dfb5df0e.204a2",
+    "type": "inject",
+    "name": "altitudethreshold (invalid type)",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 140,
+    "y": 1308,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "b00c5f4c.4ff3a"
+      ]
+    ]
+  },
+  {
+    "id": "b00c5f4c.4ff3a",
+    "type": "function",
+    "name": "altitudethreshold (invalid type)",
+    "func": "msg.payload = {channel: 1, orientation: 360, noffset:90, poffset: 90,top:2, bottom:0, depth:10, increment:1, altitudethreshold:\"abc\"};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 403,
+    "y": 1307,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "2ab353ff.d54cac",
+    "type": "inject",
+    "name": "cloudsthreshold (invalid type)",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 136,
+    "y": 1343,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "7b591959.84a6e8"
+      ]
+    ]
+  },
+  {
+    "id": "7b591959.84a6e8",
+    "type": "function",
+    "name": "cloudsthreshold (invalid type)",
+    "func": "msg.payload = {channel: 1, orientation: 360, noffset:90, poffset: 90,top:2, bottom:\"abc\", depth:10, increment:1, cloudsthreshold: \"abc\"};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 400,
+    "y": 1343,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "70f23d05.8f0dc4"
+      ]
+    ]
+  },
+  {
+    "id": "61fda4e3.9e025c",
+    "type": "inject",
+    "name": "sunInSky (invalid type)",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 127,
+    "y": 1630,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "17718ee3.e88e71"
+      ]
+    ]
+  },
+  {
+    "id": "6aa55f67.955aa",
+    "type": "inject",
+    "name": "azimuth (invalid type)",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 122,
+    "y": 1666,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "fbd1894d.042e78"
+      ]
+    ]
+  },
+  {
+    "id": "bdb6e42.f424918",
+    "type": "inject",
+    "name": "altitude (invalid type)",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 120,
+    "y": 1701,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "6040f12f.9fbf1"
+      ]
+    ]
+  },
+  {
+    "id": "17718ee3.e88e71",
+    "type": "function",
+    "name": "sunInSky (invalid type)",
+    "func": "msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": \"abc\", \"altitude\": 56.80029967413457, \"azimuth\": 72.73564171779199, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" };\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 358,
+    "y": 1629,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "e968965f.169768",
+        "85f13fad.7a0ec"
+      ]
+    ]
+  },
+  {
+    "id": "fbd1894d.042e78",
+    "type": "function",
+    "name": "azimuth (invalid type)",
+    "func": "msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": true, \"altitude\": 56.80029967413457, \"azimuth\": \"abc\", \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" };\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 356,
+    "y": 1661,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "e968965f.169768",
+        "85f13fad.7a0ec"
+      ]
+    ]
+  },
+  {
+    "id": "6040f12f.9fbf1",
+    "type": "function",
+    "name": "altitude (invalid type)",
+    "func": "msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": false, \"altitude\": \"abc\", \"azimuth\": 72.73564171779199, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" };\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 353,
+    "y": 1700,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "e968965f.169768",
+        "85f13fad.7a0ec"
+      ]
+    ]
+  },
+  {
+    "id": "20c7a9ba.df3856",
+    "type": "inject",
+    "name": "azimuth < 0",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 91,
+    "y": 1772,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "4492c07.fbb6d4"
+      ]
+    ]
+  },
+  {
+    "id": "99fdc557.660238",
+    "type": "inject",
+    "name": "azimuth > 360",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 98,
+    "y": 1807,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "e8412337.17bee"
+      ]
+    ]
+  },
+  {
+    "id": "61ba406d.9e45c",
+    "type": "inject",
+    "name": "altitude > 90",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 92,
+    "y": 1842,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "931b7a65.6ce488"
+      ]
+    ]
+  },
+  {
+    "id": "4492c07.fbb6d4",
+    "type": "function",
+    "name": "azimuth < 0",
+    "func": "msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": true, \"altitude\": 56.80029967413457, \"azimuth\": -1, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" }\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 325,
+    "y": 1772,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "e968965f.169768",
+        "85f13fad.7a0ec"
+      ]
+    ]
+  },
+  {
+    "id": "e8412337.17bee",
+    "type": "function",
+    "name": "azimuth > 360",
+    "func": "msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": true, \"altitude\": 56.80029967413457, \"azimuth\": 360.73564171779199, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" }\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 333,
+    "y": 1808,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "e968965f.169768",
+        "85f13fad.7a0ec"
+      ]
+    ]
+  },
+  {
+    "id": "931b7a65.6ce488",
+    "type": "function",
+    "name": "altitude > 90",
+    "func": "msg = { \"topic\": \"sun\", \"payload\": { \"sunInSky\": true, \"altitude\": 90.80029967413457, \"azimuth\": 72.73564171779199, \"altitudeRadians\": 0.9913522454331105, \"azimuthRadians\": -1.8721162220633787 }, \"_msgid\": \"bdd61d4.f4229e\", \"location\": { \"lat\": \"-37.82103\", \"lon\": \"144.96634\" }, \"time\": \"2015-12-07T23:54:14.682Z\" }\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 327,
+    "y": 1845,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "e968965f.169768",
+        "85f13fad.7a0ec"
+      ]
+    ]
+  },
+  {
+    "id": "d77f174a.2880e8",
+    "type": "comment",
+    "name": "Invalid Weather",
+    "info": "",
+    "x": 103,
+    "y": 1924,
+    "z": "ceb00bdc.314ff8",
+    "wires": []
+  },
+  {
+    "id": "7b0a7265.84f58c",
+    "type": "inject",
+    "name": "clouds < 0",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 86,
+    "y": 1961,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "a5df8397.5a208"
+      ]
+    ]
+  },
+  {
+    "id": "d595c890.2a6a38",
+    "type": "inject",
+    "name": "clouds > 1",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 85,
+    "y": 1998,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "7a945a12.856ba4"
+      ]
+    ]
+  },
+  {
+    "id": "a5df8397.5a208",
+    "type": "function",
+    "name": "clouds < 0",
+    "func": "msg = { \"topic\": \"weather\", \"payload\": { \"weather\": \"rain\", \"detail\": \"Light rain in the morning.\", \"humidity\": 0.65, \"maxtemp\": 29.14, \"mintemp\": 18.04, \"windspeed\": 0.44, \"winddirection\": 43, \"lon\": -37.93723, \"lat\": 145.01148, \"clouds\": -0.59, \"precipitation\": 0.57, \"sunrise\": 1449514333, \"sunset\": 1449567223, \"units\": \"si\" }};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 303,
+    "y": 1960,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "513a5b9d.aec5a4",
+        "e4a51634.1b5ae8"
+      ]
+    ]
+  },
+  {
+    "id": "7a945a12.856ba4",
+    "type": "function",
+    "name": "clouds > 1",
+    "func": "msg = { \"topic\": \"weather\", \"payload\": { \"weather\": \"rain\", \"detail\": \"Light rain in the morning.\", \"humidity\": 0.65, \"maxtemp\": 29.14, \"mintemp\": 18.04, \"windspeed\": 0.44, \"winddirection\": 43, \"lon\": -37.93723, \"lat\": 145.01148, \"clouds\": 1.59, \"precipitation\": 0.57, \"sunrise\": 1449514333, \"sunset\": 1449567223, \"units\": \"si\" }};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 302,
+    "y": 1997,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "513a5b9d.aec5a4",
+        "e4a51634.1b5ae8"
+      ]
+    ]
+  },
+  {
+    "id": "513a5b9d.aec5a4",
+    "type": "multiblindcontroller",
+    "name": "",
+    "x": 538,
+    "y": 1959,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "733e8f02.8cc17"
+      ]
+    ]
+  },
+  {
+    "id": "e4a51634.1b5ae8",
+    "type": "blindcontroller",
+    "name": "",
+    "channel": "1",
+    "orientation": "0",
+    "noffset": "90",
+    "poffset": "90",
+    "top": "1",
+    "bottom": "0",
+    "depth": "0",
+    "altitudethreshold": "",
+    "increment": "1",
+    "temperaturethreshold": "",
+    "cloudsthreshold": "",
+    "x": 535,
+    "y": 1995,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "733e8f02.8cc17"
+      ]
+    ]
+  },
+  {
+    "id": "733e8f02.8cc17",
+    "type": "debug",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 753,
+    "y": 1980,
+    "z": "ceb00bdc.314ff8",
+    "wires": []
+  },
+  {
+    "id": "b78bd458.487428",
+    "type": "comment",
+    "name": "Invalid Blind Position",
+    "info": "",
+    "x": 116,
+    "y": 2040,
+    "z": "ceb00bdc.314ff8",
+    "wires": []
+  },
+  {
+    "id": "ff6ee8c3.009118",
+    "type": "inject",
+    "name": "channel missing",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 101,
+    "y": 2081,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "b0b27455.4f4d88"
+      ]
+    ]
+  },
+  {
+    "id": "7c29fc3.f83d604",
+    "type": "inject",
+    "name": "blindPosition missing",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 117,
+    "y": 2118,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "b8a8b85b.475748"
+      ]
+    ]
+  },
+  {
+    "id": "a7a2ba48.585d48",
+    "type": "inject",
+    "name": "All missing",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 85,
+    "y": 2155,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "78cc0ef2.8733f"
+      ]
+    ]
+  },
+  {
+    "id": "55be41a7.aa41c",
+    "type": "inject",
+    "name": "blindPosition < 0",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 103,
+    "y": 2192,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "e275a941.1d8a58"
+      ]
+    ]
+  },
+  {
+    "id": "f9c24694.063db8",
+    "type": "inject",
+    "name": "blindPosition > 100",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 111,
+    "y": 2229,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "6d810417.927efc"
+      ]
+    ]
+  },
+  {
+    "id": "74f257bd.8b0da8",
+    "type": "inject",
+    "name": "blindPosition (invalid type)",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 132,
+    "y": 2265,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "91bbfce9.6e44"
+      ]
+    ]
+  },
+  {
+    "id": "b0b27455.4f4d88",
+    "type": "function",
+    "name": "channel missing",
+    "func": "msg = {topic: \"blindPosition\", payload: {blindPosition: 0}};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 340,
+    "y": 2082,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "de7acddf.21853"
+      ]
+    ]
+  },
+  {
+    "id": "b8a8b85b.475748",
+    "type": "function",
+    "name": "blindPosition missing",
+    "func": "msg = {topic: \"blindPosition\", payload: {channel: 1}};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 354,
+    "y": 2118,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "de7acddf.21853"
+      ]
+    ]
+  },
+  {
+    "id": "78cc0ef2.8733f",
+    "type": "function",
+    "name": "All missing",
+    "func": "msg = {topic: \"blindPosition\", payload: {}};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 322,
+    "y": 2154,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "de7acddf.21853"
+      ]
+    ]
+  },
+  {
+    "id": "e275a941.1d8a58",
+    "type": "function",
+    "name": "blindPosition < 0",
+    "func": "msg = {topic: \"blindPosition\", payload: {channel: 1, blindPosition: -1}};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 340,
+    "y": 2190,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "de7acddf.21853"
+      ]
+    ]
+  },
+  {
+    "id": "6d810417.927efc",
+    "type": "function",
+    "name": "blindPosition > 100",
+    "func": "msg = {topic: \"blindPosition\", payload: {channel: 1, blindPosition: 101}};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 347,
+    "y": 2227,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "de7acddf.21853"
+      ]
+    ]
+  },
+  {
+    "id": "91bbfce9.6e44",
+    "type": "function",
+    "name": "blindPosition (invalid type)",
+    "func": "msg = {topic: \"blindPosition\", payload: {channel: 1, blindPosition: \"abc\"}};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 371,
+    "y": 2264,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "de7acddf.21853"
+      ]
+    ]
+  },
+  {
+    "id": "de7acddf.21853",
+    "type": "multiblindcontroller",
+    "name": "",
+    "x": 613,
+    "y": 2176,
+    "z": "ceb00bdc.314ff8",
+    "wires": [
+      [
+        "1c836f21.e37c91"
+      ]
+    ]
+  },
+  {
+    "id": "1c836f21.e37c91",
+    "type": "debug",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 809,
+    "y": 2175,
+    "z": "ceb00bdc.314ff8",
+    "wires": []
+  },
+  {
+    "id": "4f7f98ab.b08068",
+    "type": "inject",
+    "name": "Initialise Blind",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 106,
+    "y": 75,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "ea6a0cd3.1595f",
+        "ec50dd55.13af2",
+        "95d7a676.6a2858",
+        "6d652340.929adc"
+      ]
+    ]
+  },
+  {
+    "id": "ea6a0cd3.1595f",
+    "type": "function",
+    "name": "Initialise Blind 1 - 45",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 282,
+    "y": 75,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "cb6a48aa.3495b8",
+    "type": "comment",
+    "name": "Orientation",
+    "info": "This test is to validate the \"sun in window\" aspect of the controller, which is based on the azimuth of the sun and the orientation of the window.\n\nSimulates the movement of the sun in Melbourne on 8 December 2015.  The test includes 4 identical blinds at different orientations, 45, 135, 225, and 315.\nThe blinds have the following properties:\n* Top: 2 metres\n* Bottom: 1 metre\n* Negative Offset: 90 degrees\n* Positive Offset: 90 degrees\n* Depth: 1 metre\n\nOn 8 December 2015:\n* Sunrise was at 05:52 at a azimuth of 119.52\n* Sun peak level was at 13:12 at a azimuth of virtually north\n* Sunset was at 20:33 at a azimuth of 240.47\n\nIn the morning, the control is of the blinds at the orientation of 45 and 135, with the blinds rising as the sun progressively gets higher in the sky.\n\nIn the evening, the control is of the blinds at the orientation of 225 and 315, with the blinds being progressively close as the sun gets lower in the sky.",
+    "x": 109,
+    "y": 27,
+    "z": "1355ff96.ecaa",
+    "wires": []
+  },
+  {
+    "id": "a40974f6.5bf688",
+    "type": "debug",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 724,
+    "y": 211,
+    "z": "1355ff96.ecaa",
+    "wires": []
+  },
+  {
+    "id": "29d481e3.d62b7e",
+    "type": "multiblindcontroller",
+    "name": "",
+    "x": 560,
+    "y": 534,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "a40974f6.5bf688"
+      ]
+    ]
+  },
+  {
+    "id": "1e393815.e1c6c8",
+    "type": "inject",
+    "name": "Night time",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 98,
+    "y": 250,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "9e0019e2.61ffe8"
+      ]
+    ]
+  },
+  {
+    "id": "9e0019e2.61ffe8",
+    "type": "function",
+    "name": "05:19 (-6.21, 125.11)",
+    "func": "msg.payload = { \"sunInSky\": false, \"altitude\": -6.21, \"azimuth\": 125.11};\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 303,
+    "y": 251,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "ec50dd55.13af2",
+    "type": "function",
+    "name": "Initialise Blind 2 - 135",
+    "func": "msg.payload = {channel: 2, orientation: 135, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 283,
+    "y": 117,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "95d7a676.6a2858",
+    "type": "function",
+    "name": "Initialise Blind 3 - 225",
+    "func": "msg.payload = {channel: 3, orientation: 225, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 282,
+    "y": 157,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "6d652340.929adc",
+    "type": "function",
+    "name": "Initialise Blind 4 - 315",
+    "func": "msg.payload = {channel: 4, orientation: 315, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 282,
+    "y": 197,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "c89fd327.37603",
+    "type": "inject",
+    "name": "05:59",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 89.5,
+    "y": 295,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "cc6a9ee1.33956"
+      ]
+    ]
+  },
+  {
+    "id": "cc6a9ee1.33956",
+    "type": "function",
+    "name": "05:59 (0.48, 118.75)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 0.48, \"azimuth\": 118.75};\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 305,
+    "y": 297,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "8bd3165.f742ce8",
+    "type": "function",
+    "name": "East (39.26, 89.59)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 39.26, \"azimuth\": 89.59};\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 306,
+    "y": 484,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "a7736c0d.588c9",
+    "type": "inject",
+    "name": "East",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 103,
+    "y": 481,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "8bd3165.f742ce8"
+      ]
+    ]
+  },
+  {
+    "id": "67d1bd32.982e44",
+    "type": "inject",
+    "name": "10:35",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 102,
+    "y": 524,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "efdff675.102008"
+      ]
+    ]
+  },
+  {
+    "id": "efdff675.102008",
+    "type": "function",
+    "name": "10:35 (53.15, 76.92)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 53.15, \"azimuth\": 76.92};\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 306,
+    "y": 529,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "286150b6.d79eb",
+    "type": "inject",
+    "name": "11:34",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 100,
+    "y": 568,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "21ac05ad.de53fa"
+      ]
+    ]
+  },
+  {
+    "id": "21ac05ad.de53fa",
+    "type": "function",
+    "name": "11:34 (64.01, 60.97)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 64.01, \"azimuth\": 60.97 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 302,
+    "y": 570,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "8b04d17d.74fb3",
+    "type": "inject",
+    "name": "12:14",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 99,
+    "y": 607,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "dcfb3f78.2304c"
+      ]
+    ]
+  },
+  {
+    "id": "dcfb3f78.2304c",
+    "type": "function",
+    "name": "12:14 (70.27, 43.3)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 70.27, \"azimuth\": 43.3 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 297,
+    "y": 616,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "bc18fe64.43e7",
+    "type": "inject",
+    "name": "Peak - 13.12",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 97,
+    "y": 656,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "9f1bbad1.60e448"
+      ]
+    ]
+  },
+  {
+    "id": "9f1bbad1.60e448",
+    "type": "function",
+    "name": "13.12 - Peak (74.71, 0.11)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 74.71, \"azimuth\": 0.11 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 286,
+    "y": 657,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "f359bf39.0ca64",
+    "type": "inject",
+    "name": "14:09",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 95,
+    "y": 709,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "1203e7c3.edfc18"
+      ]
+    ]
+  },
+  {
+    "id": "1203e7c3.edfc18",
+    "type": "function",
+    "name": "14:09 (70.45, 317.38)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 70.45, \"azimuth\": 317.38 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 288,
+    "y": 707,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "d23d2ad9.2dc2d8",
+    "type": "inject",
+    "name": "14:54",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 95,
+    "y": 750,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "92a25be.f6d5da8"
+      ]
+    ]
+  },
+  {
+    "id": "92a25be.f6d5da8",
+    "type": "function",
+    "name": "14:54 (63.97, 270.1)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 63.97, \"azimuth\": 270.1 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 291,
+    "y": 749,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "a5e3731a.5a1c9",
+    "type": "inject",
+    "name": "17:02",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 92,
+    "y": 830,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "5c0feaf4.a3f014"
+      ]
+    ]
+  },
+  {
+    "id": "5c0feaf4.a3f014",
+    "type": "function",
+    "name": "17:02 (38.94, 270.1)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 38.94, \"azimuth\": 270.1 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 291,
+    "y": 829,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "d615df01.29ea2",
+    "type": "inject",
+    "name": "08:12",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 99,
+    "y": 340,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "d4598bf2.2ba678"
+      ]
+    ]
+  },
+  {
+    "id": "d4598bf2.2ba678",
+    "type": "function",
+    "name": "08:12 (25.14, 99.96)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 25.14, \"azimuth\": 99.96 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 301,
+    "y": 339,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "cf23040e.30dcf8",
+    "type": "inject",
+    "name": "08:37",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 98,
+    "y": 385,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "cd75d8b0.328a28"
+      ]
+    ]
+  },
+  {
+    "id": "cd75d8b0.328a28",
+    "type": "function",
+    "name": "08:37 (30.02, 96.49)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 30.02, \"azimuth\": 96.49 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 299,
+    "y": 383,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "7f42e279.80bd1c",
+    "type": "inject",
+    "name": "09:00",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 98,
+    "y": 431,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "f2e26ddc.0d1d9"
+      ]
+    ]
+  },
+  {
+    "id": "f2e26ddc.0d1d9",
+    "type": "function",
+    "name": "09:00 (34.53, 93.2)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 34.53, \"azimuth\": 93.2 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 303,
+    "y": 431,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "4c1e4efd.b3e1b",
+    "type": "inject",
+    "name": "16:33",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 99,
+    "y": 789,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "2bb6f3be.d4490c"
+      ]
+    ]
+  },
+  {
+    "id": "2bb6f3be.d4490c",
+    "type": "function",
+    "name": "16:33 (44.65, 274.78)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 44.65, \"azimuth\": 274.78 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 306,
+    "y": 788,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "a125057c.5edaf8",
+    "type": "inject",
+    "name": "17.19",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 95,
+    "y": 873,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "67ec895b.981378"
+      ]
+    ]
+  },
+  {
+    "id": "67ec895b.981378",
+    "type": "function",
+    "name": "17:19 (35.59, 267.53)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 35.59, \"azimuth\": 267.53 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 296,
+    "y": 872,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "5bbd896b.a44278",
+    "type": "inject",
+    "name": "17:45",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 104,
+    "y": 916,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "35cdda5e.ca3226"
+      ]
+    ]
+  },
+  {
+    "id": "35cdda5e.ca3226",
+    "type": "function",
+    "name": "17:45 (30.48, 263.79)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 30.48, \"azimuth\": 263.79 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 323,
+    "y": 919,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "4553be12.baac4",
+    "type": "inject",
+    "name": "20:39",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 102,
+    "y": 960,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "8a779090.75887"
+      ]
+    ]
+  },
+  {
+    "id": "8a779090.75887",
+    "type": "function",
+    "name": "20:39 (-1.82, 239.07)",
+    "func": "msg.payload = { \"sunInSky\": false, \"altitude\": -1.82, \"azimuth\": 239.07 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 318,
+    "y": 959,
+    "z": "1355ff96.ecaa",
+    "wires": [
+      [
+        "29d481e3.d62b7e"
+      ]
+    ]
+  },
+  {
+    "id": "1c34b648.e3cb4a",
+    "type": "inject",
+    "name": "Initialise Blind",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 107,
+    "y": 83,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "7c709514.838f6c",
+        "8afd7396.75029",
+        "1ab4ec82.e54b13",
+        "d7956285.286aa",
+        "813a7ec7.7ec58",
+        "72767fac.8d898"
+      ]
+    ]
+  },
+  {
+    "id": "7c709514.838f6c",
+    "type": "function",
+    "name": "Initialise Blind 1 - 45 (1)",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:1};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 341,
+    "y": 31,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "1fe2cc07.e01d34",
+    "type": "comment",
+    "name": "Increments",
+    "info": "This test is to validate the \"increment\" logic of the controller.  A feature intended to support blinds with different degrees of control fidelity.\n\nSimulates the movement of the sun in Melbourne on 8 December 2015.  The test includes 6 identical blinds that can be controlled at different increments (1,5,20,25,50,100).\nThe blinds have the following properties:\n* Orientation: 45 degrees\n* Top: 2 metres\n* Bottom: 1 metre\n* Negative Offset: 90 degrees\n* Positive Offset: 90 degrees\n* Depth: 1 metre\n\nOn 8 December 2015:\n* Sunrise was at 05:52 at a azimuth of 119.52\n* Sun peak level was at 13:12 at a azimuth of virtually north\n* Sunset was at 20:33 at a azimuth of 240.47\n",
+    "x": 110,
+    "y": 35,
+    "z": "c5633b36.3a9cc8",
+    "wires": []
+  },
+  {
+    "id": "a158f2f7.5ea71",
+    "type": "debug",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 725,
+    "y": 219,
+    "z": "c5633b36.3a9cc8",
+    "wires": []
+  },
+  {
+    "id": "6c950a66.936af4",
+    "type": "multiblindcontroller",
+    "name": "",
+    "x": 561,
+    "y": 542,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "a158f2f7.5ea71"
+      ]
+    ]
+  },
+  {
+    "id": "92692ce5.6d96d",
+    "type": "inject",
+    "name": "Night time",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 99,
+    "y": 258,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "bcfd3fcb.4302c"
+      ]
+    ]
+  },
+  {
+    "id": "bcfd3fcb.4302c",
+    "type": "function",
+    "name": "05:19 (-6.21, 125.11)",
+    "func": "msg.payload = { \"sunInSky\": false, \"altitude\": -6.21, \"azimuth\": 125.11};\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 304,
+    "y": 259,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "8afd7396.75029",
+    "type": "function",
+    "name": "Initialise Blind 2 - 45 (5)",
+    "func": "msg.payload = {channel: 2, orientation: 45, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:5};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 341,
+    "y": 65,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "1ab4ec82.e54b13",
+    "type": "function",
+    "name": "Initialise Blind 3 - 45 (20)",
+    "func": "msg.payload = {channel: 3, orientation: 45, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:20};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 345,
+    "y": 99,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "d7956285.286aa",
+    "type": "function",
+    "name": "Initialise Blind 4 - 45 (25)",
+    "func": "msg.payload = {channel: 4, orientation: 45, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:25};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 346,
+    "y": 133,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "675ebdf7.98a144",
+    "type": "inject",
+    "name": "05:59",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 90.5,
+    "y": 303,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "59b311e2.a64cf"
+      ]
+    ]
+  },
+  {
+    "id": "59b311e2.a64cf",
+    "type": "function",
+    "name": "05:59 (0.48, 118.75)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 0.48, \"azimuth\": 118.75};\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 306,
+    "y": 305,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "995ae0db.66a52",
+    "type": "function",
+    "name": "East (39.26, 89.59)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 39.26, \"azimuth\": 89.59};\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 307,
+    "y": 492,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "995973e9.66a69",
+    "type": "inject",
+    "name": "East",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 104,
+    "y": 489,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "995ae0db.66a52"
+      ]
+    ]
+  },
+  {
+    "id": "646e1968.9b91e8",
+    "type": "inject",
+    "name": "10:35",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 103,
+    "y": 532,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "65742d0b.9a8bd4"
+      ]
+    ]
+  },
+  {
+    "id": "65742d0b.9a8bd4",
+    "type": "function",
+    "name": "10:35 (53.15, 76.92)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 53.15, \"azimuth\": 76.92};\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 307,
+    "y": 537,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "6b79b7d8.948648",
+    "type": "inject",
+    "name": "11:34",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 101,
+    "y": 576,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "5fe70100.a019"
+      ]
+    ]
+  },
+  {
+    "id": "5fe70100.a019",
+    "type": "function",
+    "name": "11:34 (64.01, 60.97)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 64.01, \"azimuth\": 60.97 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 303,
+    "y": 578,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "7cd3d0b5.832c3",
+    "type": "inject",
+    "name": "12:14",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 100,
+    "y": 615,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6f0c6acd.90f394"
+      ]
+    ]
+  },
+  {
+    "id": "6f0c6acd.90f394",
+    "type": "function",
+    "name": "12:14 (70.27, 43.3)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 70.27, \"azimuth\": 43.3 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 298,
+    "y": 624,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "217f93d0.de806c",
+    "type": "inject",
+    "name": "Peak - 13.12",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 98,
+    "y": 664,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "3d1fdc8f.c2e024"
+      ]
+    ]
+  },
+  {
+    "id": "3d1fdc8f.c2e024",
+    "type": "function",
+    "name": "13.12 - Peak (74.71, 0.11)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 74.71, \"azimuth\": 0.11 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 287,
+    "y": 665,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "c6893a08.3976c8",
+    "type": "inject",
+    "name": "14:09",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 96,
+    "y": 717,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "d5aec9b3.2a5138"
+      ]
+    ]
+  },
+  {
+    "id": "d5aec9b3.2a5138",
+    "type": "function",
+    "name": "14:09 (70.45, 317.38)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 70.45, \"azimuth\": 317.38 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 289,
+    "y": 715,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "9b628b27.649d78",
+    "type": "inject",
+    "name": "14:54",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 96,
+    "y": 758,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "cae574c6.351a88"
+      ]
+    ]
+  },
+  {
+    "id": "cae574c6.351a88",
+    "type": "function",
+    "name": "14:54 (63.97, 270.1)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 63.97, \"azimuth\": 270.1 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 292,
+    "y": 757,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "f72593b5.08da7",
+    "type": "inject",
+    "name": "17:02",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 93,
+    "y": 838,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "87b7a71c.784858"
+      ]
+    ]
+  },
+  {
+    "id": "87b7a71c.784858",
+    "type": "function",
+    "name": "17:02 (38.94, 270.1)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 38.94, \"azimuth\": 270.1 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 292,
+    "y": 837,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "9ea09dce.615f6",
+    "type": "inject",
+    "name": "08:12",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 100,
+    "y": 348,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "e16f7c2.f1e908"
+      ]
+    ]
+  },
+  {
+    "id": "e16f7c2.f1e908",
+    "type": "function",
+    "name": "08:12 (25.14, 99.96)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 25.14, \"azimuth\": 99.96 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 302,
+    "y": 347,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "3d181796.c2e7e8",
+    "type": "inject",
+    "name": "08:37",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 99,
+    "y": 393,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "d4309849.2bcf68"
+      ]
+    ]
+  },
+  {
+    "id": "d4309849.2bcf68",
+    "type": "function",
+    "name": "08:37 (30.02, 96.49)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 30.02, \"azimuth\": 96.49 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 300,
+    "y": 391,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "5d6e933f.a2916c",
+    "type": "inject",
+    "name": "09:00",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 99,
+    "y": 439,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "73a42abe.8c5bd4"
+      ]
+    ]
+  },
+  {
+    "id": "73a42abe.8c5bd4",
+    "type": "function",
+    "name": "09:00 (34.53, 93.2)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 34.53, \"azimuth\": 93.2 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 304,
+    "y": 439,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "a22cbafe.5dd348",
+    "type": "inject",
+    "name": "16:33",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 100,
+    "y": 797,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "d6b8aa4a.294758"
+      ]
+    ]
+  },
+  {
+    "id": "d6b8aa4a.294758",
+    "type": "function",
+    "name": "16:33 (44.65, 274.78)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 44.65, \"azimuth\": 274.78 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 307,
+    "y": 796,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "bfade1d5.40522",
+    "type": "inject",
+    "name": "17.19",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 96,
+    "y": 881,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "e568d06c.1a973"
+      ]
+    ]
+  },
+  {
+    "id": "e568d06c.1a973",
+    "type": "function",
+    "name": "17:19 (35.59, 267.53)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 35.59, \"azimuth\": 267.53 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 297,
+    "y": 880,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "376bbbb0.c89444",
+    "type": "inject",
+    "name": "17:45",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 105,
+    "y": 924,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "511770c2.aee89"
+      ]
+    ]
+  },
+  {
+    "id": "511770c2.aee89",
+    "type": "function",
+    "name": "17:45 (30.48, 263.79)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 30.48, \"azimuth\": 263.79 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 324,
+    "y": 927,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "3121c972.cede36",
+    "type": "inject",
+    "name": "20:39",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 103,
+    "y": 968,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "387dff5d.c782"
+      ]
+    ]
+  },
+  {
+    "id": "387dff5d.c782",
+    "type": "function",
+    "name": "20:39 (-1.82, 239.07)",
+    "func": "msg.payload = { \"sunInSky\": false, \"altitude\": -1.82, \"azimuth\": 239.07 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 319,
+    "y": 967,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "813a7ec7.7ec58",
+    "type": "function",
+    "name": "Initialise Blind 5 - 45 (50)",
+    "func": "msg.payload = {channel: 5, orientation: 45, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:50};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 346,
+    "y": 167,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "72767fac.8d898",
+    "type": "function",
+    "name": "Initialise Blind 6 - 45 (100)",
+    "func": "msg.payload = {channel: 6, orientation: 45, noffset:90, poffset: 90,top:2, bottom:1, depth:2, increment:100};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 351,
+    "y": 201,
+    "z": "c5633b36.3a9cc8",
+    "wires": [
+      [
+        "6c950a66.936af4"
+      ]
+    ]
+  },
+  {
+    "id": "96416510.69be98",
+    "type": "inject",
+    "name": "Initialise Blind",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 107,
+    "y": 91,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "756bbb95.8a9444",
+        "ddf9e9d0.220618",
+        "7d756d28.828a94",
+        "2357c94d.dca836",
+        "60640c3e.9f9bf4",
+        "fdf705db.0208f8"
+      ]
+    ]
+  },
+  {
+    "id": "756bbb95.8a9444",
+    "type": "function",
+    "name": "Initialise Blind 1 - 45",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:45, poffset: 45,top:2.5, bottom:0, depth:5, increment:25, altitudethreshold:20, cloudsthreshold: 0.5, temperaturethreshold: 30};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 341,
+    "y": 39,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "df50f91f.20af08",
+    "type": "comment",
+    "name": "Home",
+    "info": "This test uses the author's home configuration.  This configuration uses the **altitudethreshold** and differing offset values.\n\nGlobal Settings:\n* Cloud Threshold: 0.5\n* Max Temp: 30\n\nBlind 1 and 2\n* Orientation: 45 degrees\n* Negative Offset: 45 degrees\n* Positive Offset: 45 degrees\n* Top: 2.5 metres\n* Bottom: 0 metres (i.e. floor level)\n* Depth: 5 metres\n* Altitude Threshold: 20 degrees\n\nBlind 3 and 4\n* Orientation: 0 degrees\n* Negative Offset: 45 degrees\n* Positive Offset: 90 degrees\n* Top: 2.5 metres\n* Bottom: 0 metres\n* Depth: 2 metres\n\nBlind 5 and 6\n* Orientation: 90 degrees\n* Negative Offset: 90 degrees\n* Positive Offset: 10 degrees\n* Top: 1.5 metres\n* Bottom: 0 metres\n* Depth: 0 metres\n* Altitude Threshold: 10 degrees\n\nOn 8 December 2015:\n* Sunrise was at 05:52 at a azimuth of 119.52\n* Sun peak level was at 13:12 at a azimuth of virtually north\n* Sunset was at 20:33 at a azimuth of 240.47\n",
+    "x": 87,
+    "y": 20,
+    "z": "e7db3953.1824c8",
+    "wires": []
+  },
+  {
+    "id": "f4ad0787.0b52f8",
+    "type": "debug",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 725,
+    "y": 227,
+    "z": "e7db3953.1824c8",
+    "wires": []
+  },
+  {
+    "id": "adc592e7.523a7",
+    "type": "multiblindcontroller",
+    "name": "",
+    "x": 561,
+    "y": 550,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "f4ad0787.0b52f8"
+      ]
+    ]
+  },
+  {
+    "id": "cbf634fe.3409c8",
+    "type": "inject",
+    "name": "Night time",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 95,
+    "y": 453,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "1782ef0c.e87d11"
+      ]
+    ]
+  },
+  {
+    "id": "1782ef0c.e87d11",
+    "type": "function",
+    "name": "05:19 (-6.21, 125.11)",
+    "func": "msg.payload = { \"sunInSky\": false, \"altitude\": -6.21, \"azimuth\": 125.11};\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 303,
+    "y": 452,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "ddf9e9d0.220618",
+    "type": "function",
+    "name": "Initialise Blind 2 - 45",
+    "func": "msg.payload = {channel: 2, orientation: 45, noffset:45, poffset: 45,top:2.5, bottom:0, depth:5, increment:25, altitudethreshold: 20, cloudsthreshold: 0.5, temperaturethreshold: 30};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 341,
+    "y": 73,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "7d756d28.828a94",
+    "type": "function",
+    "name": "Initialise Blind 3 - 0",
+    "func": "msg.payload = {channel: 3, orientation: 0, noffset:45, poffset: 90,top:2.5, bottom:0, depth:2, increment:25, cloudsthreshold: 0.5, temperaturethreshold: 30};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 345,
+    "y": 107,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "2357c94d.dca836",
+    "type": "function",
+    "name": "Initialise Blind 4 - 0",
+    "func": "msg.payload = {channel: 4, orientation: 0, noffset:45, poffset: 90,top:2.5, bottom:0, depth:2, increment:25, cloudsthreshold: 0.5, temperaturethreshold: 30};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 346,
+    "y": 141,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "1be61e28.e419e2",
+    "type": "inject",
+    "name": "05:59",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 88.5,
+    "y": 500,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "ea8d4ff6.1572b"
+      ]
+    ]
+  },
+  {
+    "id": "ea8d4ff6.1572b",
+    "type": "function",
+    "name": "05:59 (0.48, 118.75)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 0.48, \"azimuth\": 118.75};\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 301,
+    "y": 498,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "5e423ce9.a1bdc4",
+    "type": "function",
+    "name": "East (39.26, 89.59)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 39.26, \"azimuth\": 89.59};\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 297,
+    "y": 676,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "cce338ac.331cc8",
+    "type": "inject",
+    "name": "East",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 90,
+    "y": 677,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "5e423ce9.a1bdc4"
+      ]
+    ]
+  },
+  {
+    "id": "357820e8.ca87e",
+    "type": "inject",
+    "name": "10:35",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 91,
+    "y": 721,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "1ee1f20.fe11e0e"
+      ]
+    ]
+  },
+  {
+    "id": "1ee1f20.fe11e0e",
+    "type": "function",
+    "name": "10:35 (53.15, 76.92)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 53.15, \"azimuth\": 76.92};\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 301,
+    "y": 720,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "f6fad6b0.090528",
+    "type": "inject",
+    "name": "11:34",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 91,
+    "y": 762,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "7bf31fbe.840ce"
+      ]
+    ]
+  },
+  {
+    "id": "7bf31fbe.840ce",
+    "type": "function",
+    "name": "11:34 (64.01, 60.97)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 64.01, \"azimuth\": 60.97 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 302,
+    "y": 761,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "f85c5e09.07a3a",
+    "type": "inject",
+    "name": "12:14",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 92,
+    "y": 803,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "1a1b399.fe5e4c6"
+      ]
+    ]
+  },
+  {
+    "id": "1a1b399.fe5e4c6",
+    "type": "function",
+    "name": "12:14 (70.27, 43.3)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 70.27, \"azimuth\": 43.3 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 297,
+    "y": 801,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "fd82eecc.027d1",
+    "type": "inject",
+    "name": "Peak - 13.12",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 107,
+    "y": 844,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "7a4e16fb.85b1e8"
+      ]
+    ]
+  },
+  {
+    "id": "7a4e16fb.85b1e8",
+    "type": "function",
+    "name": "13.12 - Peak (74.71, 0.11)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 74.71, \"azimuth\": 0.11 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 319,
+    "y": 843,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "274223a8.d8bddc",
+    "type": "inject",
+    "name": "14:09",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 93,
+    "y": 884,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "c022cdf.f3fdd3"
+      ]
+    ]
+  },
+  {
+    "id": "c022cdf.f3fdd3",
+    "type": "function",
+    "name": "14:09 (70.45, 317.38)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 70.45, \"azimuth\": 317.38 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 304,
+    "y": 883,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "bfa9eb94.405618",
+    "type": "inject",
+    "name": "14:54",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 92,
+    "y": 926,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "93ebf903.6c1408"
+      ]
+    ]
+  },
+  {
+    "id": "93ebf903.6c1408",
+    "type": "function",
+    "name": "14:54 (63.97, 270.1)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 63.97, \"azimuth\": 270.1 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 301,
+    "y": 927,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "5b4571e.fa4ba9",
+    "type": "inject",
+    "name": "17:02",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 91,
+    "y": 1008,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "d40a27c6.2bf5d8"
+      ]
+    ]
+  },
+  {
+    "id": "d40a27c6.2bf5d8",
+    "type": "function",
+    "name": "17:02 (38.94, 270.1)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 38.94, \"azimuth\": 270.1 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 302,
+    "y": 1007,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "d9dde15b.26222",
+    "type": "inject",
+    "name": "08:12",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 89,
+    "y": 543,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "454bb4c2.bab44c"
+      ]
+    ]
+  },
+  {
+    "id": "454bb4c2.bab44c",
+    "type": "function",
+    "name": "08:12 (25.14, 99.96)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 25.14, \"azimuth\": 99.96 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 301,
+    "y": 542,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "842ac2b1.7bd54",
+    "type": "inject",
+    "name": "08:37",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 90,
+    "y": 587,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "591cd090.a6e33"
+      ]
+    ]
+  },
+  {
+    "id": "591cd090.a6e33",
+    "type": "function",
+    "name": "08:37 (30.02, 96.49)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 30.02, \"azimuth\": 96.49 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 301,
+    "y": 586,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "1664f8e3.e99b07",
+    "type": "inject",
+    "name": "09:00",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 91,
+    "y": 631,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "f7c3ac1.f083c5"
+      ]
+    ]
+  },
+  {
+    "id": "f7c3ac1.f083c5",
+    "type": "function",
+    "name": "09:00 (34.53, 93.2)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 34.53, \"azimuth\": 93.2 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 297,
+    "y": 631,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "9571358f.6a8ec8",
+    "type": "inject",
+    "name": "16:33",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 92,
+    "y": 967,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "20d088cc.df2f78"
+      ]
+    ]
+  },
+  {
+    "id": "20d088cc.df2f78",
+    "type": "function",
+    "name": "16:33 (44.65, 274.78)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 44.65, \"azimuth\": 274.78 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 305,
+    "y": 966,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "227df9e2.dd8206",
+    "type": "inject",
+    "name": "17.19",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 91,
+    "y": 1050,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "8bdeadc.f74215"
+      ]
+    ]
+  },
+  {
+    "id": "8bdeadc.f74215",
+    "type": "function",
+    "name": "17:19 (35.59, 267.53)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 35.59, \"azimuth\": 267.53 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 308,
+    "y": 1050,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "78b3a131.874c6",
+    "type": "inject",
+    "name": "17:45",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 93,
+    "y": 1094,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "d1513195.2eaed"
+      ]
+    ]
+  },
+  {
+    "id": "d1513195.2eaed",
+    "type": "function",
+    "name": "17:45 (30.48, 263.79)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 30.48, \"azimuth\": 263.79 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 311,
+    "y": 1094,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "3802810b.c7fd7e",
+    "type": "inject",
+    "name": "20:39",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 93,
+    "y": 1138,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "d672397b.298dc8"
+      ]
+    ]
+  },
+  {
+    "id": "d672397b.298dc8",
+    "type": "function",
+    "name": "20:39 (-1.82, 239.07)",
+    "func": "msg.payload = { \"sunInSky\": false, \"altitude\": -1.82, \"azimuth\": 239.07 };\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 310,
+    "y": 1138,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "60640c3e.9f9bf4",
+    "type": "function",
+    "name": "Initialise Blind 5 - 90",
+    "func": "msg.payload = {channel: 5, orientation: 90, noffset:90, poffset: 10,top:1.5, bottom:0, depth:0, increment:25, altitudethreshold: 10, cloudsthreshold: 0.5, temperaturethreshold: 30};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 346,
+    "y": 175,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "fdf705db.0208f8",
+    "type": "function",
+    "name": "Initialise Blind 6 - 90",
+    "func": "msg.payload = {channel: 6, orientation: 90, noffset:90, poffset: 10,top:1.5, bottom:0, depth:0, increment:25, altitudethreshold: 10, cloudsthreshold: 0.5, temperaturethreshold: 30};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 351,
+    "y": 209,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "c4a69dbb.3b596",
+    "type": "inject",
+    "name": "Normal Weather Conditions",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 140,
+    "y": 261,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "fb859be0.047a68"
+      ]
+    ]
+  },
+  {
+    "id": "2932e500.d6cd1c",
+    "type": "inject",
+    "name": "Overcast - normal temperature",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 149,
+    "y": 300,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "88bf1568.7740e8"
+      ]
+    ]
+  },
+  {
+    "id": "959645f9.6a69b8",
+    "type": "inject",
+    "name": "Overcast and extreme temperature",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 163,
+    "y": 338,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "41449f96.bebb6"
+      ]
+    ]
+  },
+  {
+    "id": "55c9444f.aa36bc",
+    "type": "inject",
+    "name": "Clear and extreme temperature",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 152,
+    "y": 375,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "c8d7e099.37282"
+      ]
+    ]
+  },
+  {
+    "id": "fb859be0.047a68",
+    "type": "function",
+    "name": "",
+    "func": "msg = { \"topic\": \"weather\", \"payload\": { \"weather\": \"rain\", \"detail\": \"Light rain in the morning.\", \"humidity\": 0.65, \"maxtemp\": 29.14, \"mintemp\": 18.04, \"windspeed\": 0.44, \"winddirection\": 43, \"lon\": -37.93723, \"lat\": 145.01148, \"clouds\": 0.25, \"precipitation\": 0.57, \"sunrise\": 1449514333, \"sunset\": 1449567223, \"units\": \"si\" }};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 384,
+    "y": 262,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "88bf1568.7740e8",
+    "type": "function",
+    "name": "",
+    "func": "msg = { \"topic\": \"weather\", \"payload\": { \"weather\": \"rain\", \"detail\": \"Light rain in the morning.\", \"humidity\": 0.65, \"maxtemp\": 29.14, \"mintemp\": 18.04, \"windspeed\": 0.44, \"winddirection\": 43, \"lon\": -37.93723, \"lat\": 145.01148, \"clouds\": 0.6, \"precipitation\": 0.57, \"sunrise\": 1449514333, \"sunset\": 1449567223, \"units\": \"si\" }};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 382,
+    "y": 300,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "41449f96.bebb6",
+    "type": "function",
+    "name": "",
+    "func": "msg = { \"topic\": \"weather\", \"payload\": { \"weather\": \"rain\", \"detail\": \"Light rain in the morning.\", \"humidity\": 0.65, \"maxtemp\": 35.14, \"mintemp\": 18.04, \"windspeed\": 0.44, \"winddirection\": 43, \"lon\": -37.93723, \"lat\": 145.01148, \"clouds\": 0.51, \"precipitation\": 0.57, \"sunrise\": 1449514333, \"sunset\": 1449567223, \"units\": \"si\" }};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 384,
+    "y": 337,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "c8d7e099.37282",
+    "type": "function",
+    "name": "",
+    "func": "msg = { \"topic\": \"weather\", \"payload\": { \"weather\": \"rain\", \"detail\": \"Light rain in the morning.\", \"humidity\": 0.65, \"maxtemp\": 35.14, \"mintemp\": 18.04, \"windspeed\": 0.44, \"winddirection\": 43, \"lon\": -37.93723, \"lat\": 145.01148, \"clouds\": 0.49, \"precipitation\": 0.57, \"sunrise\": 1449514333, \"sunset\": 1449567223, \"units\": \"si\" }};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 382,
+    "y": 375,
+    "z": "e7db3953.1824c8",
+    "wires": [
+      [
+        "adc592e7.523a7"
+      ]
+    ]
+  },
+  {
+    "id": "f8d5a941.072a58",
+    "type": "inject",
+    "name": "Initialise",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 138,
+    "y": 70,
+    "z": "75b12ad1.8a4ed4",
+    "wires": [
+      [
+        "49e613d0.b619ec",
+        "9a7bbcbf.65844"
+      ]
+    ]
+  },
+  {
+    "id": "49e613d0.b619ec",
+    "type": "function",
+    "name": "Initialise Blind 1 - 45",
+    "func": "msg.payload = {channel: 1, orientation: 45, noffset:45, poffset: 45,top:2.5, bottom:0, depth:5, increment:25, altitudethreshold:20, cloudsthreshold: 0.5, temperaturethreshold: 30, blindPosition: 0};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 353,
+    "y": 70,
+    "z": "75b12ad1.8a4ed4",
+    "wires": [
+      [
+        "e9497fca.16b68"
+      ]
+    ]
+  },
+  {
+    "id": "e9497fca.16b68",
+    "type": "multiblindcontroller",
+    "name": "",
+    "x": 597,
+    "y": 116,
+    "z": "75b12ad1.8a4ed4",
+    "wires": [
+      [
+        "47b21507.b84dec"
+      ]
+    ]
+  },
+  {
+    "id": "47b21507.b84dec",
+    "type": "debug",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 786,
+    "y": 203,
+    "z": "75b12ad1.8a4ed4",
+    "wires": []
+  },
+  {
+    "id": "baaad7f5.455528",
+    "type": "inject",
+    "name": "Set Blind Position",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 120,
+    "y": 215,
+    "z": "75b12ad1.8a4ed4",
+    "wires": [
+      [
+        "c4c56f59.3b3a9"
+      ]
+    ]
+  },
+  {
+    "id": "c4c56f59.3b3a9",
+    "type": "function",
+    "name": "Set Channel 1 to 25%",
+    "func": "msg.payload = {channel: 1, blindPosition: 25};\nmsg.topic   = \"blindPosition\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 344,
+    "y": 215,
+    "z": "75b12ad1.8a4ed4",
+    "wires": [
+      [
+        "e9497fca.16b68"
+      ]
+    ]
+  },
+  {
+    "id": "9a7bbcbf.65844",
+    "type": "function",
+    "name": "Initialise Blind 2 (with expiry)",
+    "func": "var ts = new Date();\nmsg.payload = {channel: 2, orientation: 45, noffset:90, poffset: 90,top:2.5, bottom:0, depth:2, increment:25, altitudethreshold:20, cloudsthreshold: 0.5, temperaturethreshold: 30, blindPosition: 0, blindPositionExpiry: ts};\nmsg.topic = \"blind\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 337,
+    "y": 150,
+    "z": "75b12ad1.8a4ed4",
+    "wires": [
+      [
+        "e9497fca.16b68"
+      ]
+    ]
+  },
+  {
+    "id": "85d61c1.f7a29e",
+    "type": "inject",
+    "name": "Recalculate Position",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 115,
+    "y": 279,
+    "z": "75b12ad1.8a4ed4",
+    "wires": [
+      [
+        "307612a2.cf89ee"
+      ]
+    ]
+  },
+  {
+    "id": "307612a2.cf89ee",
+    "type": "function",
+    "name": "East (39.26, 89.59)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 39.26, \"azimuth\": 89.59};\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 347,
+    "y": 279,
+    "z": "75b12ad1.8a4ed4",
+    "wires": [
+      [
+        "e9497fca.16b68"
+      ]
+    ]
+  },
+  {
+    "id": "1901fb97.e6fe04",
+    "type": "inject",
+    "name": "Set Blind Position",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 123,
+    "y": 336,
+    "z": "75b12ad1.8a4ed4",
+    "wires": [
+      [
+        "11c32b71.ee3cd5"
+      ]
+    ]
+  },
+  {
+    "id": "11c32b71.ee3cd5",
+    "type": "function",
+    "name": "Set Channel 2 to 25%",
+    "func": "msg.payload = {channel: 2, blindPosition: 25};\nmsg.topic   = \"blindPosition\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 341,
+    "y": 336,
+    "z": "75b12ad1.8a4ed4",
+    "wires": [
+      [
+        "e9497fca.16b68"
+      ]
+    ]
+  },
+  {
+    "id": "faabef45.05541",
+    "type": "inject",
+    "name": "Recalculate Position",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 116,
+    "y": 394,
+    "z": "75b12ad1.8a4ed4",
+    "wires": [
+      [
+        "7c5c0bce.83a3f4"
+      ]
+    ]
+  },
+  {
+    "id": "7c5c0bce.83a3f4",
+    "type": "function",
+    "name": "East (39.26, 89.59)",
+    "func": "msg.payload = { \"sunInSky\": true, \"altitude\": 39.26, \"azimuth\": 89.59};\nmsg.topic   = \"sun\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 340,
+    "y": 393,
+    "z": "75b12ad1.8a4ed4",
+    "wires": [
+      [
+        "e9497fca.16b68"
+      ]
+    ]
+  }
+]
