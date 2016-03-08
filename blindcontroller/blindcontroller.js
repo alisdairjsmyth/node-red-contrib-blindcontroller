@@ -110,6 +110,10 @@ module.exports = function(RED) {
             "depth",
             "increment"
         ];
+        var modes = [
+            "Summer",
+            "Winter"
+        ];
         var i;
 
         for (i in blindProperty) {
@@ -123,6 +127,12 @@ module.exports = function(RED) {
                 (msg.payload.orientation < 0) ||
                 (msg.payload.orientation > 360)) {
                     node.error("blindcontroller.error.invalid-orientation: " + msg.payload.orientation, msg);
+                    validMsg = false;
+            }
+            if ((msg.payload.mode) &&
+               ((typeof msg.payload.mode != "string") ||
+                (modes.indexOf(msg.payload.mode) == -1))) {
+                    node.error("blindcontroller.error.invalid-mode: " + msg.payload.mode, msg);
                     validMsg = false;
             }
             if ((typeof msg.payload.noffset != "number") ||
@@ -160,8 +170,31 @@ module.exports = function(RED) {
             }
             if ((typeof msg.payload.increment != "number") ||
                 (msg.payload.increment < 0) ||
-                (msg.payload.increment > 100)) {
+                (msg.payload.increment > 100) ||
+                (100%msg.payload.increment != 0)) {
                 node.error("blindcontroller.error.invalid-increment: " + msg.payload.increment, msg);
+                validMsg = false;
+            }
+            if ((msg.payload.maxopen) &&
+                ((typeof msg.payload.maxopen != "number") ||
+                 (msg.payload.maxopen < 0) ||
+                 (msg.payload.maxopen > 100) ||
+                 (msg.payload.maxopen%msg.payload.increment != 0))) {
+                node.error("blindcontroller.error.invalid-maxopen: " + msg.payload.maxopen, msg);
+                validMsg = false;
+            }
+            if ((msg.payload.maxclosed) &&
+                ((typeof msg.payload.maxclosed != "number") ||
+                 (msg.payload.maxclosed < 0) ||
+                 (msg.payload.maxclosed > 100) ||
+                 (msg.payload.maxclosed%msg.payload.increment != 0))) {
+                node.error("blindcontroller.error.invalid-maxclosed: " + msg.payload.maxclosed, msg);
+                validMsg = false;
+            }
+            if ((msg.payload.maxopen) &&
+               (msg.payload.maxclosed) &&
+               (msg.payload.maxopen > msg.payload.maxclosed)) {
+                node.error("blindcontroller.error.invalid-max-settings: " + msg.payload.maxopen + " - " + msg.payload.maxclosed, msg);
                 validMsg = false;
             }
             if ((msg.payload.altitudethreshold) &&
@@ -176,6 +209,14 @@ module.exports = function(RED) {
                  (msg.payload.cloudsthreshold < 0) ||
                  (msg.payload.cloudsthreshold > 1))) {
                 node.error("blindcontroller.error.invalid-cloudsthreshold: " + msg.payload.cloudsthreshold, msg);
+                validMsg = false;
+            }
+            if ((msg.payload.nightposition) &&
+                ((typeof msg.payload.nightposition != "number") ||
+                 (msg.payload.nightposition < 0) ||
+                 (msg.payload.nightposition > 100) ||
+                 (msg.payload.nightposition%msg.payload.increment != 0))) {
+                node.error("blindcontroller.error.invalid-nightposition: " + msg.payload.nightposition, msg);
                 validMsg = false;
             }
         }
@@ -258,13 +299,16 @@ module.exports = function(RED) {
     /*
      * Function to calculate the appropriate blind position based on the
      * altitude of the sun, characteristics of the window, with the target of
-     * restricting the extent to which direct sunlight enters the room.
+     * restricting or maximising the extent to which direct sunlight enters
+     * the room.
      *
-     * When the sun is considered to be in the window, the function calculates
-     * the minimum height of an object that casts a shadow to the depth property
-     * based on the sun altitude of the sun.  This height is converted into a
-     * blind position using the dimensions of the window and the increments by
-     * which the blind position can be controlled.
+     * The function works in two modes, Summer and Winter.  In Summer mode, it
+     * restricts direct sunlight entering the room.  When the sun is considered
+     * to be in the window, the function calculates the minimum height of an
+     * object that casts a shadow to the depth property based on the sun
+     * altitude of the sun.  This height is converted into a blind position
+     * using the dimensions of the window and the increments by which the blind
+     * position can be controlled.
      *
      * The calculation also takes into account the following (in order of
      * precedence):
@@ -278,6 +322,13 @@ module.exports = function(RED) {
      *   fully open position.
      * - if the sun is below an altitude threshold, the blind will be set to a
      *   fully open position.
+     *
+     * In winter mode, the calculation is simply based on whether the sun is in
+     * window.  If the sun is in the window, it will be opened to a configured
+     * Open position.  If the sun is not in the window, it is closed to a
+     * configured Closed position.
+     *
+     * Outside daylight hours, the blind is closed to a configured position.
      */
     function calcBlindPosition (blind, sunPosition, weather) {
         /*
@@ -290,43 +341,60 @@ module.exports = function(RED) {
         var now = new Date();
 
         if (hasBlindPositionExpired(blind.blindPositionExpiry)) {
-            blind.blindPosition           = 0;
+            blind.blindPosition         = blind.maxopen;
             if (sunPosition.sunInSky) {
                 if (isTemperatureAConcern) {
-                    blind.blindPosition = 100;
+                    blind.blindPosition = blind.maxclosed;
                     blind.blindPositionReasonCode = "07";
                     blind.blindPositionReasonDesc = "Temperature forecast above threshold";
                 } else {
                     blind.sunInWindow = isSunInWindow(blind, sunPosition.azimuth);
-                    if (blind.sunInWindow) {
-                        if (((blind.altitudethreshold) && sunPosition.altitude >= blind.altitudethreshold ||
-                             (!blind.altitudeThreshold)) &&
-                             !isOvercast) {
-                            var height = Math.tan(sunPosition.altitude*Math.PI/180) * blind.depth;
-                            if (height <= blind.bottom) {
-                                blind.blindPosition = 100;
-                            } else if (height >= blind.top) {
-                                blind.blindPosition = 0;
+                    switch (blind.mode) {
+                        case "Winter":
+                            if (blind.sunInWindow) {
+                                blind.blindPosition           = blind.maxopen;
+                                blind.blindPositionReasonCode = "05";
+                                blind.blindPositionReasonDesc = "Sun in window";
                             } else {
-                                blind.blindPosition = Math.ceil(100 * (1 - (height - blind.bottom) / (blind.top - blind.bottom)));
-                                blind.blindPosition = Math.ceil(blind.blindPosition / blind.increment) * blind.increment;
+                                blind.blindPosition           = blind.maxclosed;
+                                blind.blindPositionReasonCode = "04";
+                                blind.blindPositionReasonDesc = "Sun not in window";
                             }
-                            blind.blindPositionReasonCode = "05";
-                            blind.blindPositionReasonDesc = "Sun in window";
-                        } else if ((blind.altitudethreshold) && sunPosition.altitude < blind.altitudethreshold){
-                            blind.blindPositionReasonCode = "03";
-                            blind.blindPositionReasonDesc = "Sun below altitude threshold";
-                        } else if (isOvercast) {
-                            blind.blindPositionReasonCode = "06";
-                            blind.blindPositionReasonDesc = "Overcast conditions";
-                        }
-                    } else {
-                        blind.blindPositionReasonCode = "04";
-                        blind.blindPositionReasonDesc = "Sun not in window";
+                            break;
+                        default:
+                            if (blind.sunInWindow) {
+                                if (((blind.altitudethreshold) && sunPosition.altitude >= blind.altitudethreshold ||
+                                     (!blind.altitudeThreshold)) &&
+                                     !isOvercast) {
+                                    var height = Math.tan(sunPosition.altitude*Math.PI/180) * blind.depth;
+                                    if (height <= blind.bottom) {
+                                        blind.blindPosition = blind.maxclosed;
+                                    } else if (height >= blind.top) {
+                                        blind.blindPosition = blind.maxopen;
+                                    } else {
+                                        blind.blindPosition = Math.ceil(100 * (1 - (height - blind.bottom) / (blind.top - blind.bottom)));
+                                        blind.blindPosition = Math.ceil(blind.blindPosition / blind.increment) * blind.increment;
+                                        blind.blindPosition = (blind.blindPosition > blind.maxclosed) ? blind.maxclosed : blind.blindPosition;
+                                        blind.blindPosition = (blind.blindPosition < blind.maxopen) ? blind.maxopen : blind.blindPosition;
+                                    }
+                                    blind.blindPositionReasonCode = "05";
+                                    blind.blindPositionReasonDesc = "Sun in window";
+                                } else if ((blind.altitudethreshold) && sunPosition.altitude < blind.altitudethreshold){
+                                    blind.blindPositionReasonCode = "03";
+                                    blind.blindPositionReasonDesc = "Sun below altitude threshold";
+                                } else if (isOvercast) {
+                                    blind.blindPositionReasonCode = "06";
+                                    blind.blindPositionReasonDesc = "Overcast conditions";
+                                }
+                            } else {
+                                blind.blindPositionReasonCode = "04";
+                                blind.blindPositionReasonDesc = "Sun not in window";
+                            }
+                            break;
                     }
                 }
             } else {
-                blind.blindPosition           = 100;
+                blind.blindPosition           = blind.nightposition;
                 blind.blindPositionReasonCode = "02";
                 blind.blindPositionReasonDesc = "Sun below horizon";
                 blind.sunInWindow             = false;
@@ -451,6 +519,13 @@ module.exports = function(RED) {
                     case "blind":
                         var channel = msg.payload.channel;
                         blinds[channel] = msg.payload;
+                        /*
+                         * Default settings if not specified in input msg
+                         */
+                        blinds[channel].mode          = (blinds[channel].mode === undefined)          ? blinds[channel].mode          : "Summer";
+                        blinds[channel].maxopen       = (blinds[channel].maxopen === undefined)       ? blinds[channel].maxopen       : 0;
+                        blinds[channel].maxclosed     = (blinds[channel].maxclosed === undefined)     ? blinds[channel].maxclosed     : 100;
+                        blinds[channel].nightposition = (blinds[channel].nightposition === undefined) ? blinds[channel].nightposition : 100;
                         break;
                     case "weather":
                         weather = msg.payload;
@@ -481,6 +556,7 @@ module.exports = function(RED) {
         var blinds      = [];
         blinds[channel] = {
             channel:              channel,
+            mode:                 config.mode,
             orientation:          Number(config.orientation),
             noffset:              Number(config.noffset),
             poffset:              Number(config.poffset),
@@ -489,8 +565,11 @@ module.exports = function(RED) {
             depth:                Number(config.depth),
             altitudethreshold:    Number(config.altitudethreshold),
             increment:            Number(config.increment),
+            maxopen:              Number(config.maxopen),
+            maxclosed:            Number(config.maxclosed),
             temperaturethreshold: config.temperaturethreshold,
-            cloudsthreshold:      config.cloudsthreshold
+            cloudsthreshold:      config.cloudsthreshold,
+            nightposition:        Number(config.nightposition)
         };
 
         this.blind      = blinds[channel];

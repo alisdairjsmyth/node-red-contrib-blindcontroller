@@ -36,31 +36,39 @@ Blind Controller
 
 ![Blind Controller](./docs/blindcontroller.png)
 
-This node calculates the appropriate blind position to restrict direct sunlight through the associated window.
+This node calculates the appropriate blind position to restrict or maximise direct sunlight through the associated window.
 
 It is configured with the following properties:
 * <b>channel</b>: identifier of the blind - which is used in the emitted <b>msg.payload</b>
+* <b>mode</b>: mode of control
+    * <b>Summer</b>: constrains the extent to which direct sunlight is allowed to enter the room
+    * <b>Winter</b>: maximises the amount of direct sunlight allowed to enter the room
 * <b>orientation</b>: the bearing representing the perpendicular to the of the window
 * <b>negative offset</b>: (optional) anti-clockwise offset from orientation for determination of whether the sun is coming through window
 * <b>positive offset</b>: (optional) clockwise offset from orientation for determination of whether the sun is coming through window
 * <b>top</b>: measurement from the floor to top of the window covered by the blind
 * <b>bottom</b>: measurement from the floor to bottom of the window covered by the blind
-* <b>depth</b>: the extent to which direct sunlight is to be allowed into the room through the window, defined as a length on the floor
+* <b>depth</b>: (optional) the extent to which direct sunlight is to be allowed into the room through the window, defined as a length on the floor.  (Only relevant in Summer mode.)
 * <b>altitude threshold</b>: (optional) minimum altitude of the sun for determination of blind position
 * <b>increment</b>: the degree to which the blind position can be controlled
+* <b>max open</b>: (optional) the maximum extent the blind is allowed to be opened during daylight hours.  Defaults to 0.
+* <b>max closed</b>: (optional) the maximum extent the blind is allowed to be closed during daylight hours.  Defaults to 100.
 * <b>temperature threshold</b>: (optional) temperature at which the blind will be fully closed while the sun is in the window.  This setting overrides <b>altitudethreshold</b> and <b>depth</b> in the calculation
 * <b>clouds threshold</b>: (optional) maximum percentage of sky occluded by clouds for the calculation to be performed
+* <b>night position</b>: (optional) the position of the blind outside of daylight hours. Defaults to 100.
 
 The calculation requires the output of the <b>Sun Position</b> Node.  This can be supplemented with current weather conditions, such as that from forecastio or weather underground.  <b>msg.topic</b> should be set to weather, and <b>msg.payload</b> either or both of the following properties:
 * <b>maxtemp</b>: the forecasted maximum temperature for the day;
 * <b>clouds</b>: A numerical value between 0 and 1 (inclusive) representing the percentage of sky occluded by clouds. A value of 0 corresponds to clear sky, 0.4 to scattered clouds, 0.75 to broken cloud cover, and 1 to completely overcast skies.
 
-The node calculates the appropriate blind position to restrict the amount of direct sunlight entering the room.  This calculation includes:
+In Summer mode, the node calculates the appropriate blind position to restrict the amount of direct sunlight entering the room.  This calculation includes:
 * determination of whether direct sunlight is entering the room based on the orientation of the blind and the azimuth of the sun - taking into account the negative and positive offset properties; and
 ![sunInWindow](./docs/sunInWindow.jpg)
 * dimensions of the window and the current altitude of the sun.
 ![sunInRoom](./docs/sunInRoom.jpg)
 * consideration of weather conditions against defined thresholds
+
+In Winter mode, the node calculates the appropriate blind position to maximise the amount of direct sunlight entering the room. This calculation is based on whether direct sunlight is entering the room based on the orientation of the blind and the azimuth of the sun - taking into account the negative and positive offset properties.  When the sun is in the window the blind will positioned in the <b>max open</b> setting, otherwise it will be positioned in the <b>max closed</b> setting.
 
 In the event the node determines a blind position change is required, it will emit a <b>msg.payload</b> with the properties of the blind including:
 * <b>blindPosition</b>: the new position of the blind
@@ -94,16 +102,20 @@ Multi Blind Controller
 This node calculates the appropriate blind position to restrict direct sunlight through a number of windows.  This node processes three types of input messages:
 * blind configuration where <b>msg.topic</b> equals blind, and <b>msg.payload</b> contains the following properties:
     * channel
+    * mode
     * orientation
     * noffset
     * poffset
     * top
     * bottom
     * depth
-    * altitudethreshold
+    * altitudethreshold (optional)
     * increment
-    * temperaturethreshold
-    * cloudsthreshold
+    * max open (optional)
+    * max closed (optional)
+    * temperaturethreshold (optional)
+    * cloudsthreshold (optional)
+    * night position (optional)
 * the output of the <b>Sun Position</b> Node;
 * current weather conditions, such as that from forecastio or weather underground.  <b>msg.topic</b> should be set to weather, and <b>msg.payload</b> either or both of the following properties:
     * maxtemp
