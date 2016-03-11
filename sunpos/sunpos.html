@@ -68,8 +68,18 @@
         color:"#FFCC66",
         defaults: {
             name:  {value:""},
-            lon:   {value:"",        required:true, validate:RED.validators.number() },
-            lat:   {value:"",        required:true, validate:RED.validators.number() },
+            lon:   {value:"",        required:true,
+                    validate: function (v) {
+                var n = Number(v);
+                return ((n >= -180) && (n <= 180));
+                    }
+            },
+            lat:   {value:"",        required:true,
+                    validate: function (v) {
+                var n = Number(v);
+                return ((n >= -90) && (n <= 90));
+                    }
+            },
             start: {value:"sunrise", required:true},
             end:   {value:"sunset",  required:true}
         },

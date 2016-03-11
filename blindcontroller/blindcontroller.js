@@ -191,9 +191,7 @@ module.exports = function(RED) {
                 node.error("blindcontroller.error.invalid-maxclosed: " + msg.payload.maxclosed, msg);
                 validMsg = false;
             }
-            if ((msg.payload.maxopen) &&
-               (msg.payload.maxclosed) &&
-               (msg.payload.maxopen > msg.payload.maxclosed)) {
+            if ((msg.payload.maxopen > msg.payload.maxclosed)) {
                 node.error("blindcontroller.error.invalid-max-settings: " + msg.payload.maxopen + " - " + msg.payload.maxclosed, msg);
                 validMsg = false;
             }
@@ -522,10 +520,10 @@ module.exports = function(RED) {
                         /*
                          * Default settings if not specified in input msg
                          */
-                        blinds[channel].mode          = (blinds[channel].mode === undefined)          ? blinds[channel].mode          : "Summer";
-                        blinds[channel].maxopen       = (blinds[channel].maxopen === undefined)       ? blinds[channel].maxopen       : 0;
-                        blinds[channel].maxclosed     = (blinds[channel].maxclosed === undefined)     ? blinds[channel].maxclosed     : 100;
-                        blinds[channel].nightposition = (blinds[channel].nightposition === undefined) ? blinds[channel].nightposition : 100;
+                        blinds[channel].mode          = (typeof msg.payload.mode          != "undefined") ? msg.payload.mode          : "Summer";
+                        blinds[channel].maxopen       = (typeof msg.payload.maxopen       != "undefined") ? msg.payload.maxopen       : 0;
+                        blinds[channel].maxclosed     = (typeof msg.payload.maxclosed     != "undefined") ? msg.payload.maxclosed     : 100;
+                        blinds[channel].nightposition = (typeof msg.payload.nightposition != "undefined") ? msg.payload.nightposition : 100;
                         break;
                     case "weather":
                         weather = msg.payload;
