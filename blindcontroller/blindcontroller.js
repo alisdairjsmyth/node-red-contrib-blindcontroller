@@ -563,11 +563,11 @@ module.exports = function(RED) {
             depth:                Number(config.depth),
             altitudethreshold:    Number(config.altitudethreshold),
             increment:            Number(config.increment),
-            maxopen:              Number(config.maxopen),
-            maxclosed:            Number(config.maxclosed),
+            maxopen:              (config.maxopen       != "") ? Number(config.maxopen)       : 0,
+            maxclosed:            (config.maxclosed     != "") ? Number(config.maxclosed)     : 100,
             temperaturethreshold: config.temperaturethreshold,
             cloudsthreshold:      config.cloudsthreshold,
-            nightposition:        Number(config.nightposition)
+            nightposition:        (config.nightposition != "") ? Number(config.nightposition) : 100
         };
 
         this.blind      = blinds[channel];
