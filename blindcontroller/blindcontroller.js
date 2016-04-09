@@ -350,9 +350,32 @@ module.exports = function(RED) {
                     switch (blind.mode) {
                         case "Winter":
                             if (blind.sunInWindow) {
-                                blind.blindPosition           = blind.maxopen;
-                                blind.blindPositionReasonCode = "05";
-                                blind.blindPositionReasonDesc = "Sun in window";
+                                if (((blind.altitudethreshold) && sunPosition.altitude >= blind.altitudethreshold ||
+                                     (!blind.altitudeThreshold)) &&
+                                     !isOvercast) {
+                                    var height = Math.tan(sunPosition.altitude*Math.PI/180) * blind.depth;
+									blind.height = height;
+                                    if (height <= blind.bottom) {
+                                        blind.blindPosition = blind.maxclosed;
+                                    } else if (height >= blind.top) {
+                                        blind.blindPosition = blind.maxopen;
+                                    } else {
+                                        blind.blindPosition = Math.ceil(100 * ((height - blind.bottom) / (blind.top - blind.bottom)));
+                                        blind.blindPosition = Math.ceil(blind.blindPosition / blind.increment) * blind.increment;
+                                        blind.blindPosition = (blind.blindPosition > blind.maxclosed) ? blind.maxclosed : blind.blindPosition;
+                                        blind.blindPosition = (blind.blindPosition < blind.maxopen) ? blind.maxopen : blind.blindPosition;
+                                    }
+                                    blind.blindPositionReasonCode = "05";
+                                    blind.blindPositionReasonDesc = "Sun in window";
+                                } else if ((blind.altitudethreshold) && sunPosition.altitude < blind.altitudethreshold){
+									blind.blindPosition           = blind.maxclosed;
+                                    blind.blindPositionReasonCode = "03";
+                                    blind.blindPositionReasonDesc = "Sun below altitude threshold";
+                                } else if (isOvercast) {
+									blind.blindPosition           = blind.maxclosed;
+                                    blind.blindPositionReasonCode = "06";
+                                    blind.blindPositionReasonDesc = "Overcast conditions";
+                                }
                             } else {
                                 blind.blindPosition           = blind.maxclosed;
                                 blind.blindPositionReasonCode = "04";
@@ -365,6 +388,7 @@ module.exports = function(RED) {
                                      (!blind.altitudeThreshold)) &&
                                      !isOvercast) {
                                     var height = Math.tan(sunPosition.altitude*Math.PI/180) * blind.depth;
+									blind.height = height;
                                     if (height <= blind.bottom) {
                                         blind.blindPosition = blind.maxclosed;
                                     } else if (height >= blind.top) {
@@ -451,7 +475,7 @@ module.exports = function(RED) {
      */
     function setPosition (node, msg, blind) {
         blind.blindPosition           = msg.payload.blindPosition;
-        blind.blindPositionExpiry     = calcBlindPositionExpiry ();
+        blind.blindPositionExpiry     = msg.payload.blindPositionExpiry ? msg.payload.blindPositionExpiry : calcBlindPositionExpiry ();
         blind.blindPositionReasonCode = "01";
         blind.blindPositionReasonDesc = "Manually set";
         msg.payload                   = blind;
@@ -563,11 +587,11 @@ module.exports = function(RED) {
             depth:                Number(config.depth),
             altitudethreshold:    Number(config.altitudethreshold),
             increment:            Number(config.increment),
-            maxopen:              (config.maxopen       != "") ? Number(config.maxopen)       : 0,
-            maxclosed:            (config.maxclosed     != "") ? Number(config.maxclosed)     : 100,
+            maxopen:              Number(config.maxopen),
+            maxclosed:            Number(config.maxclosed),
             temperaturethreshold: config.temperaturethreshold,
             cloudsthreshold:      config.cloudsthreshold,
-            nightposition:        (config.nightposition != "") ? Number(config.nightposition) : 100
+            nightposition:        Number(config.nightposition)
         };
 
         this.blind      = blinds[channel];
