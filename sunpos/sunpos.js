@@ -32,7 +32,10 @@ module.exports = function(RED) {
         var node     = this;
 
         this.on("input", function(msg) {
-            var now             = new Date();
+			var now             = new Date();
+			if(typeof msg.payload.time !== 'undefined') {
+				now = new Date(msg.payload.time);
+			} 
             var sunPosition     = SunCalc.getPosition(now, location.lat, location.lon);
             var sunTimes        = SunCalc.getTimes   (now, location.lat, location.lon);
             var altitudeDegrees = 180 / Math.PI       * sunPosition.altitude;
