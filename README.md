@@ -20,6 +20,8 @@ It is configured with the following properties:
 * <b>start</b>: time of day that constitutes the start of daylight hours
 * <b>end</b>: time of day that constitutes the end of daylight hours
 
+This node can optionally receive a time via an input message containing **msg.time** conforming to Javascript Date object, otherwise it will use the current time.
+
 This node emits a <b>msg.payload</b> with the following properties:
 * <b>sunInSky</b>: boolean value indicating whether it is currently considered daylight hours
 * <b>altitude</b>: altitude of the sun above the horizon in degrees
