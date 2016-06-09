@@ -128,15 +128,6 @@ When processing either a Sun Position or Weather message, the blind position cal
 
 This node does not report status within the Node-RED flow editor.
 
-Qmotion
--------
-
-![Qmotion](./docs/qmotion.png)
-
-This node prepares a command for Qmotion motorised blinds based on the required blind position.  It consumes the <b>msg.payload</b> emitted from the <b>Blind Controller</b> node and then emits a message with the following properties:
-* <b>channel</b>: identifier of the blind
-* <b>command</b>: the command in decimal representation associated with the required blind position
-
 Sample Flow
 -----------
 
