@@ -45,10 +45,17 @@ module.exports = function(RED) {
 
             var sunInSky = (((nowMillis > startMillis) && (nowMillis < endMillis)));
             if (sunInSky) {
-                node.status({fill:"yellow", shape: "dot", text: "day"});
+                node.status({
+					fill:"yellow",
+					shape: "dot",
+					text: "day - start: " + new Date(startMillis).toLocaleTimeString() + "; end: " + new Date(endMillis).toLocaleTimeString()
+				});
             } else {
-                node.status({fill:"blue", shape: "dot", text: "night"});
-
+                node.status({
+					fill:"blue",
+					shape: "dot",
+					text: "night - start: " + new Date(endMillis).toLocaleTimeString() + "; end: " + new Date(startMillis).toLocaleTimeString()
+				});
             }
 
             msg.payload = {
