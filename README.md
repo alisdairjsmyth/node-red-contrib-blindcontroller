@@ -18,7 +18,9 @@ It is configured with the following properties:
 * <b>lat</b>: latitude of the location
 * <b>lon</b>: longitude of the location
 * <b>start</b>: time of day that constitutes the start of daylight hours
+* <b>startOffset</b>: offset to be applied for start of daylight hours, a negative value brings the start forward, a positive value delays
 * <b>end</b>: time of day that constitutes the end of daylight hours
+* <b>endOffset</b>: offset to be applied for end of daylight hours
 
 This node can optionally receive a time via an input message containing **msg.time** conforming to Javascript Date object, otherwise it will use the current time.
 

@@ -21,8 +21,10 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
 
         var stConfig = {
-            start: config.start,
-            end:   config.end
+            start:       config.start,
+            startOffset: config.startoffset,
+            end:         config.end,
+            endOffset:   config.endoffset
         };
 
         var location = {
@@ -40,15 +42,15 @@ module.exports = function(RED) {
             var azimuthDegrees  = 180 + 180 / Math.PI * sunPosition.azimuth;
 
             var nowMillis   = now.getTime();
-            var startMillis = sunTimes[stConfig.start].getTime();
-            var endMillis   = sunTimes[stConfig.end].getTime();
+            var startMillis = sunTimes[stConfig.start].getTime() + (stConfig.startOffset * 60000);
+            var endMillis   = sunTimes[stConfig.end].getTime()   + (stConfig.endOffset * 60000);
 
             var sunInSky = (((nowMillis > startMillis) && (nowMillis < endMillis)));
             if (sunInSky) {
                 node.status({
-					fill:"yellow",
+					fill:  "yellow",
 					shape: "dot",
-					text: "day - start: " + new Date(startMillis).toLocaleTimeString() + "; end: " + new Date(endMillis).toLocaleTimeString()
+					text:  "day - start: " + new Date(startMillis).toLocaleTimeString() + "; end: " + new Date(endMillis).toLocaleTimeString()
 				});
             } else {
                 node.status({
