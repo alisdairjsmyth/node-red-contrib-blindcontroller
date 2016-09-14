@@ -19,9 +19,7 @@
   ],
   "node-red": {
     "nodes": {
-      "blindcontroller": "blindcontroller/blindcontroller.js",
-      "sunpos": "sunpos/sunpos.js",
-      "qmotion": "qmotion/qmotion.js"
+      "blindcontroller": "blindcontroller/blindcontroller.js"
     }
   },
   "author": {
