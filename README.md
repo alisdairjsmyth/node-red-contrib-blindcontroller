@@ -1,4 +1,5 @@
 # node-red-contrib-blindcontroller
+[![npm version](https://badge.fury.io/js/node-red-contrib-blindcontroller.svg)](https://badge.fury.io/js/node-red-contrib-blindcontroller)
 
 A collection of <a href="http://nodered.org" target="_new">Node-RED</a> nodes that can be used to automate the control of  household roller blinds based on the current position of the sun.
 
@@ -8,6 +9,7 @@ Run the following command in the root directory of your Node-RED install
 
     npm install node-red-contrib-blindcontroller
 
+<b>node-red-contrib-blindcontroller</b> is compatible with <b>node-red-contrib-sunpos</b>.
 ## Blind Controller
 
 ![Blind Controller](./docs/blindcontroller.png)
