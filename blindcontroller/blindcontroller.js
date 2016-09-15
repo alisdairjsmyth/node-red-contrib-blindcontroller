@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Alisdair Smyth
+ * Copyright 2015, 2016 Alisdair Smyth
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ module.exports = function(RED) {
         var validMsg = true;
 
         if (!(typeof msg.payload === "object")) {
-            node.error("blindcontroller.error.invalid-msg-payload", msg);
+            node.error(RED._("blindcontroller.error.invalid-msg-payload"), msg);
             validMsg = false;
         } else {
             switch (msg.topic) {
@@ -50,7 +50,7 @@ module.exports = function(RED) {
                     validMsg = validateWeatherMsg (node, msg);
                     break;
                 default:
-                    node.error("blindcontroller.error.unknown-msg-topic: "+ msg.topic, msg);
+                    node.error(RED._("blindcontroller.error.unknown-msg-topic")+ msg.topic, msg);
                     validMsg = false;
             }
         }
@@ -71,24 +71,24 @@ module.exports = function(RED) {
 
         for (i in sunProperty) {
             if (!(sunProperty[i] in msg.payload)) {
-                node.error("blindcontroller.error.property-" + sunProperty[i] + "-missing", msg);
+                node.error(RED._("blindcontroller.error.sunPosition.missing-property") + sunProperty[i], msg);
                 validMsg = false;
             }
         }
         if (validMsg) {
             if (typeof msg.payload.sunInSky != "boolean") {
-                node.error("blindcontroller.error.invalid-sunInSky: "+ msg.payload.sunInSky, msg);
+                node.error(RED._("blindcontroller.error.sunPosition.invalid-sunInSky")+ typeof msg.payload.sunInSky, msg);
                 validMsg = false;
             }
             if ((typeof msg.payload.altitude != "number") ||
                 (msg.payload.altitude > 90)) {
-                node.error("blindcontroller.error.invalid-altitude: "+ msg.payload.altitude, msg);
+                node.error(RED._("blindcontroller.error.sunPosition.invalid-altitude")+ msg.payload.altitude, msg);
                 validMsg = false;
             }
             if ((typeof msg.payload.azimuth != "number") ||
                 (msg.payload.azimuth < 0) ||
                 (msg.payload.azimuth > 360)) {
-                node.error("blindcontroller.error.invalid-azimuth: "+ msg.payload.azimuth, msg);
+                node.error(RED._("blindcontroller.error.sunPosition.invalid-azimuth")+ msg.payload.azimuth, msg);
                 validMsg = false;
             }
         }
@@ -118,7 +118,7 @@ module.exports = function(RED) {
 
         for (i in blindProperty) {
             if (!(blindProperty[i] in msg.payload)) {
-                node.error("blindcontroller.error.property-" + blindProperty[i] + "-missing", msg);
+                node.error(RED._("blindcontroller.error.blind.missing-property") + blindProperty[i], msg);
                 validMsg = false;
             }
         }
@@ -126,53 +126,53 @@ module.exports = function(RED) {
             if ((typeof msg.payload.orientation != "number") ||
                 (msg.payload.orientation < 0) ||
                 (msg.payload.orientation > 360)) {
-                    node.error("blindcontroller.error.invalid-orientation: " + msg.payload.orientation, msg);
+                    node.error(RED._("blindcontroller.error.blind.invalid-orientation") + msg.payload.orientation, msg);
                     validMsg = false;
             }
             if ((msg.payload.mode) &&
                ((typeof msg.payload.mode != "string") ||
                 (modes.indexOf(msg.payload.mode) == -1))) {
-                    node.error("blindcontroller.error.invalid-mode: " + msg.payload.mode, msg);
+                    node.error(RED._("blindcontroller.error.blind.invalid-mode") + msg.payload.mode, msg);
                     validMsg = false;
             }
             if ((typeof msg.payload.noffset != "number") ||
                 (msg.payload.noffset < 0) ||
                 (msg.payload.noffset > 90)) {
-                    node.error("blindcontroller.error.invalid-noffset: " + msg.payload.noffset, msg);
+                    node.error(RED._("blindcontroller.error.blind.invalid-noffset") + msg.payload.noffset, msg);
                     validMsg = false;
             }
             if ((typeof msg.payload.poffset != "number") ||
                 (msg.payload.poffset < 0) ||
                 (msg.payload.poffset > 90)) {
-                    node.error("blindcontroller.error.invalid-poffset: " + msg.payload.poffset, msg);
+                    node.error(RED._("blindcontroller.error.blind.invalid-poffset") + msg.payload.poffset, msg);
                     validMsg = false;
             }
             if ((typeof msg.payload.top != "number") ||
-                (msg.payload.top < 0)) {
-                    node.error("blindcontroller.error.invalid-top: " + msg.payload.top, msg);
+                (msg.payload.top <= 0)) {
+                    node.error(RED._("blindcontroller.error.blind.invalid-top") + msg.payload.top, msg);
                     validMsg = false;
             }
             if ((typeof msg.payload.bottom != "number") ||
                 (msg.payload.bottom < 0)) {
-                    node.error("blindcontroller.error.invalid-bottom: " + msg.payload.bottom, msg);
+                    node.error(RED._("blindcontroller.error.blind.invalid-bottom") + msg.payload.bottom, msg);
                     validMsg = false;
             }
             if ((typeof msg.payload.depth != "number") ||
                 (msg.payload.depth < 0)) {
-                    node.error("blindcontroller.error.invalid-depth: " + msg.payload.depth, msg);
+                    node.error(RED._("blindcontroller.error.blind.invalid-depth") + msg.payload.depth, msg);
                     validMsg = false;
             }
             if ((typeof msg.payload.top == "number") &&
                 (typeof msg.payload.bottom == "number") &&
                 (msg.payload.top < msg.payload.bottom)) {
-                node.error("blindcontroller.error.invalid-dimensions: " + msg.payload.top + " " + msg.payload.bottom, msg);
+                node.error(RED._("blindcontroller.error.blind.invalid-dimensions") + msg.payload.top + " - " + msg.payload.bottom, msg);
                 validMsg = false;
             }
             if ((typeof msg.payload.increment != "number") ||
                 (msg.payload.increment < 0) ||
                 (msg.payload.increment > 100) ||
                 (100%msg.payload.increment != 0)) {
-                node.error("blindcontroller.error.invalid-increment: " + msg.payload.increment, msg);
+                node.error(RED._("blindcontroller.error.blind.invalid-increment") + msg.payload.increment, msg);
                 validMsg = false;
             }
             if ((msg.payload.maxopen) &&
@@ -180,7 +180,7 @@ module.exports = function(RED) {
                  (msg.payload.maxopen < 0) ||
                  (msg.payload.maxopen > 100) ||
                  (msg.payload.maxopen%msg.payload.increment != 0))) {
-                node.error("blindcontroller.error.invalid-maxopen: " + msg.payload.maxopen, msg);
+                node.error(RED._("blindcontroller.error.blind.invalid-maxopen") + msg.payload.maxopen, msg);
                 validMsg = false;
             }
             if ((msg.payload.maxclosed) &&
@@ -188,25 +188,25 @@ module.exports = function(RED) {
                  (msg.payload.maxclosed < 0) ||
                  (msg.payload.maxclosed > 100) ||
                  (msg.payload.maxclosed%msg.payload.increment != 0))) {
-                node.error("blindcontroller.error.invalid-maxclosed: " + msg.payload.maxclosed, msg);
+                node.error(RED._("blindcontroller.error.blind.invalid-maxclosed") + msg.payload.maxclosed, msg);
                 validMsg = false;
             }
             if ((msg.payload.maxopen > msg.payload.maxclosed)) {
-                node.error("blindcontroller.error.invalid-max-settings: " + msg.payload.maxopen + " - " + msg.payload.maxclosed, msg);
+                node.error(RED._("blindcontroller.error.blind.invalid-max-settings") + msg.payload.maxopen + " - " + msg.payload.maxclosed, msg);
                 validMsg = false;
             }
             if ((msg.payload.altitudethreshold) &&
                 ((typeof msg.payload.altitudethreshold != "number") ||
                  (msg.payload.altitudethreshold < 0) ||
                  (msg.payload.altitudethreshold > 90))) {
-                node.error("blindcontroller.error.invalid-altitudethreshold: " + msg.payload.altitudethreshold, msg);
+                node.error(RED._("blindcontroller.error.blind.invalid-altitudethreshold") + msg.payload.altitudethreshold, msg);
                 validMsg = false;
             }
             if ((msg.payload.cloudsthreshold) &&
                 ((typeof msg.payload.cloudsthreshold != "number") ||
                  (msg.payload.cloudsthreshold < 0) ||
                  (msg.payload.cloudsthreshold > 1))) {
-                node.error("blindcontroller.error.invalid-cloudsthreshold: " + msg.payload.cloudsthreshold, msg);
+                node.error(RED._("blindcontroller.error.blind.invalid-cloudsthreshold") + msg.payload.cloudsthreshold, msg);
                 validMsg = false;
             }
             if ((msg.payload.nightposition) &&
@@ -214,7 +214,7 @@ module.exports = function(RED) {
                  (msg.payload.nightposition < 0) ||
                  (msg.payload.nightposition > 100) ||
                  (msg.payload.nightposition%msg.payload.increment != 0))) {
-                node.error("blindcontroller.error.invalid-nightposition: " + msg.payload.nightposition, msg);
+                node.error(RED._("blindcontroller.error.blind.invalid-nightposition") + msg.payload.nightposition, msg);
                 validMsg = false;
             }
         }
@@ -234,7 +234,7 @@ module.exports = function(RED) {
 
         for (i in blindProperty) {
             if (!(blindProperty[i] in msg.payload)) {
-                node.error("blindcontroller.error.property-" + blindProperty[i] + "-missing", msg);
+                node.error(RED._("blindcontroller.error.blindPosition.missing-property") + blindProperty[i], msg);
                 validMsg = false;
             }
         }
@@ -242,7 +242,7 @@ module.exports = function(RED) {
             if ((typeof msg.payload.blindPosition != "number") ||
                 (msg.payload.blindPosition < 0) ||
                 (msg.payload.blindPosition > 100)) {
-                node.error("blindcontroller.error.invalid-blindPosition: " + msg.payload.blindPosition, msg);
+                node.error(RED._("blindcontroller.error.blindPosition.invalid-blindPosition") + msg.payload.blindPosition, msg);
                 validMsg = false;
             }
         }
@@ -255,7 +255,7 @@ module.exports = function(RED) {
     function validateWeatherMsg (node, msg) {
         var validMsg = true;
         if ((msg.payload.clouds < 0) || (msg.payload.clouds > 1)) {
-            node.error("blindscontroller.error.invalid-clouds: "+ msg.payload.clouds, msg);
+            node.error(RED._("blindcontroller.error.weather.invalid-clouds") + msg.payload.clouds, msg);
             validMsg = false;
         }
         return validMsg;
@@ -344,7 +344,7 @@ module.exports = function(RED) {
                 if (isTemperatureAConcern) {
                     blind.blindPosition = blind.maxclosed;
                     blind.blindPositionReasonCode = "07";
-                    blind.blindPositionReasonDesc = "Temperature forecast above threshold";
+                    blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.07");
                 } else {
                     blind.sunInWindow = isSunInWindow(blind, sunPosition.azimuth);
                     switch (blind.mode) {
@@ -352,11 +352,11 @@ module.exports = function(RED) {
                             if (blind.sunInWindow) {
                                 blind.blindPosition           = blind.maxopen;
                                 blind.blindPositionReasonCode = "05";
-                                blind.blindPositionReasonDesc = "Sun in window";
+                                blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.05");
                             } else {
                                 blind.blindPosition           = blind.maxclosed;
                                 blind.blindPositionReasonCode = "04";
-                                blind.blindPositionReasonDesc = "Sun not in window";
+                                blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.04");;
                             }
                             break;
                         default:
@@ -376,17 +376,17 @@ module.exports = function(RED) {
                                         blind.blindPosition = (blind.blindPosition < blind.maxopen) ? blind.maxopen : blind.blindPosition;
                                     }
                                     blind.blindPositionReasonCode = "05";
-                                    blind.blindPositionReasonDesc = "Sun in window";
+                                    blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.05");
                                 } else if ((blind.altitudethreshold) && sunPosition.altitude < blind.altitudethreshold){
                                     blind.blindPositionReasonCode = "03";
-                                    blind.blindPositionReasonDesc = "Sun below altitude threshold";
+                                    blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.03");
                                 } else if (isOvercast) {
                                     blind.blindPositionReasonCode = "06";
-                                    blind.blindPositionReasonDesc = "Overcast conditions";
+                                    blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.06");
                                 }
                             } else {
                                 blind.blindPositionReasonCode = "04";
-                                blind.blindPositionReasonDesc = "Sun not in window";
+                                blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.04");
                             }
                             break;
                     }
@@ -394,7 +394,7 @@ module.exports = function(RED) {
             } else {
                 blind.blindPosition           = blind.nightposition;
                 blind.blindPositionReasonCode = "02";
-                blind.blindPositionReasonDesc = "Sun below horizon";
+                blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.02");
                 blind.sunInWindow             = false;
             }
             if (blind.blindPositionExpiry) {
@@ -453,7 +453,7 @@ module.exports = function(RED) {
         blind.blindPosition           = msg.payload.blindPosition;
         blind.blindPositionExpiry     = calcBlindPositionExpiry ();
         blind.blindPositionReasonCode = "01";
-        blind.blindPositionReasonDesc = "Manually set";
+        blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.01");
         msg.payload                   = blind;
         msg.topic                     = "blind";
         node.send(msg);

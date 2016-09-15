@@ -1,0 +1,85 @@
+{
+    "blindcontroller" : {
+        "status" : {
+        },
+        "label" : {
+            "channel"              : "Channel",
+            "mode"                 : "Mode",
+            "orientation"          : "Orientation",
+            "noffset"              : "Negative Offset",
+            "poffset"              : "Positive Offset",
+            "top"                  : "Top",
+            "bottom"               : "Bottom",
+            "depth"                : "Depth",
+            "altitudethreshold"    : "Altitude Threshold",
+            "increment"            : "Increment",
+            "maxopen"              : "Maximum Open Position",
+            "maxclosed"            : "Maximum Closed Position",
+            "temperaturethreshold" : "Temperature Threshold",
+            "cloudsthreshold"      : "Cloud Threshold",
+            "name"                 : "Name",
+            "nightposition"        : "Night Position"
+        },
+        "placeholder" : {
+            "channel"              : "1",
+            "orientation"          : "0",
+            "noffset"              : "90",
+            "poffset"              : "90",
+            "top"                  : "1",
+            "bottom"               : "1",
+            "depth"                : "1",
+            "altitudethreshold"    : "0",
+            "increment"            : "1",
+            "maxopen"              : "0",
+            "maxclosed"            : "100",
+            "temperaturethreshold" : "0",
+            "cloudsthreshold"      : "0",
+            "name"                 : "Name",
+            "nightposition"        : "100"
+        },
+        "error" : {
+            "invalid-msg-payload"  : "Invalid msg.payload",
+            "unknown-msg-topic"    : "Unknown msg.topic: ",
+            "sunPosition" : {
+                "missing-property"          : "Missing property: ",
+                "invalid-sunInSky"          : "Property sunInSky must be of type boolean: ",
+                "invalid-altitude"          : "Property altitude must be of type number and less than 90: ",
+                "invalid-azimuth"           : "Property azimuth must be of type number and between 0 and 360: "
+            },
+            "blind" : {
+                "missing-property"          : "Missing property: ",
+                "invalid-orientation"       : "Property orientation must be of type number and between 0 and 360: ",
+                "invalid-mode"              : "Invalid mode: ",
+                "invalid-noffset"           : "Negative offset must be of type number and between 0 and 90: ",
+                "invalid-poffset"           : "Positive offset must be of type number and between 0 and 90: ",
+                "invalid-top"               : "Top must be of type number and greater than 0: ",
+                "invalid-bottom"            : "Bottom must be of type number and greater than or equal to 0: ",
+                "invalid-depth"             : "Depth must be of type number and greater than or equal to 0: ",
+                "invalid-dimensions"        : "Top must be greater than bottom: ",
+                "invalid-increment"         : "Increment must be between 0 and 100, and be a factor of 100: ",
+                "invalid-maxopen"           : "Maximum open position must be between 0 and 100 and a multiple of increment: ",
+                "invalid-maxclosed"         : "Maximum closed position must be between 0 and 100 and a multiple of increnent: ",
+                "invalid-max-settings"      : "Maximum open position must be less than maximum closed position: ",
+                "invalid-altitudethreshold" : "Altitude threshold must be of type number and between 0 and 90: ",
+                "invalid-cloudsthreshold"   : "Cloud threshold must be of type number and between 0 and 1: ",
+                "invalid-nightposition"     : "Night position must be between 0 and 100 and a multiple of increment: "
+            },
+            "blindPosition" : {
+                "missing-property"          : "Missing property: ",
+                "invalid-blindPosition"     : "Invalid blind position: "
+            },
+            "weather" : {
+                "invalid-clouds"            : "Invalid clouds: "
+            }
+        },
+        "positionReason" : {
+            "01" : "Manually set",
+            "02" : "Sun below horizon",
+            "03" : "Sun below altitude threshold",
+            "04" : "Sun not in window",
+            "05" : "Sun in window",
+            "06" : "Overcast conditions",
+            "07" : "Temperature forecast above threshold"
+        }
+    }
+}

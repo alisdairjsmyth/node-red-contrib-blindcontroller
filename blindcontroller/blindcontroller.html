@@ -1,5 +1,5 @@
 <!--
-  Copyright 2015 Alisdair Smyth
+  Copyright 2015, 2016 Alisdair Smyth
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -15,71 +15,71 @@
 -->
 <script type="text/x-red" data-template-name="blindcontroller">
     <div class="form-row">
-        <label for="node-input-channel"><i class="fa fa-picture-o"></i> Channel</label>
-        <input type="text" id="node-input-channel" placeholder="1">
+        <label for="node-input-channel"><i class="fa fa-picture-o"></i> <span data-i18n="blindcontroller.label.channel"></span></label>
+        <input type="text" id="node-input-channel" data-i18n="[placeholder]blindcontroller.placeholder.channel">
     </div>
     <div class="form-row">
-        <label for="node-input-mode"><i class="fa fa-sliders"></i> Mode</label>
+        <label for="node-input-mode"><i class="fa fa-sliders"></i> <span data-i18n="blindcontroller.label.mode"></span></label>
         <select id="node-input-mode" style='width:70%'>
             <option value="Summer">Summer, restrict sunlight</option>
             <option value="Winter">Winter, maximise sunlight</option>
         </select>
     </div>
     <div class="form-row">
-        <label for="node-input-orientation"><i class="fa fa-compass"></i> Orientation</label>
-        <input type="text" id="node-input-orientation" placeholder="0">
+        <label for="node-input-orientation"><i class="fa fa-compass"></i> <span data-i18n="blindcontroller.label.orientation"></span></label>
+        <input type="text" id="node-input-orientation" data-i18n="[placeholder]blindcontroller.placeholder.orientation">
     </div>
     <div class="form-row">
-        <label for="node-input-noffset"><i class="fa fa-undo"></i> Negative Offset</label>
-        <input type="text" id="node-input-noffset" placeholder="90">
+        <label for="node-input-noffset"><i class="fa fa-undo"></i> <span data-i18n="blindcontroller.label.noffset"></span></label>
+        <input type="text" id="node-input-noffset" data-i18n="[placeholder]blindcontroller.placeholder.noffset">
     </div>
     <div class="form-row">
-        <label for="node-input-poffset"><i class="fa fa-repeat"></i> Positive Offset</label>
-        <input type="text" id="node-input-poffset" placeholder="90">
+        <label for="node-input-poffset"><i class="fa fa-repeat"></i> <span data-i18n="blindcontroller.label.poffset"></span></label>
+        <input type="text" id="node-input-poffset" data-i18n="[placeholder]blindcontroller.placeholder.poffset">
     </div>
     <div class="form-row">
-        <label for="node-input-top"><i class="fa fa-angle-up"></i> Top</label>
-        <input type="text" id="node-input-top" placeholder="1">
+        <label for="node-input-top"><i class="fa fa-angle-up"></i> <span data-i18n="blindcontroller.label.top"></span></label>
+        <input type="text" id="node-input-top" data-i18n="[placeholder]blindcontroller.placeholder.top">
     </div>
     <div class="form-row">
-        <label for="node-input-bottom"><i class="fa fa-angle-down"></i> Bottom</label>
-        <input type="text" id="node-input-bottom" placeholder="1">
+        <label for="node-input-bottom"><i class="fa fa-angle-down"></i> <span data-i18n="blindcontroller.label.bottom"></span></label>
+        <input type="text" id="node-input-bottom" data-i18n="[placeholder]blindcontroller.placeholder.bottom">
     </div>
     <div class="form-row">
-        <label for="node-input-depth"><i class="fa fa-arrows-h"></i> Depth</label>
-        <input type="text" id="node-input-depth" placeholder="1">
+        <label for="node-input-depth"><i class="fa fa-arrows-h"></i> <span data-i18n="blindcontroller.label.depth"></span></label>
+        <input type="text" id="node-input-depth" data-i18n="[placeholder]blindcontroller.placeholder.depth">
     </div>
     <div class="form-row">
-        <label for="node-input-altitudethreshold"><i class="fa fa-angle-up"></i> Altitude Threshold</label>
-        <input type="text" id="node-input-altitudethreshold" placeholder="0">
+        <label for="node-input-altitudethreshold"><i class="fa fa-angle-up"></i> <span data-i18n="blindcontroller.label.altitudethreshold"></span></label>
+        <input type="text" id="node-input-altitudethreshold" data-i18n="[placeholder]blindcontroller.placeholder.altitudethreshold">
     </div>
     <div class="form-row">
-        <label for="node-input-increment"><i class="fa fa-angle-up"></i> Increment</label>
-        <input type="text" id="node-input-increment" placeholder="0">
+        <label for="node-input-increment"><i class="fa fa-angle-up"></i> <span data-i18n="blindcontroller.label.increment"></span></label>
+        <input type="text" id="node-input-increment" data-i18n="[placeholder]blindcontroller.placeholder.increment">
     </div>
     <div class="form-row">
-        <label for="node-input-maxopen"><i class="fa fa-angle-up"></i> Maximum Open Position</label>
-        <input type="text" id="node-input-maxopen" placeholder="0">
+        <label for="node-input-maxopen"><i class="fa fa-angle-up"></i> <span data-i18n="blindcontroller.label.maxopen"></span></label>
+        <input type="text" id="node-input-maxopen" data-i18n="[placeholder]blindcontroller.placeholder.maxopen">
     </div>
     <div class="form-row">
-        <label for="node-input-maxclosed"><i class="fa fa-angle-down"></i> Maximum Closed Position</label>
-        <input type="text" id="node-input-maxclosed" placeholder="100">
+        <label for="node-input-maxclosed"><i class="fa fa-angle-down"></i> <span data-i18n="blindcontroller.label.maxclosed"></span></label>
+        <input type="text" id="node-input-maxclosed" data-i18n="[placeholder]blindcontroller.placeholder.maxclosed">
     </div>
     <div class="form-row">
-        <label for="node-input-temperaturethreshold"><i class="fa fa-tachometer"></i> Temperature Threshold</label>
-        <input type="text" id="node-input-temperaturethreshold" placeholder="0">
+        <label for="node-input-temperaturethreshold"><i class="fa fa-tachometer"></i> <span data-i18n="blindcontroller.label.temperaturethreshold"></span></label>
+        <input type="text" id="node-input-temperaturethreshold" data-i18n="[placeholder]blindcontroller.placeholder.temperaturethreshold">
     </div>
     <div class="form-row">
-        <label for="node-input-cloudsthreshold"><i class="fa fa-cloud"></i> Cloud Threshold</label>
-        <input type="text" id="node-input-cloudsthreshold" placeholder="0">
+        <label for="node-input-cloudsthreshold"><i class="fa fa-cloud"></i> <span data-i18n="blindcontroller.label.cloudsthreshold"></span></label>
+        <input type="text" id="node-input-cloudsthreshold" data-i18n="[placeholder]blindcontroller.placeholder.cloudsthreshold">
     </div>
     <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="blindcontroller.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]blindcontroller.placeholder.name">
     </div>
     <div class="form-row">
-        <label for="node-input-nightposition"><i class="fa fa-angle-down"></i> Night Position</label>
-        <input type="text" id="node-input-nightposition" placeholder="100">
+        <label for="node-input-nightposition"><i class="fa fa-angle-down"></i> <span data-i18n="blindcontroller.label.nightposition"></span></label>
+        <input type="text" id="node-input-nightposition" data-i18n="[placeholder]blindcontroller.placeholder.nightposition">
     </div>
 </script>
 
@@ -198,8 +198,8 @@
 
 <script type="text/x-red" data-template-name="multiblindcontroller">
     <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="blindcontroller.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]blindcontroller.placeholder.name">
     </div>
 </script>
 
