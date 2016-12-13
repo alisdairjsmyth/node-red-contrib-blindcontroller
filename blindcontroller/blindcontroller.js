@@ -539,9 +539,10 @@ module.exports = function(RED) {
     /*
      * Function which is exported when the node-RED runtime loads the node on
      * start-up, and the basis of the Blind Controller node.  The node responds
-     * to four different input messages:
+     * to three different input messages:
      * - sun: the output of the Sun Position node containing the sun's current
      *        altitude and azimuth
+     * - blindPosition: message containing a specified blind position
      * - weather: the current weather conditions
      */
     function BlindControllerWithConfig(config) {
@@ -589,6 +590,9 @@ module.exports = function(RED) {
                     case "sun":
                         sunPosition = msg.payload;
                         runCalc(node, msg, blinds, sunPosition, weather);
+                        break;
+                    case "blindPosition":
+                        setPosition(node, msg, blinds[msg.payload.channel]);
                         break;
                     case "weather":
                         weather = msg.payload;

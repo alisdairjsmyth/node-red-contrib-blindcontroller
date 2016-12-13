@@ -12,8 +12,6 @@ Run the following command in the root directory of your Node-RED install
 <b>node-red-contrib-blindcontroller</b> is compatible with <b>node-red-contrib-sunpos</b>.
 ## Blind Controller
 
-![Blind Controller](./docs/blindcontroller.png)
-
 This node calculates the appropriate blind position to restrict or maximise direct sunlight through the associated window.
 
 It is configured with the following properties:
@@ -35,7 +33,7 @@ It is configured with the following properties:
 * <b>clouds threshold</b>: (optional) maximum percentage of sky occluded by clouds for the calculation to be performed
 * <b>night position</b>: (optional) the position of the blind outside of daylight hours. Defaults to 100.
 
-The calculation requires the output of the <b>Sun Position</b> Node.  This can be supplemented with current weather conditions, such as that from forecastio or weather underground.  <b>msg.topic</b> should be set to weather, and <b>msg.payload</b> either or both of the following properties:
+The calculation requires the output of the <a href="https://www.npmjs.com/package/node-red-contrib-sunpos" target="_new">Sun Position</a> Node.  This can be supplemented with current weather conditions, such as that from forecastio or weather underground.  <b>msg.topic</b> should be set to weather, and <b>msg.payload</b> either or both of the following properties:
 * <b>maxtemp</b>: the forecasted maximum temperature for the day;
 * <b>clouds</b>: A numerical value between 0 and 1 (inclusive) representing the percentage of sky occluded by clouds. A value of 0 corresponds to clear sky, 0.4 to scattered clouds, 0.75 to broken cloud cover, and 1 to completely overcast skies.
 
@@ -67,14 +65,16 @@ In addition, <b>msg.data</b> includes information useful for monitoring:
 
 <b>msg.topic</b> is set to "blind".
 
+The node also supports manual overrides by processing messages with <b>msg.topic</b> set to blindPosition, and <b>msg.payload</b> containing the following properties:
+* <b>channel</b>: the channel of the blind
+* <b>blindPosition</b>: the new position of the blind
+
 The node also reports its status within the Node-RED flow editor:
 * colour indicates whether it is currently considered daylight hours;
 * shape indicates whether the blind is fully closed or not;
 * text reports current blind position.
 
 ## Multi Blind Controller
-
-![Multi Blind Controller](./docs/multiblindcontroller.png)
 
 This node calculates the appropriate blind position to restrict direct sunlight through a number of windows.  This node processes three types of input messages:
 * blind configuration where <b>msg.topic</b> equals blind, and <b>msg.payload</b> contains the following properties:
@@ -93,11 +93,13 @@ This node calculates the appropriate blind position to restrict direct sunlight 
     * temperaturethreshold (optional)
     * cloudsthreshold (optional)
     * night position (optional)
-* the output of the <b>Sun Position</b> Node;
+* the output of the <a href="https://www.npmjs.com/package/node-red-contrib-sunpos" target="_new">Sun Position</a> Node;
 * current weather conditions, such as that from forecastio or weather underground.  <b>msg.topic</b> should be set to weather, and <b>msg.payload</b> either or both of the following properties:
     * maxtemp
     * clouds
 * a specified blind position, which will remain in effect for 2 hours
+    * channel
+    * blindPosition
 
 When processing either a Sun Position or Weather message, the blind position calculation is performed for each blind for which a configuration message has previously been received.  Emitted messages from this node have the same properties as those emitted from the <b>Blind Controller</b> node.
 
