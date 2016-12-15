@@ -103,8 +103,6 @@ module.exports = function(RED) {
         var blindProperty = [
             "channel",
             "orientation",
-            "noffset",
-            "poffset",
             "top",
             "bottom",
             "depth",
@@ -135,15 +133,17 @@ module.exports = function(RED) {
                     node.error(RED._("blindcontroller.error.blind.invalid-mode") + msg.payload.mode, msg);
                     validMsg = false;
             }
-            if ((typeof msg.payload.noffset != "number") ||
+            if ((msg.payload.noffset) &&
+               ((typeof msg.payload.noffset != "number") ||
                 (msg.payload.noffset < 0) ||
-                (msg.payload.noffset > 90)) {
+                (msg.payload.noffset > 90))) {
                     node.error(RED._("blindcontroller.error.blind.invalid-noffset") + msg.payload.noffset, msg);
                     validMsg = false;
             }
-            if ((typeof msg.payload.poffset != "number") ||
+            if ((msg.payload.poffset) &&
+               ((typeof msg.payload.poffset != "number") ||
                 (msg.payload.poffset < 0) ||
-                (msg.payload.poffset > 90)) {
+                (msg.payload.poffset > 90))) {
                     node.error(RED._("blindcontroller.error.blind.invalid-poffset") + msg.payload.poffset, msg);
                     validMsg = false;
             }
@@ -217,6 +217,12 @@ module.exports = function(RED) {
                 node.error(RED._("blindcontroller.error.blind.invalid-nightposition") + msg.payload.nightposition, msg);
                 validMsg = false;
             }
+            if ((msg.payload.expiryperiod) &&
+                ((typeof msg.payload.expiryperiod != "number") ||
+                 (msg.payload.expiryposition < 0))) {
+                     node.error(RED._("blindcontroller.error.blind.invalid-expiryperiod") + msg.payload.expiryperiod, msg);
+                     validMsg = false;
+            }
         }
         return validMsg;
     }
@@ -266,9 +272,6 @@ module.exports = function(RED) {
      * based on the orientation of the window and the azimuth of the sun
      */
     function isSunInWindow(blind, azimuth) {
-        var noffset = blind.noffset ? blind.noffset : 90;
-        var poffset = blind.poffset ? blind.poffset : 90;
-
         var sunInWindow = false;
 
         /*
@@ -276,18 +279,18 @@ module.exports = function(RED) {
          * Where the range includes ranges each side of north, separate checks
          * need to be performed either side of north
          */
-        if (blind.orientation - noffset < 0) {
-            if ((((360 + blind.orientation - noffset) <= azimuth) & (azimuth <= 360)) ||
-                ((0 <= azimuth) && (azimuth <= blind.orientation + poffset))) {
+        if (blind.orientation - blind.noffset < 0) {
+            if ((((360 + blind.orientation - blind.noffset) <= azimuth) & (azimuth <= 360)) ||
+                ((0 <= azimuth) && (azimuth <= blind.orientation + blind.poffset))) {
                 sunInWindow = true;
             }
-        } else if (blind.orientation + poffset > 360) {
-            if (((0 <= azimuth) & (azimuth <= (blind.orientation + poffset - 360))) ||
-                (((blind.orientation - noffset) <= azimuth) && (azimuth <= 360))) {
+        } else if (blind.orientation + blind.poffset > 360) {
+            if (((0 <= azimuth) & (azimuth <= (blind.orientation + blind.poffset - 360))) ||
+                (((blind.orientation - blind.noffset) <= azimuth) && (azimuth <= 360))) {
                 sunInWindow = true;
             }
         } else {
-            if (((blind.orientation - noffset) <= azimuth) && (azimuth <= (blind.orientation + poffset))) {
+            if (((blind.orientation - blind.noffset) <= azimuth) && (azimuth <= (blind.orientation + blind.poffset))) {
                 sunInWindow = true;
             }
         }
@@ -451,7 +454,7 @@ module.exports = function(RED) {
      */
     function setPosition (node, msg, blind) {
         blind.blindPosition           = msg.payload.blindPosition;
-        blind.blindPositionExpiry     = calcBlindPositionExpiry ();
+        blind.blindPositionExpiry     = calcBlindPositionExpiry (blind);
         blind.blindPositionReasonCode = "01";
         blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.01");
         msg.payload                   = blind;
@@ -460,12 +463,11 @@ module.exports = function(RED) {
     }
 
     /*
-     * Calculates the expiry timestamp to be 2 hours after the current time
+     * Calculates the expiry timestamp
      */
-    function calcBlindPositionExpiry () {
+    function calcBlindPositionExpiry (blind) {
         var expiryTimestamp      = new Date();
-        expiryTimestamp.setHours(expiryTimestamp.getHours()+ 2)
-
+        expiryTimestamp.setHours(expiryTimestamp.getHours()+ blind.expiryperiod);
         return expiryTimestamp;
     }
 
@@ -520,10 +522,20 @@ module.exports = function(RED) {
                         /*
                          * Default settings if not specified in input msg
                          */
-                        blinds[channel].mode          = (typeof msg.payload.mode          != "undefined") ? msg.payload.mode          : "Summer";
-                        blinds[channel].maxopen       = (typeof msg.payload.maxopen       != "undefined") ? msg.payload.maxopen       : 0;
-                        blinds[channel].maxclosed     = (typeof msg.payload.maxclosed     != "undefined") ? msg.payload.maxclosed     : 100;
-                        blinds[channel].nightposition = (typeof msg.payload.nightposition != "undefined") ? msg.payload.nightposition : 100;
+                        blinds[channel].mode          = (typeof msg.payload.mode          != "undefined") ?
+                            msg.payload.mode          : RED._("blindcontroller.placeholder.mode");
+                        blinds[channel].noffset       = (typeof msg.payload.noffset       != "undefined") ?
+                            msg.payload.noffset       : Number(RED._("blindcontroller.placeholder.noffset"));
+                        blinds[channel].poffset       = (typeof msg.payload.poffset       != "undefined") ?
+                            msg.payload.poffset       : Number(RED._("blindcontroller.placeholder.poffset"));
+                        blinds[channel].maxopen       = (typeof msg.payload.maxopen       != "undefined") ?
+                            msg.payload.maxopen       : Number(RED._("blindcontroller.placeholder.maxopen"));
+                        blinds[channel].maxclosed     = (typeof msg.payload.maxclosed     != "undefined") ?
+                            msg.payload.maxclosed     : Number(RED._("blindcontroller.placeholder.maxclosed"));
+                        blinds[channel].nightposition = (typeof msg.payload.nightposition != "undefined") ?
+                            msg.payload.nightposition : Number(RED._("blindcontroller.placeholder.nightposition"));
+                        blinds[channel].expiryperiod  = (typeof msg.payload.expiryperiod  != "undefined") ?
+                            msg.payload.expiryperiod  : Number(RED._("blindcontroller.placeholder.expiryperiod"));
                         break;
                     case "weather":
                         weather = msg.payload;
@@ -557,20 +569,20 @@ module.exports = function(RED) {
             channel:              channel,
             mode:                 config.mode,
             orientation:          Number(config.orientation),
-            noffset:              Number(config.noffset),
-            poffset:              Number(config.poffset),
+            noffset:              (config.noffset       != "") ? Number(config.noffset)       : Number(RED._("blindcontroller.placeholder.noffset")),
+            poffset:              (config.poffset       != "") ? Number(config.poffset)       : Number(RED._("blindcontroller.placeholder.poffset")),
             top:                  Number(config.top),
             bottom:               Number(config.bottom),
             depth:                Number(config.depth),
             altitudethreshold:    Number(config.altitudethreshold),
             increment:            Number(config.increment),
-            maxopen:              (config.maxopen       != "") ? Number(config.maxopen)       : 0,
-            maxclosed:            (config.maxclosed     != "") ? Number(config.maxclosed)     : 100,
+            maxopen:              (config.maxopen       != "") ? Number(config.maxopen)       : Number(RED._("blindcontroller.placeholder.maxopen")),
+            maxclosed:            (config.maxclosed     != "") ? Number(config.maxclosed)     : Number(RED._("blindcontroller.placeholder.maxclosed")),
             temperaturethreshold: config.temperaturethreshold,
             cloudsthreshold:      config.cloudsthreshold,
-            nightposition:        (config.nightposition != "") ? Number(config.nightposition) : 100
+            nightposition:        (config.nightposition != "") ? Number(config.nightposition) : Number(RED._("blindcontroller.placeholder.nightposition")),
+            expiryperiod:         (config.expiryperiod  != "") ? Number(config.expiryperiod)  : Number(RED._("blindcontroller.placeholder.expiryperiod"))
         };
-
         this.blind      = blinds[channel];
         var node        = this;
         var sunPosition = {};

@@ -32,6 +32,7 @@ It is configured with the following properties:
 * <b>temperature threshold</b>: (optional) temperature at which the blind will be fully closed while the sun is in the window.  This setting overrides <b>altitudethreshold</b> and <b>depth</b> in the calculation
 * <b>clouds threshold</b>: (optional) maximum percentage of sky occluded by clouds for the calculation to be performed
 * <b>night position</b>: (optional) the position of the blind outside of daylight hours. Defaults to 100.
+* <b>expiry period</b>: (optional) the duration in hours a manual setting will remain is place. Default to 2.
 
 The calculation requires the output of the <a href="https://www.npmjs.com/package/node-red-contrib-sunpos" target="_new">Sun Position</a> Node.  This can be supplemented with current weather conditions, such as that from forecastio or weather underground.  <b>msg.topic</b> should be set to weather, and <b>msg.payload</b> either or both of the following properties:
 * <b>maxtemp</b>: the forecasted maximum temperature for the day;
@@ -81,8 +82,8 @@ This node calculates the appropriate blind position to restrict direct sunlight 
     * channel
     * mode
     * orientation
-    * noffset
-    * poffset
+    * noffset (optional)
+    * poffset (optional)
     * top
     * bottom
     * depth
@@ -93,11 +94,12 @@ This node calculates the appropriate blind position to restrict direct sunlight 
     * temperaturethreshold (optional)
     * cloudsthreshold (optional)
     * night position (optional)
+    * expiry period (optional)
 * the output of the <a href="https://www.npmjs.com/package/node-red-contrib-sunpos" target="_new">Sun Position</a> Node;
 * current weather conditions, such as that from forecastio or weather underground.  <b>msg.topic</b> should be set to weather, and <b>msg.payload</b> either or both of the following properties:
     * maxtemp
     * clouds
-* a specified blind position, which will remain in effect for 2 hours
+* a specified blind position, which will remain in effect for the expiry period
     * channel
     * blindPosition
 

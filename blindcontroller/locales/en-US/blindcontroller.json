@@ -18,9 +18,11 @@
             "temperaturethreshold" : "Temperature Threshold",
             "cloudsthreshold"      : "Cloud Threshold",
             "name"                 : "Name",
-            "nightposition"        : "Night Position"
+            "nightposition"        : "Night Position",
+            "expiryperiod"         : "Expiry Period"
         },
         "placeholder" : {
+            "mode"                 : "Summer",
             "channel"              : "1",
             "orientation"          : "0",
             "noffset"              : "90",
@@ -35,7 +37,8 @@
             "temperaturethreshold" : "0",
             "cloudsthreshold"      : "0",
             "name"                 : "Name",
-            "nightposition"        : "100"
+            "nightposition"        : "100",
+            "expiryperiod"         : "2"
         },
         "error" : {
             "invalid-msg-payload"  : "Invalid msg.payload",
@@ -62,7 +65,8 @@
                 "invalid-max-settings"      : "Maximum open position must be less than maximum closed position: ",
                 "invalid-altitudethreshold" : "Altitude threshold must be of type number and between 0 and 90: ",
                 "invalid-cloudsthreshold"   : "Cloud threshold must be of type number and between 0 and 1: ",
-                "invalid-nightposition"     : "Night position must be between 0 and 100 and a multiple of increment: "
+                "invalid-nightposition"     : "Night position must be between 0 and 100 and a multiple of increment: ",
+                "invalid-expiryperiod"      : "Expiry period must be greater than 0: "
             },
             "blindPosition" : {
                 "missing-property"          : "Missing property: ",
