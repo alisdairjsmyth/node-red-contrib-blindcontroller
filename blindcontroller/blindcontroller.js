@@ -472,6 +472,13 @@ module.exports = function(RED) {
     }
 
     /*
+     * Tests whether val has been set, and returns defaultVal if it hasn't
+     */
+    function defaultIfUndefined (val, defaultVal) {
+        return (((typeof val == "undefined") || (val == "")) ? defaultVal : val);
+    }
+
+    /*
      * Function which is exported when the node-RED runtime loads the node on
      * start-up, and the basis of the Multi Blind Controller node.  The node
      * responds to four different input messages:
@@ -522,20 +529,13 @@ module.exports = function(RED) {
                         /*
                          * Default settings if not specified in input msg
                          */
-                        blinds[channel].mode          = (typeof msg.payload.mode          != "undefined") ?
-                            msg.payload.mode          : RED._("blindcontroller.placeholder.mode");
-                        blinds[channel].noffset       = (typeof msg.payload.noffset       != "undefined") ?
-                            msg.payload.noffset       : Number(RED._("blindcontroller.placeholder.noffset"));
-                        blinds[channel].poffset       = (typeof msg.payload.poffset       != "undefined") ?
-                            msg.payload.poffset       : Number(RED._("blindcontroller.placeholder.poffset"));
-                        blinds[channel].maxopen       = (typeof msg.payload.maxopen       != "undefined") ?
-                            msg.payload.maxopen       : Number(RED._("blindcontroller.placeholder.maxopen"));
-                        blinds[channel].maxclosed     = (typeof msg.payload.maxclosed     != "undefined") ?
-                            msg.payload.maxclosed     : Number(RED._("blindcontroller.placeholder.maxclosed"));
-                        blinds[channel].nightposition = (typeof msg.payload.nightposition != "undefined") ?
-                            msg.payload.nightposition : Number(RED._("blindcontroller.placeholder.nightposition"));
-                        blinds[channel].expiryperiod  = (typeof msg.payload.expiryperiod  != "undefined") ?
-                            msg.payload.expiryperiod  : Number(RED._("blindcontroller.placeholder.expiryperiod"));
+                        blinds[channel].mode          = defaultIfUndefined(msg.payload.mode,          RED._("blindcontroller.placeholder.mode"));
+                        blinds[channel].noffset       = defaultIfUndefined(msg.payload.noffset,       Number(RED._("blindcontroller.placeholder.noffset")));
+                        blinds[channel].poffset       = defaultIfUndefined(msg.payload.poffset,       Number(RED._("blindcontroller.placeholder.poffset")));
+                        blinds[channel].maxopen       = defaultIfUndefined(msg.payload.maxopen,       Number(RED._("blindcontroller.placeholder.maxopen")));
+                        blinds[channel].maxclosed     = defaultIfUndefined(msg.payload.maxclosed,     Number(RED._("blindcontroller.placeholder.maxclosed")));
+                        blinds[channel].nightposition = defaultIfUndefined(msg.payload.nightposition, Number(RED._("blindcontroller.placeholder.nightposition")));
+                        blinds[channel].expiryperiod  = defaultIfUndefined(msg.payload.expiryperiod,  Number(RED._("blindcontroller.placeholder.expiryperiod")));
                         break;
                     case "weather":
                         weather = msg.payload;
@@ -569,19 +569,19 @@ module.exports = function(RED) {
             channel:              channel,
             mode:                 config.mode,
             orientation:          Number(config.orientation),
-            noffset:              (config.noffset       != "") ? Number(config.noffset)       : Number(RED._("blindcontroller.placeholder.noffset")),
-            poffset:              (config.poffset       != "") ? Number(config.poffset)       : Number(RED._("blindcontroller.placeholder.poffset")),
+            noffset:              defaultIfUndefined(config.noffset,       Number(RED._("blindcontroller.placeholder.noffset"))),
+            poffset:              defaultIfUndefined(config.poffset,       Number(RED._("blindcontroller.placeholder.poffset"))),
             top:                  Number(config.top),
             bottom:               Number(config.bottom),
             depth:                Number(config.depth),
             altitudethreshold:    Number(config.altitudethreshold),
             increment:            Number(config.increment),
-            maxopen:              (config.maxopen       != "") ? Number(config.maxopen)       : Number(RED._("blindcontroller.placeholder.maxopen")),
-            maxclosed:            (config.maxclosed     != "") ? Number(config.maxclosed)     : Number(RED._("blindcontroller.placeholder.maxclosed")),
+            maxopen:              defaultIfUndefined(config.maxopen,       Number(RED._("blindcontroller.placeholder.maxopen"))),
+            maxclosed:            defaultIfUndefined(config.maxclosed,     Number(RED._("blindcontroller.placeholder.maxclosed"))),
             temperaturethreshold: config.temperaturethreshold,
             cloudsthreshold:      config.cloudsthreshold,
-            nightposition:        (config.nightposition != "") ? Number(config.nightposition) : Number(RED._("blindcontroller.placeholder.nightposition")),
-            expiryperiod:         (config.expiryperiod  != "") ? Number(config.expiryperiod)  : Number(RED._("blindcontroller.placeholder.expiryperiod"))
+            nightposition:        defaultIfUndefined(config.nightposition, Number(RED._("blindcontroller.placeholder.nightposition"))),
+            expiryperiod:         defaultIfUndefined(config.expiryperiod,  Number(RED._("blindcontroller.placeholder.expiryperiod")))
         };
         this.blind      = blinds[channel];
         var node        = this;
