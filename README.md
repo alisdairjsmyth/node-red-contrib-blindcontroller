@@ -10,6 +10,7 @@ Run the following command in the root directory of your Node-RED install
     npm install node-red-contrib-blindcontroller
 
 <b>node-red-contrib-blindcontroller</b> is compatible with <b>node-red-contrib-sunpos</b>.
+
 ## Blind Controller
 
 This node calculates the appropriate blind position to restrict or maximise direct sunlight through the associated window.
