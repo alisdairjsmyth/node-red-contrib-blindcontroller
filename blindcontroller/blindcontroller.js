@@ -354,9 +354,6 @@ module.exports = function(RED) {
                     switch (blind.mode) {
                         case "Winter":
                             if (blind.sunInWindow) {
-                                blind.blindPosition           = blind.maxopen;
-                                blind.blindPositionReasonCode = "05";
-                                blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.05");
                                 if (isOvercast) {
                                     blind.blindPosition           = blind.maxclosed;
                                     blind.blindPositionReasonCode = "06";
