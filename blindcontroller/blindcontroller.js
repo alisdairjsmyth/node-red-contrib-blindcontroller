@@ -366,7 +366,7 @@ module.exports = function(RED) {
                             } else {
                                 blind.blindPosition           = blind.maxclosed;
                                 blind.blindPositionReasonCode = "04";
-                                blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.04");;
+                                blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.04");
                             }
                             break;
                         default:
