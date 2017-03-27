@@ -46,7 +46,7 @@ In Summer mode, the node calculates the appropriate blind position to restrict t
 ![sunInRoom](./docs/sunInRoom.jpg)
 * consideration of weather conditions against defined thresholds
 
-In Winter mode, the node calculates the appropriate blind position to maximise the amount of direct sunlight entering the room. This calculation is based on whether direct sunlight is entering the room based on the orientation of the blind and the azimuth of the sun - taking into account the negative and positive offset properties.  When the sun is in the window the blind will positioned in the <b>max open</b> setting, otherwise it will be positioned in the <b>max closed</b> setting.
+In Winter mode, the node calculates the appropriate blind position to maximise the amount of direct sunlight entering the room. This calculation is based on whether direct sunlight is entering the room based on the orientation of the blind and the azimuth of the sun - taking into account the negative and positive offset properties.  When the sun is in the window the blind will positioned in the <b>max open</b> setting, otherwise it will be positioned in the <b>max closed</b> setting.  In overcast conditions the blind will be positioned in the <b>max closed</b> setting.
 
 In the event the node determines a blind position change is required, it will emit a <b>msg.payload</b> with the properties of the blind including:
 * <b>blindPosition</b>: the new position of the blind

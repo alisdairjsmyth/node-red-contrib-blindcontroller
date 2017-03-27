@@ -324,10 +324,11 @@ module.exports = function(RED) {
      * - if the sun is below an altitude threshold, the blind will be set to a
      *   fully open position.
      *
-     * In winter mode, the calculation is simply based on whether the sun is in
-     * window.  If the sun is in the window, it will be opened to a configured
-     * Open position.  If the sun is not in the window, it is closed to a
-     * configured Closed position.
+     * In winter mode, the calculation is based on whether the sun is in
+     * window and whether it is suffiently overcast.  If the sun is in the
+     * window, it will be opened to a configured Open position unless it is
+     * overcast it which case it will be closed.  If the sun is not in the
+     * window, it is closed to a configured Closed position.
      *
      * Outside daylight hours, the blind is closed to a configured position.
      */
@@ -356,6 +357,15 @@ module.exports = function(RED) {
                                 blind.blindPosition           = blind.maxopen;
                                 blind.blindPositionReasonCode = "05";
                                 blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.05");
+                                if (isOvercast) {
+                                    blind.blindPosition           = blind.maxclosed;
+                                    blind.blindPositionReasonCode = "06";
+                                    blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.06");
+                                } else {
+                                    blind.blindPosition           = blind.maxopen;
+                                    blind.blindPositionReasonCode = "05";
+                                    blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.05");
+                                }
                             } else {
                                 blind.blindPosition           = blind.maxclosed;
                                 blind.blindPositionReasonCode = "04";
@@ -391,6 +401,9 @@ module.exports = function(RED) {
                                 blind.blindPositionReasonCode = "04";
                                 blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.04");
                             }
+							if (weather) {
+								blind.weather = weather;
+							}
                             break;
                     }
                 }
