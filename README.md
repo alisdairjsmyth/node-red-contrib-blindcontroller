@@ -20,8 +20,8 @@ It is configured with the following properties:
 * <b>mode</b>: mode of control
     * <b>Summer</b>: constrains the extent to which direct sunlight is allowed to enter the room
     * <b>Winter</b>: maximises the amount of direct sunlight allowed to enter the room
-* <b>orientation</b>: the bearing representing the perpendicular to the of the window
-* <b>negative offset</b>: (optional) anti-clockwise offset from orientation for determination of whether the sun is coming through window
+* <b>orientation</b>: the bearing representing the perpendicular of the window to geographical north
+* <b>negative offset</b>: (optional) anti-clockwise offset from orientation for determination of whether the sun is coming through window.  Offsets allow for obstacles that inhibit direct sunlight through the window.  The obstacle could be a tree, a wall, anything.
 * <b>positive offset</b>: (optional) clockwise offset from orientation for determination of whether the sun is coming through window
 * <b>top</b>: measurement from the floor to top of the window covered by the blind
 * <b>bottom</b>: measurement from the floor to bottom of the window covered by the blind
