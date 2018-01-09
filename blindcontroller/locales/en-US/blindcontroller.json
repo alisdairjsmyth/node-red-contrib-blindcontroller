@@ -74,6 +74,10 @@
             },
             "weather" : {
                 "invalid-clouds"            : "Invalid clouds: "
+            },
+            "mode" : {
+                "missing-property"          : "Missing property: ",
+                "invalid-mode"              : "Invalid mode: "
             }
         },
         "positionReason" : {

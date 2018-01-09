@@ -49,6 +49,9 @@ module.exports = function(RED) {
         case "weather":
           validMsg = validateWeatherMsg(node, msg);
           break;
+        case "mode":
+          validMsg = validateModeMsg(node, msg);
+          break;
         default:
           node.error(
             RED._("blindcontroller.error.unknown-msg-topic") + msg.topic,
@@ -381,6 +384,41 @@ module.exports = function(RED) {
         msg
       );
       validMsg = false;
+    }
+    return validMsg;
+  }
+
+  /*
+   * Validate Mode message
+   */
+  function validateModeMsg(node, msg) {
+    var validMsg = true;
+    var modeProperty = ["mode"];
+    var modes = ["Summer", "Winter"];
+    var i;
+
+    for (i in modeProperty) {
+      if (!(modeProperty[i] in msg.payload)) {
+        node.error(
+          RED._("blindcontroller.error.mode.missing-property") +
+            modeProperty[i],
+          msg
+        );
+        validMsg = false;
+      }
+    }
+    if (validMsg) {
+      if (
+        msg.payload.mode &&
+        (typeof msg.payload.mode != "string" ||
+          modes.indexOf(msg.payload.mode) == -1)
+      ) {
+        node.error(
+          RED._("blindcontroller.error.mode.invalid-mode") + msg.payload.mode,
+          msg
+        );
+        validMsg = false;
+      }
     }
     return validMsg;
   }
@@ -744,6 +782,14 @@ module.exports = function(RED) {
             weather = msg.payload;
             runCalc(node, msg, blinds, sunPosition, weather);
             break;
+          case "mode":
+            var mode = msg.payload.mode;
+            var i;
+            for (i in blinds) {
+              blinds[i].mode = mode;
+            }
+            runCalc(node, msg, blinds, sunPosition, weather);
+            break;
           default:
             break;
         }
@@ -841,6 +887,14 @@ module.exports = function(RED) {
             break;
           case "weather":
             weather = msg.payload;
+            runCalc(node, msg, blinds, sunPosition, weather);
+            break;
+          case "mode":
+            var mode = msg.payload.mode;
+            var i;
+            for (i in blinds) {
+              blinds[i].mode = mode;
+            }
             runCalc(node, msg, blinds, sunPosition, weather);
             break;
           default:
