@@ -87,27 +87,6 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="blindcontroller">
-    <p>This node controls roller blind height based on the position of the sun in the sky.</p>
-    <ul>
-        <li><b>Mode</b>: the mode of control of the blind</li>
-        <li><b>Orientation</b>: the perpendicular bearing of the window</li>
-        <li><b>Negative Offset</b>: anti-clockwise offset from orientation for determination of whether the sun is coming through window</li>
-        <li><b>Positive Offset</b>: clockwise offset from orientation for determination of whether the sun is coming through window</li>
-        <li><b>Top</b>: the top of the window (in centimetres) from floor level</li>
-        <li><b>Bottom</b>: the bottom of the window (in centimetres) from floor level</li>
-        <li><b>Depth</b>: how far into the room (in centimetres), the direct sunlight is to be allowed</li>
-        <li><b>Altitude Threshold</b>: minimum altitude of the sun for determination of blind position</li>
-        <li><b>Increment</b>: increment in which the blind height can be controlled</li>
-        <li><b>Max Open Position</b>: the maximum the blind can be opened during daylight hours</li>
-        <li><b>Max Closed Position</b>: the maximum the blind can be closed during daylight hours</li>
-        <li><b>Temperature Threshold</b>: temperature at which the blind will be fully closed while the sun is in the window.  This setting overrides <b>altitudethreshold</b> and <b>depth</b> in the calculation</li>
-        <li><b>Clouds Threshold</b>: A numerical value between 0 and 1 (inclusive) representing the percentage of sky occluded by clouds. A value of 0 corresponds to clear sky, 0.4 to scattered clouds, 0.75 to broken cloud cover, and 1 to completely overcast skies.</li>
-        <li><b>Night Position</b>: The position of the blind outside of daylight hours.</li>
-        <li><b>Expiry Period</b>: The time in hours a manual setting will remain in place.</li>
-    </ul>
-</script>
-
 <script type="text/javascript">
     RED.nodes.registerType("blindcontroller",{
         category: "advanced-input",
@@ -212,10 +191,6 @@
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="blindcontroller.label.name"></span></label>
         <input type="text" id="node-input-name" data-i18n="[placeholder]blindcontroller.placeholder.name">
     </div>
-</script>
-
-<script type="text/x-red" data-help-name="multiblindcontroller">
-    <p>This node controls the height of mutliple roller blinds based on the position of the sun in the sky.</p>
 </script>
 
 <script type="text/javascript">
