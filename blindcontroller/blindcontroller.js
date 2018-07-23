@@ -552,7 +552,7 @@ module.exports = function(RED) {
                 if (
                   ((blind.altitudethreshold &&
                     sunPosition.altitude >= blind.altitudethreshold) ||
-                    !blind.altitudeThreshold) &&
+                    !blind.altitudethreshold) &&
                   !isOvercast
                 ) {
                   var height =
