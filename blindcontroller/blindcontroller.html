@@ -70,8 +70,16 @@
         <input type="text" id="node-input-temperaturethreshold" data-i18n="[placeholder]blindcontroller.placeholder.temperaturethreshold">
     </div>
     <div class="form-row">
+        <label for="node-input-temperaturethresholdposition"><i class="fa fa-angle-down"></i> <span data-i18n="blindcontroller.label.temperaturethresholdposition"></span></label>
+        <input type="text" id="node-input-temperaturethresholdposition">
+    </div>
+    <div class="form-row">
         <label for="node-input-cloudsthreshold"><i class="fa fa-cloud"></i> <span data-i18n="blindcontroller.label.cloudsthreshold"></span></label>
         <input type="text" id="node-input-cloudsthreshold" data-i18n="[placeholder]blindcontroller.placeholder.cloudsthreshold">
+    </div>
+    <div class="form-row">
+        <label for="node-input-cloudsthresholdposition"><i class="fa fa-angle-down"></i> <span data-i18n="blindcontroller.label.cloudsthresholdposition"></span></label>
+        <input type="text" id="node-input-cloudsthresholdposition">
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="blindcontroller.label.name"></span></label>
@@ -149,10 +157,24 @@
                                    }
                                   },
             temperaturethreshold: {value:""},
+            temperaturethresholdposition:              {value:"", required:false,
+                                   validate: function (v) {
+                var n = Number(v);
+                var i = Number(this.increment);
+                return ((n >= 0) && (n <= 100) && (n%i == 0));
+                                   }
+                                  },
             cloudsthreshold:      {value:"",
                                    validate: function (v) {
                 var n = Number(v);
                 return ((n >= 0) && (n <= 1));
+                                   }
+                                  },
+            cloudsthresholdposition:              {value:"", required:false,
+                                   validate: function (v) {
+                var n = Number(v);
+                var i = Number(this.increment);
+                return ((n >= 0) && (n <= 100) && (n%i == 0));
                                    }
                                   },
             nightposition:        {value:"",

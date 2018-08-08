@@ -516,7 +516,7 @@ module.exports = function(RED) {
       blind.blindPosition = blind.maxopen;
       if (sunPosition.sunInSky) {
         if (isTemperatureAConcern) {
-          blind.blindPosition = blind.maxclosed;
+          blind.blindPosition = blind.temperaturethresholdposition;
           blind.blindPositionReasonCode = "07";
           blind.blindPositionReasonDesc = RED._(
             "blindcontroller.positionReason.07"
@@ -527,7 +527,7 @@ module.exports = function(RED) {
             case "Winter":
               if (blind.sunInWindow) {
                 if (isOvercast) {
-                  blind.blindPosition = blind.maxclosed;
+                  blind.blindPosition = blind.cloudsthresholdposition;
                   blind.blindPositionReasonCode = "06";
                   blind.blindPositionReasonDesc = RED._(
                     "blindcontroller.positionReason.06"
@@ -593,6 +593,7 @@ module.exports = function(RED) {
                     "blindcontroller.positionReason.03"
                   );
                 } else if (isOvercast) {
+                  blind.blindPosition = blind.cloudsthresholdposition;
                   blind.blindPositionReasonCode = "06";
                   blind.blindPositionReasonDesc = RED._(
                     "blindcontroller.positionReason.06"
@@ -848,7 +849,9 @@ module.exports = function(RED) {
         )
       ),
       temperaturethreshold: config.temperaturethreshold,
+      temperaturethresholdposition: config.temperaturethresholdposition,
       cloudsthreshold: config.cloudsthreshold,
+      cloudsthresholdposition: config.cloudsthresholdposition,
       nightposition: Number(
         defaultIfUndefined(
           config.nightposition,

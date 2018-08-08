@@ -16,7 +16,9 @@
             "maxopen"              : "Maximum Open Position",
             "maxclosed"            : "Maximum Closed Position",
             "temperaturethreshold" : "Temperature Threshold",
+            "temperaturethresholdposition" : "Temperature Threshold Position",
             "cloudsthreshold"      : "Cloud Threshold",
+            "cloudsthresholdposition"      : "Cloud Threshold Position",
             "name"                 : "Name",
             "nightposition"        : "Night Position",
             "expiryperiod"         : "Expiry Period"
