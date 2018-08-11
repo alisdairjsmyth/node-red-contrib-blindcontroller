@@ -117,6 +117,16 @@ module.exports = function(RED) {
     return validMsg;
   }
 
+  function invalidPosition(position, increment) {
+    return (
+      position &&
+      (typeof position != "number" ||
+        position < 0 ||
+        position > 100 ||
+        position % increment != 0)
+    )
+  }
+
   /*
    * Validate Blind message
    */
@@ -243,13 +253,7 @@ module.exports = function(RED) {
         );
         validMsg = false;
       }
-      if (
-        msg.payload.maxopen &&
-        (typeof msg.payload.maxopen != "number" ||
-          msg.payload.maxopen < 0 ||
-          msg.payload.maxopen > 100 ||
-          msg.payload.maxopen % msg.payload.increment != 0)
-      ) {
+      if (invalidPosition(msg.payload.maxopen, msg.payload.increment)) {
         node.error(
           RED._("blindcontroller.error.blind.invalid-maxopen") +
             msg.payload.maxopen,
@@ -257,13 +261,7 @@ module.exports = function(RED) {
         );
         validMsg = false;
       }
-      if (
-        msg.payload.maxclosed &&
-        (typeof msg.payload.maxclosed != "number" ||
-          msg.payload.maxclosed < 0 ||
-          msg.payload.maxclosed > 100 ||
-          msg.payload.maxclosed % msg.payload.increment != 0)
-      ) {
+      if (invalidPosition(msg.payload.maxclosed, msg.payload.increment)) {
         node.error(
           RED._("blindcontroller.error.blind.invalid-maxclosed") +
             msg.payload.maxclosed,
@@ -307,13 +305,7 @@ module.exports = function(RED) {
         );
         validMsg = false;
       }
-      if (
-        msg.payload.cloudsthresholdposition &&
-        (typeof msg.payload.cloudsthresholdposition != "number" ||
-          msg.payload.cloudsthresholdposition < 0 ||
-          msg.payload.cloudsthresholdposition > 100 ||
-          msg.payload.cloudsthresholdposition % msg.payload.increment != 0)
-      ) {
+      if (invalidPosition(msg.payload.cloudsthresholdposition, msg.payload.increment)) {
         node.error(
           RED._("blindcontroller.error.blind.invalid-cloudsthresholdposition") +
             msg.payload.cloudsthresholdposition,
@@ -321,27 +313,15 @@ module.exports = function(RED) {
         );
         validMsg = false;
       }
-      if (
-        msg.payload.temperaturethresholdposition &&
-        (typeof msg.payload.temperaturethresholdposition != "number" ||
-          msg.payload.temperaturethresholdposition < 0 ||
-          msg.payload.temperaturethresholdposition > 100 ||
-          msg.payload.temperaturethresholdposition % msg.payload.increment != 0)
-      ) {
+      if (invalidPosition(msg.payload.temperaturethresholdposition, msg.payload.increment)) {
         node.error(
-          RED._("blindcontroller.error.blind.invalid-cloudsthresholdposition") +
-            msg.payload.cloudsthresholdposition,
+          RED._("blindcontroller.error.blind.invalid-temperaturethresholdposition") +
+            msg.payload.temperaturethresholdposition,
           msg
         );
         validMsg = false;
       }
-      if (
-        msg.payload.nightposition &&
-        (typeof msg.payload.nightposition != "number" ||
-          msg.payload.nightposition < 0 ||
-          msg.payload.nightposition > 100 ||
-          msg.payload.nightposition % msg.payload.increment != 0)
-      ) {
+      if (invalidPosition(msg.payload.nightposition, msg.payload.increment)) {
         node.error(
           RED._("blindcontroller.error.blind.invalid-nightposition") +
             msg.payload.nightposition,
