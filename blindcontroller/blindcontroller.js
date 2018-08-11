@@ -308,6 +308,34 @@ module.exports = function(RED) {
         validMsg = false;
       }
       if (
+        msg.payload.cloudsthresholdposition &&
+        (typeof msg.payload.cloudsthresholdposition != "number" ||
+          msg.payload.cloudsthresholdposition < 0 ||
+          msg.payload.cloudsthresholdposition > 100 ||
+          msg.payload.cloudsthresholdposition % msg.payload.increment != 0)
+      ) {
+        node.error(
+          RED._("blindcontroller.error.blind.invalid-cloudsthresholdposition") +
+            msg.payload.cloudsthresholdposition,
+          msg
+        );
+        validMsg = false;
+      }
+      if (
+        msg.payload.temperaturethresholdposition &&
+        (typeof msg.payload.temperaturethresholdposition != "number" ||
+          msg.payload.temperaturethresholdposition < 0 ||
+          msg.payload.temperaturethresholdposition > 100 ||
+          msg.payload.temperaturethresholdposition % msg.payload.increment != 0)
+      ) {
+        node.error(
+          RED._("blindcontroller.error.blind.invalid-cloudsthresholdposition") +
+            msg.payload.cloudsthresholdposition,
+          msg
+        );
+        validMsg = false;
+      }
+      if (
         msg.payload.nightposition &&
         (typeof msg.payload.nightposition != "number" ||
           msg.payload.nightposition < 0 ||
@@ -774,6 +802,14 @@ module.exports = function(RED) {
               msg.payload.nightposition,
               Number(RED._("blindcontroller.placeholder.nightposition"))
             );
+            blinds[channel].temperaturethresholdposition = defaultIfUndefined(
+              msg.payload.temperaturethresholdposition,
+              Number(RED._("blindcontroller.placeholder.temperaturethresholdposition"))
+            );
+            blinds[channel].cloudsthresholdposition = defaultIfUndefined(
+              msg.payload.cloudsthresholdposition,
+              Number(RED._("blindcontroller.placeholder.cloudsthresholdposition"))
+            );
             blinds[channel].expiryperiod = defaultIfUndefined(
               msg.payload.expiryperiod,
               Number(RED._("blindcontroller.placeholder.expiryperiod"))
@@ -849,9 +885,19 @@ module.exports = function(RED) {
         )
       ),
       temperaturethreshold: config.temperaturethreshold,
-      temperaturethresholdposition: config.temperaturethresholdposition,
+      temperaturethresholdposition: Number(
+        defaultIfUndefined(
+          config.temperaturethresholdposition,
+          RED._("blindcontroller.placeholder.temperaturethresholdposition")
+        )
+      ),
       cloudsthreshold: config.cloudsthreshold,
-      cloudsthresholdposition: config.cloudsthresholdposition,
+      cloudsthresholdposition: Number(
+        defaultIfUndefined(
+          config.cloudsthresholdposition,
+          RED._("blindcontroller.placeholder.cloudsthresholdposition")
+        )
+      ),
       nightposition: Number(
         defaultIfUndefined(
           config.nightposition,

@@ -16,9 +16,11 @@
             "maxopen"              : "Maximum Open Position",
             "maxclosed"            : "Maximum Closed Position",
             "temperaturethreshold" : "Temperature Threshold",
-            "temperaturethresholdposition" : "Temperature Threshold Position",
+            "temperaturethresholdposition"
+                                   : "Temperature Threshold Position",
             "cloudsthreshold"      : "Cloud Threshold",
-            "cloudsthresholdposition"      : "Cloud Threshold Position",
+            "cloudsthresholdposition"
+                                   : "Cloud Threshold Position",
             "name"                 : "Name",
             "nightposition"        : "Night Position",
             "expiryperiod"         : "Expiry Period"
@@ -37,7 +39,11 @@
             "maxopen"              : "0",
             "maxclosed"            : "100",
             "temperaturethreshold" : "0",
+            "temperaturethresholdposition" :
+                                     "100",
             "cloudsthreshold"      : "0",
+            "cloudsthresholdposition" :
+                                     "0",
             "name"                 : "Name",
             "nightposition"        : "100",
             "expiryperiod"         : "2"
@@ -63,10 +69,14 @@
                 "invalid-dimensions"        : "Top must be greater than bottom: ",
                 "invalid-increment"         : "Increment must be between 0 and 100, and be a factor of 100: ",
                 "invalid-maxopen"           : "Maximum open position must be between 0 and 100 and a multiple of increment: ",
-                "invalid-maxclosed"         : "Maximum closed position must be between 0 and 100 and a multiple of increnent: ",
+                "invalid-maxclosed"         : "Maximum closed position must be between 0 and 100 and a multiple of increment: ",
                 "invalid-max-settings"      : "Maximum open position must be less than maximum closed position: ",
                 "invalid-altitudethreshold" : "Altitude threshold must be of type number and between 0 and 90: ",
                 "invalid-cloudsthreshold"   : "Cloud threshold must be of type number and between 0 and 1: ",
+                "invalid-cloudsthresholdposition"
+                                            : "Cloud threshold position be between 0 and 100 and a multiple of increment: ",
+                "invalid-temperaturethresholdposition"
+                                            : "Temperature threshold position be between 0 and 100 and a multiple of increment: ",
                 "invalid-nightposition"     : "Night position must be between 0 and 100 and a multiple of increment: ",
                 "invalid-expiryperiod"      : "Expiry period must be greater than 0: "
             },

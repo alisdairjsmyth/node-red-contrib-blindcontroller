@@ -32,8 +32,10 @@ It is configured with the following properties:
 * <b>increment</b>: the degree to which the blind position can be controlled
 * <b>max open</b>: (optional) the maximum extent the blind is allowed to be opened during daylight hours. Defaults to 0.
 * <b>max closed</b>: (optional) the maximum extent the blind is allowed to be closed during daylight hours. Defaults to 100.
-* <b>temperature threshold</b>: (optional) temperature at which the blind will be fully closed while the sun is in the window. This setting overrides <b>altitudethreshold</b> and <b>depth</b> in the calculation
+* <b>temperature threshold</b>: (optional) temperature at which the blind will be set to the <b>temperature threshold position</b> while the sun is in the window. This setting overrides <b>altitudethreshold</b> and <b>depth</b> in the calculation
+* <b>temperature threshold position</b>: (optional) the blind position associated with <b>temperature threshold</b>, default is fully closed
 * <b>clouds threshold</b>: (optional) maximum percentage of sky occluded by clouds for the calculation to be performed
+* <b>clouds threshold position</b>: (optional) the blind position associated with the <b>clouds threshold</b>, default is fully open
 * <b>night position</b>: (optional) the position of the blind outside of daylight hours. Defaults to 100.
 * <b>expiry period</b>: (optional) the duration in hours a manual setting will remain is place. Default to 2.
 
@@ -106,7 +108,9 @@ This node calculates the appropriate blind position to restrict direct sunlight 
   * max open (optional)
   * max closed (optional)
   * temperaturethreshold (optional)
+  * temperatrurethresholdposition (optional)
   * cloudsthreshold (optional)
+  * cloudsthresholdposition (optional)
   * night position (optional)
   * expiry period (optional)
 * the output of the <a href="https://www.npmjs.com/package/node-red-contrib-sunpos" target="_new">Sun Position</a> Node;

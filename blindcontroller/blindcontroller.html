@@ -71,7 +71,7 @@
     </div>
     <div class="form-row">
         <label for="node-input-temperaturethresholdposition"><i class="fa fa-angle-down"></i> <span data-i18n="blindcontroller.label.temperaturethresholdposition"></span></label>
-        <input type="text" id="node-input-temperaturethresholdposition">
+        <input type="text" id="node-input-temperaturethresholdposition" data-i18n="[placeholder]blindcontroller.placeholder.temperaturethresholdposition">
     </div>
     <div class="form-row">
         <label for="node-input-cloudsthreshold"><i class="fa fa-cloud"></i> <span data-i18n="blindcontroller.label.cloudsthreshold"></span></label>
@@ -79,7 +79,7 @@
     </div>
     <div class="form-row">
         <label for="node-input-cloudsthresholdposition"><i class="fa fa-angle-down"></i> <span data-i18n="blindcontroller.label.cloudsthresholdposition"></span></label>
-        <input type="text" id="node-input-cloudsthresholdposition">
+        <input type="text" id="node-input-cloudsthresholdposition"  data-i18n="[placeholder]blindcontroller.placeholder.cloudsthresholdposition">
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="blindcontroller.label.name"></span></label>
@@ -131,9 +131,10 @@
                                   },
             depth:                {value:"", required:true, validate:RED.validators.number()},
             altitudethreshold:    {value:"",
+                                   required:false,
                                    validate: function (v) {
                 var n = Number(v);
-                return ((n >= 0) && (n <= 90));
+                return (v == "" || ((n >= 0) && (n <= 90)));
                                    }
                                   },
             increment:            {value:"",
@@ -146,48 +147,52 @@
                                    validate: function (v) {
                 var n = Number(v);
                 var i = Number(this.increment);
-                return ((n >= 0) && (n <= 100) && (n%i == 0));
+                return (v == "" || ((n >= 0) && (n <= 100) && (n%i == 0)));
                                    }
                                   },
             maxclosed:            {value:"",
                                    validate: function (v) {
                 var n = Number(v);
                 var i = Number(this.increment);
-                return ((n >= 0) && (n <= 100) && (n%i == 0) && (n >= this.maxopen));
+                return (v == "" || ((n >= 0) && (n <= 100) && (n%i == 0) && (n >= this.maxopen)));
                                    }
                                   },
             temperaturethreshold: {value:""},
-            temperaturethresholdposition:              {value:"", required:false,
+            temperaturethresholdposition:
+                                  {value:"",
+                                   required:false,
                                    validate: function (v) {
                 var n = Number(v);
                 var i = Number(this.increment);
-                return ((n >= 0) && (n <= 100) && (n%i == 0));
+                return (v == "" || ((n >= 0) && (n <= 100) && (n%i == 0)));
                                    }
                                   },
             cloudsthreshold:      {value:"",
                                    validate: function (v) {
                 var n = Number(v);
-                return ((n >= 0) && (n <= 1));
+                return (v == "" || ((n >= 0) && (n <= 1)));
                                    }
                                   },
-            cloudsthresholdposition:              {value:"", required:false,
+            cloudsthresholdposition:
+                                  {value:"",
+                                   required:false,
                                    validate: function (v) {
                 var n = Number(v);
                 var i = Number(this.increment);
-                return ((n >= 0) && (n <= 100) && (n%i == 0));
+                return (v == "" || ((n >= 0) && (n <= 100) && (n%i == 0)));
                                    }
                                   },
             nightposition:        {value:"",
                                    validate: function (v) {
                 var n = Number(v);
                 var i = Number(this.increment);
-                return ((n >= 0) && (n <= 100) && (n%i == 0));
+                return (v == "" || ((n >= 0) && (n <= 100) && (n%i == 0)));
                                    }
                                   },
             expiryperiod:         {value:"", required:false,
                                    validate: function(v) {
                 var n = Number(v);
-                return (n >= 0);
+                return (v == "" || n >= 0);
                                    }
                                   }
         },
