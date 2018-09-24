@@ -353,30 +353,30 @@ module.exports = function(RED) {
     var blindProperty = ["channel", "blindPosition"];
     var i;
 
-    for (i in blindProperty) {
-      if (!(blindProperty[i] in msg.payload)) {
-        node.error(
-          RED._("blindcontroller.error.blindPosition.missing-property") +
-            blindProperty[i],
-          msg
-        );
-        validMsg = false;
-      }
-    }
-    if (validMsg) {
-      if (
-        typeof msg.payload.blindPosition != "number" ||
-        msg.payload.blindPosition < 0 ||
-        msg.payload.blindPosition > 100
-      ) {
-        node.error(
-          RED._("blindcontroller.error.blindPosition.invalid-blindPosition") +
-            msg.payload.blindPosition,
-          msg
-        );
-        validMsg = false;
-      }
-    }
+    // for (i in blindProperty) {
+      // if (!(blindProperty[i] in msg.payload)) {
+        // node.error(
+          // RED._("blindcontroller.error.blindPosition.missing-property") +
+            // blindProperty[i],
+          // msg
+        // );
+        // validMsg = false;
+      // }
+    // }
+    // if (validMsg) {
+      // if (
+        // typeof msg.payload.blindPosition != "number" ||
+        // msg.payload.blindPosition < 0 ||
+        // msg.payload.blindPosition > 100
+      // ) {
+        // node.error(
+          // RED._("blindcontroller.error.blindPosition.invalid-blindPosition") +
+            // msg.payload.blindPosition,
+          // msg
+        // );
+        // validMsg = false;
+      // }
+    // }
     return validMsg;
   }
 
@@ -683,20 +683,30 @@ module.exports = function(RED) {
    */
   function setPosition(node, msg, blind) {
     blind.blindPosition = msg.payload.blindPosition;
-    blind.blindPositionExpiry = calcBlindPositionExpiry(blind);
+    blind.blindPositionExpiry = calcBlindPositionExpiry(blind, msg.payload.expiryperiod);
     blind.blindPositionReasonCode = "01";
     blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.01");
     msg.payload = blind;
     msg.topic = "blind";
     node.send(msg);
   }
+  
+  /*
+   * When the blind position is manually specified and a reset message is received, this function is used to
+   * remove the expiry timestamp and set it back to "defaults".
+   */
+  function resetPosition(node, msg, blind, sunPosition, weather) {
+    delete blind.blindPositionExpiry;
+	
+    runCalc(node, msg, [blind], sunPosition, weather);
+  }
 
   /*
    * Calculates the expiry timestamp
    */
-  function calcBlindPositionExpiry(blind) {
+  function calcBlindPositionExpiry(blind, expiryperiod) {
     var expiryTimestamp = new Date();
-    expiryTimestamp.setHours(expiryTimestamp.getHours() + blind.expiryperiod);
+    expiryTimestamp.setHours(expiryTimestamp.getHours() + (expiryperiod ? expiryperiod : blind.expiryperiod));
     return expiryTimestamp;
   }
 
@@ -912,7 +922,12 @@ module.exports = function(RED) {
             runCalc(node, msg, blinds, sunPosition, weather);
             break;
           case "blindPosition":
-            setPosition(node, msg, blinds[msg.payload.channel]);
+			var blind = msg.payload.channel ? msg.payload.channel : this.blind.channel;
+			if(msg.payload.reset == true) {
+				resetPosition(node, msg, blinds[blind], sunPosition, weather );
+			} else {
+				setPosition(node, msg, blinds[blind]);
+			}
             break;
           case "weather":
             weather = msg.payload;
