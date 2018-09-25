@@ -350,8 +350,8 @@ module.exports = function(RED) {
    */
   function validateBlindPositionMsg(node, msg) {
     var validMsg = true;
-    var blindProperty = ["channel", "blindPosition"];
-    var i;
+    //var blindProperty = ["channel", "blindPosition"];
+    //var i;
 
     // for (i in blindProperty) {
       // if (!(blindProperty[i] in msg.payload)) {
@@ -377,6 +377,44 @@ module.exports = function(RED) {
         // validMsg = false;
       // }
     // }
+	
+	if (
+		 msg.payload.reset && typeof msg.payload.reset != "boolean" 
+		) {
+		node.error(
+		  RED._("blindcontroller.error.blind.invalid-reset") +
+			msg.payload.reset,
+		  msg
+		);
+		validMsg = false;
+		}
+	
+	if (
+        msg.payload.expiryperiod &&
+        (typeof msg.payload.expiryperiod != "number" ||
+          msg.payload.expiryperiod < 0)
+      ) {
+        node.error(
+          RED._("blindcontroller.error.blind.invalid-expiryperiod") +
+            msg.payload.expiryperiod,
+          msg
+        );
+        validMsg = false;
+      }
+	  
+	 if (
+        msg.payload.blindPosition &&
+        (typeof msg.payload.blindPosition != "number" ||
+          msg.payload.blindPosition < 0 || msg.payload.blindPosition > 100)
+      ) {
+        node.error(
+          RED._("blindcontroller.error.blind.invalid-blindPosition") +
+            msg.payload.blindPosition,
+          msg
+        );
+        validMsg = false;
+      }
+	
     return validMsg;
   }
 
@@ -760,7 +798,12 @@ module.exports = function(RED) {
             runCalc(node, msg, blinds, sunPosition, weather);
             break;
           case "blindPosition":
-            setPosition(node, msg, blinds[msg.payload.channel]);
+			var blind = msg.payload.channel ? msg.payload.channel : this.blind.channel;
+			if(msg.payload.reset == true) {
+				resetPosition(node, msg, blinds[blind], sunPosition, weather );
+			} else {
+				setPosition(node, msg, blinds[blind]);
+			}
             break;
           case "blind":
             var channel = msg.payload.channel;
@@ -946,10 +989,11 @@ module.exports = function(RED) {
         }
 
         node.status({
-          fill: sunPosition.sunInSky ? "yellow" : "blue",
+          fill: blinds[channel].blindPositionReasonCode == "01" ? "red" : (sunPosition.sunInSky ? "yellow" : "blue"),
           shape: blinds[channel].blindPosition == 100 ? "dot" : "ring",
           text: blinds[channel].blindPosition + "%"
         });
+		
       }
     });
   }
