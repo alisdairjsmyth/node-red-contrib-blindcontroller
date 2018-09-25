@@ -350,33 +350,6 @@ module.exports = function(RED) {
    */
   function validateBlindPositionMsg(node, msg) {
     var validMsg = true;
-    //var blindProperty = ["channel", "blindPosition"];
-    //var i;
-
-    // for (i in blindProperty) {
-      // if (!(blindProperty[i] in msg.payload)) {
-        // node.error(
-          // RED._("blindcontroller.error.blindPosition.missing-property") +
-            // blindProperty[i],
-          // msg
-        // );
-        // validMsg = false;
-      // }
-    // }
-    // if (validMsg) {
-      // if (
-        // typeof msg.payload.blindPosition != "number" ||
-        // msg.payload.blindPosition < 0 ||
-        // msg.payload.blindPosition > 100
-      // ) {
-        // node.error(
-          // RED._("blindcontroller.error.blindPosition.invalid-blindPosition") +
-            // msg.payload.blindPosition,
-          // msg
-        // );
-        // validMsg = false;
-      // }
-    // }
 	
 	if (
 		 msg.payload.reset && typeof msg.payload.reset != "boolean" 
