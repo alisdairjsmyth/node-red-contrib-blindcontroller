@@ -729,7 +729,8 @@ module.exports = function(RED) {
    */
   function calcBlindPositionExpiry(blind, expiryperiod) {
     var expiryTimestamp = new Date();
-    expiryTimestamp.setHours(expiryTimestamp.getHours() + (expiryperiod ? expiryperiod : blind.expiryperiod));
+    //expiryTimestamp.setHours(expiryTimestamp.getHours() + (expiryperiod ? expiryperiod : blind.expiryperiod));
+    expiryTimestamp.setMinutes(expiryTimestamp.getMinutes() + (expiryperiod ? expiryperiod : blind.expiryperiod));
     return expiryTimestamp;
   }
 
