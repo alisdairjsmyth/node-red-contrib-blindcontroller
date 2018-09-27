@@ -43,6 +43,9 @@ module.exports = function(RED) {
         case "blindPosition":
           validMsg = validateBlindPositionMsg(node, msg);
           break;
+        case "blindPositionReset":
+          validMsg = validateBlindPositionResetMsg(node, msg);
+          break;
         case "blind":
           validMsg = validateBlindMsg(node, msg);
           break;
@@ -352,17 +355,6 @@ module.exports = function(RED) {
     var validMsg = true;
 	
 	if (
-		 msg.payload.reset && typeof msg.payload.reset != "boolean" 
-		) {
-		node.error(
-		  RED._("blindcontroller.error.blind.invalid-reset") +
-			msg.payload.reset,
-		  msg
-		);
-		validMsg = false;
-		}
-	
-	if (
         msg.payload.expiryperiod &&
         (typeof msg.payload.expiryperiod != "number" ||
           msg.payload.expiryperiod < 0)
@@ -387,6 +379,26 @@ module.exports = function(RED) {
         );
         validMsg = false;
       }
+	
+    return validMsg;
+  }
+  
+  /*
+   * Validate Blind Position message
+   */
+  function validateBlindPositionResetMsg(node, msg) {
+    var validMsg = true;
+	
+	if (
+		 msg.payload.reset && typeof msg.payload.reset != "boolean" 
+		) {
+		node.error(
+		  RED._("blindcontroller.error.blind.invalid-reset") +
+			msg.payload.reset,
+		  msg
+		);
+		validMsg = false;
+		}
 	
     return validMsg;
   }
@@ -772,12 +784,17 @@ module.exports = function(RED) {
             break;
           case "blindPosition":
 			var blind = msg.payload.channel ? msg.payload.channel : this.blind.channel;
-			if(msg.payload.reset == true) {
-				resetPosition(node, msg, blinds[blind], sunPosition, weather );
-			} else {
-				setPosition(node, msg, blinds[blind]);
-			}
+			
+			setPosition(node, msg, blinds[blind]);
+			
             break;
+		  case "blindPositionReset":
+			var blind = msg.payload.channel ? msg.payload.channel : this.blind.channel;
+			
+			resetPosition(node, msg, blinds[blind], sunPosition, weather );
+			
+            break;
+			
           case "blind":
             var channel = msg.payload.channel;
             blinds[channel] = msg.payload;
@@ -939,11 +956,15 @@ module.exports = function(RED) {
             break;
           case "blindPosition":
 			var blind = msg.payload.channel ? msg.payload.channel : this.blind.channel;
-			if(msg.payload.reset == true) {
-				resetPosition(node, msg, blinds[blind], sunPosition, weather );
-			} else {
-				setPosition(node, msg, blinds[blind]);
-			}
+			
+			setPosition(node, msg, blinds[blind]);
+			
+            break;
+		  case "blindPositionReset":
+			var blind = msg.payload.channel ? msg.payload.channel : this.blind.channel;
+			
+			resetPosition(node, msg, blinds[blind], sunPosition, weather );
+			
             break;
           case "weather":
             weather = msg.payload;
