@@ -15,7 +15,7 @@
       </li>
       <li>Blind Position
         <dl class="message-properties">
-          <dt>payload.channel <span class="property-type">number</span></dt>
+          <dt class="optional">payload.channel <span class="property-type">string</span></dt>
           <dd>the channel of the blind</dd>
         </dl>
         <dl class="message-properties">
@@ -23,8 +23,26 @@
           <dd>the new position of the blind</dd>
         </dl>
         <dl class="message-properties">
+          <dt class="optional">payload.expiryperiod<span class="property-type">number</span></dt>
+          <dd>the duration in minutes a manual setting will remain is place</dd>
+        </dl>
+        <dl class="message-properties">
           <dt>topic <span class="property-type">string</span></dt>
           <dd>set to <code>blindPosition</code></dd>
+        </dl>
+      </li>
+      <li>Blind Position Reset
+        <dl class="message-properties">
+          <dt class="optional">payload.channel <span class="property-type">string</span></dt>
+          <dd>the channel of the blind</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>payload.reset<span class="property-type">boolean</span></dt>
+          <dd>indicator to expire manual position</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>topic <span class="property-type">string</span></dt>
+          <dd>set to <code>blindPositionReset</code></dd>
         </dl>
       </li>
       <li>Weather
@@ -55,7 +73,7 @@
 
   <h3>Outputs</h3>
     <dl class="message-properties">
-      <dt>payload.channel <span class="property-type">number</span></dt>
+      <dt>payload.channel <span class="property-type">string</span></dt>
       <dd>the channel of the blind</dd>
     </dl>
     <dl class="message-properties">
@@ -155,7 +173,7 @@
         </dl>
         <dl class="message-properties">
           <dt class="optional">payload.expiryperiod<span class="property-type">number</span></dt>
-          <dd>the duration in hours a manual setting will remain is place</dd>
+          <dd>the duration in minutes a manual setting will remain is place</dd>
         </dl>
         <dl class="message-properties">
           <dt>topic <span class="property-type">string</span></dt>
@@ -182,8 +200,26 @@
           <dd>the new position of the blind</dd>
         </dl>
         <dl class="message-properties">
+          <dt class="optional">payload.expiryperiod<span class="property-type">number</span></dt>
+          <dd>the duration in minutes a manual setting will remain is place</dd>
+        </dl>
+        <dl class="message-properties">
           <dt>topic <span class="property-type">string</span></dt>
           <dd>set to <code>blindPosition</code></dd>
+        </dl>
+      </li>
+      <li>Blind Position Reset
+        <dl class="message-properties">
+          <dt>payload.channel <span class="property-type">string</span></dt>
+          <dd>the channel of the blind</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>payload.reset<span class="property-type">number</span></dt>
+          <dd>the duration in minutes a manual setting will remain is place</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>topic <span class="property-type">string</span></dt>
+          <dd>set to <code>blindPositionReset</code></dd>
         </dl>
       </li>
       <li>Weather
@@ -214,7 +250,7 @@
 
   <h3>Outputs</h3>
     <dl class="message-properties">
-      <dt>payload.channel <span class="property-type">number</span></dt>
+      <dt>payload.channel <span class="property-type">string</span></dt>
       <dd>the channel of the blind</dd>
     </dl>
     <dl class="message-properties">
