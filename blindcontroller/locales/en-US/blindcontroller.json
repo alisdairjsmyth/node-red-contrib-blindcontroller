@@ -46,7 +46,7 @@
                                      "0",
             "name"                 : "Name",
             "nightposition"        : "100",
-            "expiryperiod"         : "2"
+            "expiryperiod"         : "120"
         },
         "error" : {
             "invalid-msg-payload"  : "Invalid msg.payload",
@@ -82,7 +82,9 @@
             },
             "blindPosition" : {
                 "missing-property"          : "Missing property: ",
-                "invalid-blindPosition"     : "Invalid blind position: "
+                "invalid-blindPosition"     : "Invalid blind position: ",
+                "invalid-expiryperiod"      : "Expiry period must be greater than 0: ",
+                "invalid-reset"             : "Reset should be of type boolean: "
             },
             "weather" : {
                 "invalid-clouds"            : "Invalid clouds: "
