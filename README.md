@@ -85,7 +85,7 @@ The node also supports manual overrides by processing messages with <b>msg.topic
 * <b>blindPosition</b>: the new position of the blind
 * <b>expiry period</b>: (optional) the duration in minutes this manual setting will remain is place.
 
-Manual positions can be forced to expiry by processing a message with <b>msg.topic</b> set to blindPositionReset, and <b>msg.payload</b> containing the following properties:
+Manual positions can be forced to expire by processing a message with <b>msg.topic</b> set to blindPositionReset, and <b>msg.payload</b> containing the following properties:
 
 * <b>channel</b>: the channel of the blind
 * <b>reset</b>: boolean indicating manual setting is to be reset
