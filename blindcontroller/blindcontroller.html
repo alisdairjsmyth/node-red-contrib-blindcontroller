@@ -201,6 +201,7 @@
                                   },
             opposite:             {value: "", required:false,
                                    validate: function(v) {
+                return (v == "" || v.toLowerCase() == "true" || v.toLowerCase() == "false")
                                    }
                                   }
         },
