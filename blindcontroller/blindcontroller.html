@@ -93,6 +93,10 @@
         <label for="node-input-expiryperiod"><i class="fa fa-clock-o"></i> <span data-i18n="blindcontroller.label.expiryperiod"></span></label>
         <input type="text" id="node-input-expiryperiod" data-i18n="[placeholder]blindcontroller.placeholder.expiryperiod">
     </div>
+    <div class="form-row">
+        <label for="node-input-opposite"><i class="fa fa-arrows-v"></i> <span data-i18n="blindcontroller.label.opposite"></span></label>
+        <input type="text" id="node-input-opposite" data-i18n="[placeholder]blindcontroller.placeholder.opposite">
+    </div>
 </script>
 
 <script type="text/javascript">
@@ -193,6 +197,10 @@
                                    validate: function(v) {
                 var n = Number(v);
                 return (v == "" || n >= 0);
+                                   }
+                                  },
+            opposite:             {value: "", required:false,
+                                   validate: function(v) {
                                    }
                                   }
         },

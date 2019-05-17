@@ -38,6 +38,7 @@ It is configured with the following properties:
 * <b>clouds threshold position</b>: (optional) the blind position associated with the <b>clouds threshold</b>, default is fully open
 * <b>night position</b>: (optional) the position of the blind outside of daylight hours. Defaults to 100.
 * <b>expiry period</b>: (optional) the duration in minutes a manual setting will remain is place. Default to 120.
+* <b>opposite</b>: (optional) boolean to indicate the blind uses 0% to indicate the blind is closed rather than open.  Defaults to false
 
 The calculation requires the output of the <a href="https://www.npmjs.com/package/node-red-contrib-sunpos" target="_new">Sun Position</a> Node. This can be supplemented with current weather conditions, such as that from forecastio or weather underground. <b>msg.topic</b> should be set to weather, and <b>msg.payload</b> either or both of the following properties:
 
@@ -119,6 +120,7 @@ This node calculates the appropriate blind position to restrict direct sunlight 
   * cloudsthresholdposition (optional)
   * night position (optional)
   * expiry period (optional)
+  * opposite (optional)
 * the output of the <a href="https://www.npmjs.com/package/node-red-contrib-sunpos" target="_new">Sun Position</a> Node;
 * current weather conditions, such as that from forecastio or weather underground. <b>msg.topic</b> should be set to weather, and <b>msg.payload</b> either or both of the following properties:
   * maxtemp

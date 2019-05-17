@@ -23,7 +23,8 @@
                                    : "Cloud Threshold Position",
             "name"                 : "Name",
             "nightposition"        : "Night Position",
-            "expiryperiod"         : "Expiry Period"
+            "expiryperiod"         : "Expiry Period",
+            "opposite"             : "0 is Closed"
         },
         "placeholder" : {
             "mode"                 : "Summer",
@@ -46,7 +47,8 @@
                                      "0",
             "name"                 : "Name",
             "nightposition"        : "100",
-            "expiryperiod"         : "120"
+            "expiryperiod"         : "120",
+            "opposite"             : "false"
         },
         "error" : {
             "invalid-msg-payload"  : "Invalid msg.payload",

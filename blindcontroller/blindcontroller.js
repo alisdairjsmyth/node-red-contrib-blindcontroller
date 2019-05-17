@@ -716,6 +716,10 @@ module.exports = function(RED) {
       var previousBlindPositionReasonCode = blinds[i].blindPositionReasonCode;
 
       calcBlindPosition(blinds[i], sunPosition, weather);
+
+      blinds[i].logicalBlindPosition = blinds[i].blindPosition;
+      blinds[i].blindPosition = blinds[i].opposite ? 100 - blinds[i].blindPosition : blinds[i].blindPosition;
+
       if (
         blinds[i].blindPosition != previousBlindPosition ||
         blinds[i].sunInWindow != previousSunInWindow ||
@@ -739,7 +743,9 @@ module.exports = function(RED) {
    * prepare the message and the expiry timestamp.
    */
   function setPosition(node, msg, blind) {
-    blind.blindPosition = msg.payload.blindPosition;
+    node.log("Start of setPosition")
+    blind.blindPosition = blind.opposite ? 100 - msg.payload.blindPosition : msg.payload.blindPosition;
+    blind.logicalBlindPosition = msg.payload.blindPosition;
     blind.blindPositionExpiry = calcBlindPositionExpiry(msg.payload.expiryperiod ? msg.payload.expiryperiod : blind.expiryperiod);
     blind.blindPositionReasonCode = "01";
     blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.01");
@@ -770,6 +776,19 @@ module.exports = function(RED) {
    */
   function defaultIfUndefined(val, defaultVal) {
     return typeof val == "undefined" || val == "" ? defaultVal : val;
+  }
+
+  function convertToBoolean(val) {
+    switch (typeof val) {
+      case "boolean":
+        return val;
+      case "string":
+        switch(val.toLowerCase().trim()){
+          case "true": case "yes": case "1": return true;
+          case "false": case "no": case "0": case null: return false;
+          default: return Boolean(string);
+        }
+    }
   }
 
   /*
@@ -862,6 +881,12 @@ module.exports = function(RED) {
             blinds[channel].expiryperiod = defaultIfUndefined(
               msg.payload.expiryperiod,
               Number(RED._("blindcontroller.placeholder.expiryperiod"))
+            );
+            blinds[channel].opposite = convertToBoolean(
+              defaultIfUndefined(
+                msg.payload.opposite,
+                RED._("blindcontroller.placeholder.opposite")
+              )
             );
             break;
           case "weather":
@@ -958,6 +983,12 @@ module.exports = function(RED) {
           config.expiryperiod,
           RED._("blindcontroller.placeholder.expiryperiod")
         )
+      ),
+      opposite: convertToBoolean(
+        defaultIfUndefined(
+          config.opposite,
+          RED._("blindcontroller.placeholder.opposite")
+        )
       )
     };
     this.blind = blinds[channel];
@@ -1009,8 +1040,8 @@ module.exports = function(RED) {
 
         node.status({
           fill: blinds[channel].blindPositionReasonCode == "01" ? "red" : (sunPosition.sunInSky ? "yellow" : "blue"),
-          shape: blinds[channel].blindPosition == 100 ? "dot" : "ring",
-          text: blinds[channel].blindPosition + "%"
+          shape: blinds[channel].logicalBlindPosition == 100 ? "dot" : "ring",
+          text: blinds[channel].logicalBlindPosition + "%"
         });
 
       }
