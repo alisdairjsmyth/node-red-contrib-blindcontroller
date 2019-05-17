@@ -743,7 +743,6 @@ module.exports = function(RED) {
    * prepare the message and the expiry timestamp.
    */
   function setPosition(node, msg, blind) {
-    node.log("Start of setPosition")
     blind.blindPosition = blind.opposite ? 100 - msg.payload.blindPosition : msg.payload.blindPosition;
     blind.logicalBlindPosition = msg.payload.blindPosition;
     blind.blindPositionExpiry = calcBlindPositionExpiry(msg.payload.expiryperiod ? msg.payload.expiryperiod : blind.expiryperiod);
