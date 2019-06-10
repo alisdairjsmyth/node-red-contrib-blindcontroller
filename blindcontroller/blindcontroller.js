@@ -316,6 +316,27 @@ module.exports = function(RED) {
         );
         validMsg = false;
       }
+      if (
+        msg.payload.uvindexthreshold &&
+        (typeof msg.payload.uvindexthreshold != "number" ||
+          msg.payload.uvindexthreshold < 0 ||
+          msg.payload.uvindexthreshold > 20)
+      ) {
+        node.error(
+          RED._("blindcontroller.error.blind.invalid-uvindexthreshold") +
+            msg.payload.uvindexthreshold,
+          msg
+        );
+        validMsg = false;
+      }
+      if (invalidPosition(msg.payload.uvindexthresholdposition, msg.payload.increment)) {
+        node.error(
+          RED._("blindcontroller.error.blind.invalid-uvindexthresholdposition") +
+            msg.payload.uvindexthresholdposition,
+          msg
+        );
+        validMsg = false;
+      }
       if (invalidPosition(msg.payload.temperaturethresholdposition, msg.payload.increment)) {
         node.error(
           RED._("blindcontroller.error.blind.invalid-temperaturethresholdposition") +
@@ -450,6 +471,14 @@ module.exports = function(RED) {
       );
       validMsg = false;
     }
+    if (msg.payload.uvindex < 0 || msg.payload.uvindex > 20) {
+      node.error(
+        RED._("blindcontroller.error.weather.invalid-uvindex") +
+          msg.payload.uvindex,
+        msg
+      );
+      validMsg = false;
+    }
     return validMsg;
   }
 
@@ -526,6 +555,10 @@ module.exports = function(RED) {
     return sunInWindow;
   }
 
+  function getBlindPositionReasonDesc (blindPositionReasonCode) {
+    return RED._("blindcontroller.positionReason."+blindPositionReasonCode);
+  }
+
   /*
    * Function to calculate the appropriate blind position based on the
    * altitude of the sun, characteristics of the window, with the target of
@@ -548,6 +581,7 @@ module.exports = function(RED) {
    *   blind will be closed fully while the sun is in the sky.  This feature
    *   of the function is intended to allow blinds to be used to block out
    *   extreme heat.
+   * - if the UV index is low, the blind will be set to a fully open position.
    * - if it is deemed to be sufficiently overcast, the blind will be set to a
    *   fully open position.
    * - if the sun is below an altitude threshold, the blind will be set to a
@@ -575,6 +609,10 @@ module.exports = function(RED) {
       weather.clouds && blind.cloudsthreshold
         ? weather.clouds > blind.cloudsthreshold
         : false;
+    var isLowUV =
+      weather.uvindex && blind.uvindexthreshold
+        ? weather.uvindex < blind.uvindexthreshold
+        : false;
     var now = new Date();
 
     if (hasBlindPositionExpired(blind.blindPositionExpiry)) {
@@ -583,9 +621,7 @@ module.exports = function(RED) {
         if (isTemperatureAConcern) {
           blind.blindPosition = blind.temperaturethresholdposition;
           blind.blindPositionReasonCode = "07";
-          blind.blindPositionReasonDesc = RED._(
-            "blindcontroller.positionReason.07"
-          );
+          blind.blindPositionReasonDesc = getBlindPositionReasonDesc("07");
         } else {
           blind.sunInWindow = isSunInWindow(blind, sunPosition.azimuth);
           switch (blind.mode) {
@@ -594,22 +630,20 @@ module.exports = function(RED) {
                 if (isOvercast) {
                   blind.blindPosition = blind.cloudsthresholdposition;
                   blind.blindPositionReasonCode = "06";
-                  blind.blindPositionReasonDesc = RED._(
-                    "blindcontroller.positionReason.06"
-                  );
+                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc("06");
+                } else if (isLowUV) {
+                  blind.blindPosition = blind.uvindexthresholdposition;
+                  blind.blindPositionReasonCode = "08";
+                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc("08");
                 } else {
                   blind.blindPosition = blind.maxopen;
                   blind.blindPositionReasonCode = "05";
-                  blind.blindPositionReasonDesc = RED._(
-                    "blindcontroller.positionReason.05"
-                  );
+                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc("05");
                 }
               } else {
                 blind.blindPosition = blind.maxclosed;
                 blind.blindPositionReasonCode = "04";
-                blind.blindPositionReasonDesc = RED._(
-                  "blindcontroller.positionReason.04"
-                );
+                blind.blindPositionReasonDesc = getBlindPositionReasonDesc("04");
               }
               break;
             default:
@@ -618,7 +652,7 @@ module.exports = function(RED) {
                   ((blind.altitudethreshold &&
                     sunPosition.altitude >= blind.altitudethreshold) ||
                     !blind.altitudethreshold) &&
-                  !isOvercast
+                  !isOvercast && !isLowUV
                 ) {
                   var height =
                     Math.tan(sunPosition.altitude * Math.PI / 180) *
@@ -646,29 +680,25 @@ module.exports = function(RED) {
                         : blind.blindPosition;
                   }
                   blind.blindPositionReasonCode = "05";
-                  blind.blindPositionReasonDesc = RED._(
-                    "blindcontroller.positionReason.05"
-                  );
+                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc("05");
                 } else if (
                   blind.altitudethreshold &&
                   sunPosition.altitude < blind.altitudethreshold
                 ) {
                   blind.blindPositionReasonCode = "03";
-                  blind.blindPositionReasonDesc = RED._(
-                    "blindcontroller.positionReason.03"
-                  );
+                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc("03");
                 } else if (isOvercast) {
                   blind.blindPosition = blind.cloudsthresholdposition;
                   blind.blindPositionReasonCode = "06";
-                  blind.blindPositionReasonDesc = RED._(
-                    "blindcontroller.positionReason.06"
-                  );
-                }
+                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc("06");
+                } else if (isLowUV) {
+                  blind.blindPosition = blind.uvindexthresholdposition;
+                  blind.blindPositionReasonCode = "08";
+                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc("08");
+}
               } else {
                 blind.blindPositionReasonCode = "04";
-                blind.blindPositionReasonDesc = RED._(
-                  "blindcontroller.positionReason.04"
-                );
+                blind.blindPositionReasonDesc = getBlindPositionReasonDesc("04");
               }
               if (weather) {
                 blind.weather = weather;
@@ -679,9 +709,7 @@ module.exports = function(RED) {
       } else {
         blind.blindPosition = blind.nightposition;
         blind.blindPositionReasonCode = "02";
-        blind.blindPositionReasonDesc = RED._(
-          "blindcontroller.positionReason.02"
-        );
+        blind.blindPositionReasonDesc = getBlindPositionReasonDesc("02");
         blind.sunInWindow = false;
       }
       if (blind.blindPositionExpiry) {
@@ -747,7 +775,7 @@ module.exports = function(RED) {
     blind.logicalBlindPosition = msg.payload.blindPosition;
     blind.blindPositionExpiry = calcBlindPositionExpiry(msg.payload.expiryperiod ? msg.payload.expiryperiod : blind.expiryperiod);
     blind.blindPositionReasonCode = "01";
-    blind.blindPositionReasonDesc = RED._("blindcontroller.positionReason.01");
+    blind.blindPositionReasonDesc = getBlindPositionReasonDesc("01");
     msg.payload = blind;
     msg.topic = "blind";
     node.send(msg);
@@ -877,6 +905,10 @@ module.exports = function(RED) {
               msg.payload.cloudsthresholdposition,
               Number(RED._("blindcontroller.placeholder.cloudsthresholdposition"))
             );
+            blinds[channel].uvindexthresholdposition = defaultIfUndefined(
+                msg.payload.uvindexthresholdposition,
+                RED._("blindcontroller.placeholder.uvindexthresholdposition")
+            );
             blinds[channel].expiryperiod = defaultIfUndefined(
               msg.payload.expiryperiod,
               Number(RED._("blindcontroller.placeholder.expiryperiod"))
@@ -969,6 +1001,13 @@ module.exports = function(RED) {
         defaultIfUndefined(
           config.cloudsthresholdposition,
           RED._("blindcontroller.placeholder.cloudsthresholdposition")
+        )
+      ),
+      uvindexthreshold: config.uvindexthreshold,
+      uvindexthresholdposition: Number(
+        defaultIfUndefined(
+          config.uvindexthresholdposition,
+          RED._("blindcontroller.placeholder.uvindexthresholdposition")
         )
       ),
       nightposition: Number(

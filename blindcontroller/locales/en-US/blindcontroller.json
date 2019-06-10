@@ -21,6 +21,9 @@
             "cloudsthreshold"      : "Cloud Threshold",
             "cloudsthresholdposition"
                                    : "Cloud Threshold Position",
+            "uvindexthreshold"     : "UV Index Threshold",
+            "uvindexthresholdposition"
+                                   : "UV Index Threshold Position",
             "name"                 : "Name",
             "nightposition"        : "Night Position",
             "expiryperiod"         : "Expiry Period",
@@ -45,6 +48,9 @@
             "cloudsthreshold"      : "0",
             "cloudsthresholdposition" :
                                      "0",
+            "uvindexthreshold"     : "0",
+            "uvindexthresholdposition"
+                                   : "0",
             "name"                 : "Name",
             "nightposition"        : "100",
             "expiryperiod"         : "120",
@@ -76,7 +82,10 @@
                 "invalid-altitudethreshold" : "Altitude threshold must be of type number and between 0 and 90: ",
                 "invalid-cloudsthreshold"   : "Cloud threshold must be of type number and between 0 and 1: ",
                 "invalid-cloudsthresholdposition"
-                                            : "Cloud threshold position be between 0 and 100 and a multiple of increment: ",
+                                            : "Cloud threshold position must be between 0 and 100 and a multiple of increment: ",
+                "invalid-uvindexthreshold"  : "UV Index threshold must be of type number and between 0 and 20: ",
+                "invalid-uvindexthresholdposition"
+                                            : "UV Index threshold position must be between 0 and 100 and a multiple of increment: ",
                 "invalid-temperaturethresholdposition"
                                             : "Temperature threshold position be between 0 and 100 and a multiple of increment: ",
                 "invalid-nightposition"     : "Night position must be between 0 and 100 and a multiple of increment: ",
@@ -89,7 +98,8 @@
                 "invalid-reset"             : "Reset should be of type boolean: "
             },
             "weather" : {
-                "invalid-clouds"            : "Invalid clouds: "
+                "invalid-clouds"            : "Invalid clouds: ",
+                "invalid-uvindex"           : "Invalid UV Index: "
             },
             "mode" : {
                 "missing-property"          : "Missing property: ",
@@ -103,7 +113,8 @@
             "04" : "Sun not in window",
             "05" : "Sun in window",
             "06" : "Overcast conditions",
-            "07" : "Temperature forecast above threshold"
+            "07" : "Temperature forecast above threshold",
+            "08" : "UV Index below threshold"
         }
     }
 }

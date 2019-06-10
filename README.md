@@ -44,6 +44,7 @@ The calculation requires the output of the <a href="https://www.npmjs.com/packag
 
 * <b>maxtemp</b>: the forecasted maximum temperature for the day;
 * <b>clouds</b>: A numerical value between 0 and 1 (inclusive) representing the percentage of sky occluded by clouds. A value of 0 corresponds to clear sky, 0.4 to scattered clouds, 0.75 to broken cloud cover, and 1 to completely overcast skies.
+* <b>uvindex</b>: the current uv index
 
 In Summer mode, the node calculates the appropriate blind position to restrict the amount of direct sunlight entering the room. This calculation includes:
 
@@ -70,6 +71,7 @@ In the event the node determines a blind position change is required, it will em
   * <b>05</b> - Sun in window
   * <b>06</b> - Overcast conditions
   * <b>07</b> - Temperature forecast above threshold
+  * <b>08</b> - Low UV Index
 * <b>blindPositionReasonDesc</b>: description of rationale of the new position (as above)
 
 In addition, <b>msg.data</b> includes information useful for monitoring:
@@ -118,6 +120,8 @@ This node calculates the appropriate blind position to restrict direct sunlight 
   * temperatrurethresholdposition (optional)
   * cloudsthreshold (optional)
   * cloudsthresholdposition (optional)
+  * uvindexthreshold (optional)
+  * uvindexthresholdposition (optional)
   * night position (optional)
   * expiry period (optional)
   * opposite (optional)
@@ -125,6 +129,7 @@ This node calculates the appropriate blind position to restrict direct sunlight 
 * current weather conditions, such as that from forecastio or weather underground. <b>msg.topic</b> should be set to weather, and <b>msg.payload</b> either or both of the following properties:
   * maxtemp
   * clouds
+  * uvindex
 * a specified blind position (<b>msg.topic</b> set to blindPosition), which will remain in effect for the expiry period
   * channel
   * blindPosition

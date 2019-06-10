@@ -55,6 +55,10 @@
           <dd>extent to which sky is occuded by clouds</dd>
         </dl>
         <dl class="message-properties">
+          <dt>payload.uvindex <span class="property-type">number</span></dt>
+          <dd>current UV Index</dd>
+        </dl>
+        <dl class="message-properties">
           <dt>topic <span class="property-type">string</span></dt>
           <dd>set to <code>weather</code></dd>
         </dl>
@@ -72,22 +76,30 @@
     </ol>
 
   <h3>Outputs</h3>
-    <dl class="message-properties">
-      <dt>payload.channel <span class="property-type">string</span></dt>
-      <dd>the channel of the blind</dd>
-    </dl>
-    <dl class="message-properties">
-      <dt>payload.blindPosition <span class="property-type">number</span></dt>
-      <dd>the new position of the blind</dd>
-    </dl>
-    <dl class="message-properties">
-      <dt>payload.blindPositionReasonCode <span class="property-type">string</span></dt>
-      <dd>the rationale of the new position</dd>
-    </dl>
-    <dl class="message-properties">
-      <dt>payload.blindPositionReasonDesc <span class="property-type">string</span></dt>
-      <dd>decsription of the rationale of the new position</dd>
-    </dl>
+    <ol class="node-ports">
+      <li>payload
+        <dl class="message-properties">
+          <dt>payload.channel <span class="property-type">string</span></dt>
+          <dd>the channel of the blind</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>payload.blindPosition <span class="property-type">number</span></dt>
+          <dd>the new position of the blind</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>payload.blindPositionReasonCode <span class="property-type">string</span></dt>
+          <dd>the rationale of the new position</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>payload.blindPositionReasonDesc <span class="property-type">string</span></dt>
+          <dd>description of the rationale of the new position</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>topic <span class="property-type">string</span></dt>
+          <dd>set to <code>blind</code></dd>
+        </dl>
+      </li>
+    </ol>
 
   <h3>References</h3>
     <ul>
@@ -166,6 +178,14 @@
         <dl class="message-properties">
           <dt class="optional">payload.cloudsthresholdposition<span class="property-type">number</span></dt>
           <dd>blind position associated with cloud threshold</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt class="optional">payload.uvindexthreshold<span class="property-type">number</span></dt>
+          <dd>maximum UV Index for the calculation to be performed</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt class="optional">payload.uvindexthresholdposition<span class="property-type">number</span></dt>
+          <dd>blind position associated with UV Index threshold</dd>
         </dl>
         <dl class="message-properties">
           <dt class="optional">payload.nightposition<span class="property-type">number</span></dt>
@@ -249,22 +269,30 @@
     </ol>
 
   <h3>Outputs</h3>
-    <dl class="message-properties">
-      <dt>payload.channel <span class="property-type">string</span></dt>
-      <dd>the channel of the blind</dd>
-    </dl>
-    <dl class="message-properties">
-      <dt>payload.blindPosition <span class="property-type">number</span></dt>
-      <dd>the new position of the blind</dd>
-    </dl>
-    <dl class="message-properties">
-      <dt>payload.blindPositionReasonCode <span class="property-type">string</span></dt>
-      <dd>the rationale of the new position</dd>
-    </dl>
-    <dl class="message-properties">
-      <dt>payload.blindPositionReasonDesc <span class="property-type">string</span></dt>
-      <dd>decsription of the rationale of the new position</dd>
-    </dl>
+    <ol class="node-ports">
+      <li>payload
+        <dl class="message-properties">
+          <dt>payload.channel <span class="property-type">string</span></dt>
+          <dd>the channel of the blind</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>payload.blindPosition <span class="property-type">number</span></dt>
+          <dd>the new position of the blind</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>payload.blindPositionReasonCode <span class="property-type">string</span></dt>
+          <dd>the rationale of the new position</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>payload.blindPositionReasonDesc <span class="property-type">string</span></dt>
+          <dd>description of the rationale of the new position</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>topic <span class="property-type">string</span></dt>
+          <dd>set to <code>blind</code></dd>
+        </dl>
+      </li>
+    </ol>
 
   <h3>References</h3>
     <ul>
