@@ -114,16 +114,16 @@ This node calculates the appropriate blind position to restrict direct sunlight 
   * depth
   * altitudethreshold (optional)
   * increment
-  * max open (optional)
-  * max closed (optional)
+  * maxopen (optional)
+  * maxclosed (optional)
   * temperaturethreshold (optional)
   * temperatrurethresholdposition (optional)
   * cloudsthreshold (optional)
   * cloudsthresholdposition (optional)
   * uvindexthreshold (optional)
   * uvindexthresholdposition (optional)
-  * night position (optional)
-  * expiry period (optional)
+  * nightposition (optional)
+  * expiryperiod (optional)
   * opposite (optional)
 * the output of the <a href="https://www.npmjs.com/package/node-red-contrib-sunpos" target="_new">Sun Position</a> Node;
 * current weather conditions, such as that from forecastio or weather underground. <b>msg.topic</b> should be set to weather, and <b>msg.payload</b> either or both of the following properties:
@@ -133,7 +133,7 @@ This node calculates the appropriate blind position to restrict direct sunlight 
 * a specified blind position (<b>msg.topic</b> set to blindPosition), which will remain in effect for the expiry period
   * channel
   * blindPosition
-  * expiry period (optional)
+  * expiryperiod (optional)
 * reset blind Position (<b>msg.topic</b> set to blindPosition)
   * channel
   * reset
