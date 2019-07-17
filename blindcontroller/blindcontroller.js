@@ -127,7 +127,7 @@ module.exports = function(RED) {
         position < 0 ||
         position > 100 ||
         position % increment != 0)
-    )
+    );
   }
 
   /*
@@ -308,7 +308,12 @@ module.exports = function(RED) {
         );
         validMsg = false;
       }
-      if (invalidPosition(msg.payload.cloudsthresholdposition, msg.payload.increment)) {
+      if (
+        invalidPosition(
+          msg.payload.cloudsthresholdposition,
+          msg.payload.increment
+        )
+      ) {
         node.error(
           RED._("blindcontroller.error.blind.invalid-cloudsthresholdposition") +
             msg.payload.cloudsthresholdposition,
@@ -329,18 +334,30 @@ module.exports = function(RED) {
         );
         validMsg = false;
       }
-      if (invalidPosition(msg.payload.uvindexthresholdposition, msg.payload.increment)) {
+      if (
+        invalidPosition(
+          msg.payload.uvindexthresholdposition,
+          msg.payload.increment
+        )
+      ) {
         node.error(
-          RED._("blindcontroller.error.blind.invalid-uvindexthresholdposition") +
-            msg.payload.uvindexthresholdposition,
+          RED._(
+            "blindcontroller.error.blind.invalid-uvindexthresholdposition"
+          ) + msg.payload.uvindexthresholdposition,
           msg
         );
         validMsg = false;
       }
-      if (invalidPosition(msg.payload.temperaturethresholdposition, msg.payload.increment)) {
+      if (
+        invalidPosition(
+          msg.payload.temperaturethresholdposition,
+          msg.payload.increment
+        )
+      ) {
         node.error(
-          RED._("blindcontroller.error.blind.invalid-temperaturethresholdposition") +
-            msg.payload.temperaturethresholdposition,
+          RED._(
+            "blindcontroller.error.blind.invalid-temperaturethresholdposition"
+          ) + msg.payload.temperaturethresholdposition,
           msg
         );
         validMsg = false;
@@ -374,10 +391,7 @@ module.exports = function(RED) {
    */
   function validateBlindPositionMsg(node, msg) {
     var validMsg = true;
-    var blindProperty = [
-      "channel",
-      "blindPosition"
-    ];
+    var blindProperty = ["channel", "blindPosition"];
     var i;
 
     for (i in blindProperty) {
@@ -391,31 +405,32 @@ module.exports = function(RED) {
       }
     }
     if (validMsg) {
-    	if (
-            msg.payload.expiryperiod &&
-            (typeof msg.payload.expiryperiod != "number" ||
-              msg.payload.expiryperiod < 0)
-          ) {
-            node.error(
-              RED._("blindcontroller.error.blindPosition.invalid-expiryperiod") +
-                msg.payload.expiryperiod,
-              msg
-            );
-            validMsg = false;
-          }
+      if (
+        msg.payload.expiryperiod &&
+        (typeof msg.payload.expiryperiod != "number" ||
+          msg.payload.expiryperiod < 0)
+      ) {
+        node.error(
+          RED._("blindcontroller.error.blindPosition.invalid-expiryperiod") +
+            msg.payload.expiryperiod,
+          msg
+        );
+        validMsg = false;
+      }
 
-    	 if (
-            msg.payload.blindPosition &&
-            (typeof msg.payload.blindPosition != "number" ||
-              msg.payload.blindPosition < 0 || msg.payload.blindPosition > 100)
-          ) {
-            node.error(
-              RED._("blindcontroller.error.blindPosition.invalid-blindPosition") +
-                msg.payload.blindPosition,
-              msg
-            );
-            validMsg = false;
-          }
+      if (
+        msg.payload.blindPosition &&
+        (typeof msg.payload.blindPosition != "number" ||
+          msg.payload.blindPosition < 0 ||
+          msg.payload.blindPosition > 100)
+      ) {
+        node.error(
+          RED._("blindcontroller.error.blindPosition.invalid-blindPosition") +
+            msg.payload.blindPosition,
+          msg
+        );
+        validMsg = false;
+      }
     }
 
     return validMsg;
@@ -426,10 +441,7 @@ module.exports = function(RED) {
    */
   function validateBlindPositionResetMsg(node, msg) {
     var validMsg = true;
-    var blindProperty = [
-      "channel",
-      "reset"
-    ];
+    var blindProperty = ["channel", "reset"];
     var i;
 
     for (i in blindProperty) {
@@ -443,16 +455,14 @@ module.exports = function(RED) {
       }
     }
     if (validMsg) {
-    	if (
-    		 msg.payload.reset && typeof msg.payload.reset != "boolean"
-    		) {
-    		node.error(
-    		  RED._("blindcontroller.error.blindPosition.invalid-reset") +
-    			msg.payload.reset,
-    		  msg
-    		);
-    		validMsg = false;
-    		}
+      if (msg.payload.reset && typeof msg.payload.reset != "boolean") {
+        node.error(
+          RED._("blindcontroller.error.blindPosition.invalid-reset") +
+            msg.payload.reset,
+          msg
+        );
+        validMsg = false;
+      }
     }
 
     return validMsg;
@@ -555,8 +565,8 @@ module.exports = function(RED) {
     return sunInWindow;
   }
 
-  function getBlindPositionReasonDesc (blindPositionReasonCode) {
-    return RED._("blindcontroller.positionReason."+blindPositionReasonCode);
+  function getBlindPositionReasonDesc(blindPositionReasonCode) {
+    return RED._("blindcontroller.positionReason." + blindPositionReasonCode);
   }
 
   /*
@@ -630,20 +640,28 @@ module.exports = function(RED) {
                 if (isOvercast) {
                   blind.blindPosition = blind.cloudsthresholdposition;
                   blind.blindPositionReasonCode = "06";
-                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc("06");
+                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc(
+                    "06"
+                  );
                 } else if (isLowUV) {
                   blind.blindPosition = blind.uvindexthresholdposition;
                   blind.blindPositionReasonCode = "08";
-                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc("08");
+                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc(
+                    "08"
+                  );
                 } else {
                   blind.blindPosition = blind.maxopen;
                   blind.blindPositionReasonCode = "05";
-                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc("05");
+                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc(
+                    "05"
+                  );
                 }
               } else {
                 blind.blindPosition = blind.maxclosed;
                 blind.blindPositionReasonCode = "04";
-                blind.blindPositionReasonDesc = getBlindPositionReasonDesc("04");
+                blind.blindPositionReasonDesc = getBlindPositionReasonDesc(
+                  "04"
+                );
               }
               break;
             default:
@@ -652,10 +670,11 @@ module.exports = function(RED) {
                   ((blind.altitudethreshold &&
                     sunPosition.altitude >= blind.altitudethreshold) ||
                     !blind.altitudethreshold) &&
-                  !isOvercast && !isLowUV
+                  !isOvercast &&
+                  !isLowUV
                 ) {
                   var height =
-                    Math.tan(sunPosition.altitude * Math.PI / 180) *
+                    Math.tan((sunPosition.altitude * Math.PI) / 180) *
                     blind.depth;
                   if (height <= blind.bottom) {
                     blind.blindPosition = blind.maxclosed;
@@ -680,25 +699,35 @@ module.exports = function(RED) {
                         : blind.blindPosition;
                   }
                   blind.blindPositionReasonCode = "05";
-                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc("05");
+                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc(
+                    "05"
+                  );
                 } else if (
                   blind.altitudethreshold &&
                   sunPosition.altitude < blind.altitudethreshold
                 ) {
                   blind.blindPositionReasonCode = "03";
-                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc("03");
+                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc(
+                    "03"
+                  );
                 } else if (isOvercast) {
                   blind.blindPosition = blind.cloudsthresholdposition;
                   blind.blindPositionReasonCode = "06";
-                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc("06");
+                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc(
+                    "06"
+                  );
                 } else if (isLowUV) {
                   blind.blindPosition = blind.uvindexthresholdposition;
                   blind.blindPositionReasonCode = "08";
-                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc("08");
-}
+                  blind.blindPositionReasonDesc = getBlindPositionReasonDesc(
+                    "08"
+                  );
+                }
               } else {
                 blind.blindPositionReasonCode = "04";
-                blind.blindPositionReasonDesc = getBlindPositionReasonDesc("04");
+                blind.blindPositionReasonDesc = getBlindPositionReasonDesc(
+                  "04"
+                );
               }
               if (weather) {
                 blind.weather = weather;
@@ -746,7 +775,9 @@ module.exports = function(RED) {
       calcBlindPosition(blinds[i], sunPosition, weather);
 
       blinds[i].logicalBlindPosition = blinds[i].blindPosition;
-      blinds[i].blindPosition = blinds[i].opposite ? 100 - blinds[i].blindPosition : blinds[i].blindPosition;
+      blinds[i].blindPosition = blinds[i].opposite
+        ? 100 - blinds[i].blindPosition
+        : blinds[i].blindPosition;
 
       if (
         blinds[i].blindPosition != previousBlindPosition ||
@@ -771,9 +802,13 @@ module.exports = function(RED) {
    * prepare the message and the expiry timestamp.
    */
   function setPosition(node, msg, blind) {
-    blind.blindPosition = blind.opposite ? 100 - msg.payload.blindPosition : msg.payload.blindPosition;
+    blind.blindPosition = blind.opposite
+      ? 100 - msg.payload.blindPosition
+      : msg.payload.blindPosition;
     blind.logicalBlindPosition = msg.payload.blindPosition;
-    blind.blindPositionExpiry = calcBlindPositionExpiry(msg.payload.expiryperiod ? msg.payload.expiryperiod : blind.expiryperiod);
+    blind.blindPositionExpiry = calcBlindPositionExpiry(
+      msg.payload.expiryperiod ? msg.payload.expiryperiod : blind.expiryperiod
+    );
     blind.blindPositionReasonCode = "01";
     blind.blindPositionReasonDesc = getBlindPositionReasonDesc("01");
     msg.payload = blind;
@@ -810,10 +845,18 @@ module.exports = function(RED) {
       case "boolean":
         return val;
       case "string":
-        switch(val.toLowerCase().trim()){
-          case "true": case "yes": case "1": return true;
-          case "false": case "no": case "0": case null: return false;
-          default: return Boolean(string);
+        switch (val.toLowerCase().trim()) {
+          case "true":
+          case "yes":
+          case "1":
+            return true;
+          case "false":
+          case "no":
+          case "0":
+          case null:
+            return false;
+          default:
+            return Boolean(string);
         }
     }
   }
@@ -861,10 +904,10 @@ module.exports = function(RED) {
             runCalc(node, msg, blinds, sunPosition, weather);
             break;
           case "blindPosition":
-			      setPosition(node, msg, blinds[msg.payload.channel]);
+            setPosition(node, msg, blinds[msg.payload.channel]);
             break;
-		      case "blindPositionReset":
-      			resetPosition(blinds[msg.payload.channel]);
+          case "blindPositionReset":
+            resetPosition(blinds[msg.payload.channel]);
             runCalc(node, msg, blinds, sunPosition, weather);
             break;
           case "blind":
@@ -899,15 +942,21 @@ module.exports = function(RED) {
             );
             blinds[channel].temperaturethresholdposition = defaultIfUndefined(
               msg.payload.temperaturethresholdposition,
-              Number(RED._("blindcontroller.placeholder.temperaturethresholdposition"))
+              Number(
+                RED._(
+                  "blindcontroller.placeholder.temperaturethresholdposition"
+                )
+              )
             );
             blinds[channel].cloudsthresholdposition = defaultIfUndefined(
               msg.payload.cloudsthresholdposition,
-              Number(RED._("blindcontroller.placeholder.cloudsthresholdposition"))
+              Number(
+                RED._("blindcontroller.placeholder.cloudsthresholdposition")
+              )
             );
             blinds[channel].uvindexthresholdposition = defaultIfUndefined(
-                msg.payload.uvindexthresholdposition,
-                RED._("blindcontroller.placeholder.uvindexthresholdposition")
+              msg.payload.uvindexthresholdposition,
+              RED._("blindcontroller.placeholder.uvindexthresholdposition")
             );
             blinds[channel].expiryperiod = defaultIfUndefined(
               msg.payload.expiryperiod,
@@ -1056,7 +1105,7 @@ module.exports = function(RED) {
           case "blindPosition":
             setPosition(node, msg, blinds[msg.payload.channel]);
             break;
-		      case "blindPositionReset":
+          case "blindPositionReset":
             resetPosition(blinds[msg.payload.channel]);
             runCalc(node, msg, blinds, sunPosition, weather);
             break;
@@ -1077,11 +1126,15 @@ module.exports = function(RED) {
         }
 
         node.status({
-          fill: blinds[channel].blindPositionReasonCode == "01" ? "red" : (sunPosition.sunInSky ? "yellow" : "blue"),
+          fill:
+            blinds[channel].blindPositionReasonCode == "01"
+              ? "red"
+              : sunPosition.sunInSky
+              ? "yellow"
+              : "blue",
           shape: blinds[channel].logicalBlindPosition == 100 ? "dot" : "ring",
           text: blinds[channel].logicalBlindPosition + "%"
         });
-
       }
     });
   }
