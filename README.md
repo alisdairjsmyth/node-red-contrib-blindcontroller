@@ -50,9 +50,9 @@ In Summer mode, the node calculates the appropriate blind position to restrict t
 
 * determination of whether direct sunlight is entering the room based on the orientation of the blind and the azimuth of the sun - taking into account the negative and positive offset properties; and
   ![sunInWindow](./docs/sunInWindow.jpg)
-* dimensions of the window and the current altitude of the sun.
+* dimensions of the window and the current altitude of the sun.  The node is agnostic of unit of measure, though the same UOM should be used for all dimensions.
   ![sunInRoom](./docs/sunInRoom.jpg)
-* consideration of weather conditions against defined thresholds
+* consideration of weather conditions against defined thresholds.  As per window dimensions, weather conditions are also agnostic of unit of measure and used consistently. 
 
 In Winter mode, the node calculates the appropriate blind position to maximise the amount of direct sunlight entering the room. This calculation is based on whether direct sunlight is entering the room based on the orientation of the blind and the azimuth of the sun - taking into account the negative and positive offset properties. When the sun is in the window the blind will positioned in the <b>max open</b> setting, otherwise it will be positioned in the <b>max closed</b> setting. In overcast conditions the blind will be positioned in the <b>max closed</b> setting.
 
