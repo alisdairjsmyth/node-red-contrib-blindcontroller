@@ -619,9 +619,9 @@ module.exports = function(RED) {
       weather.clouds && blind.cloudsthreshold
         ? weather.clouds > blind.cloudsthreshold
         : false;
-    var isLowUV =
+    var isHighUV =
       weather.uvindex && blind.uvindexthreshold
-        ? weather.uvindex < blind.uvindexthreshold
+        ? weather.uvindex > blind.uvindexthreshold
         : false;
     var now = new Date();
 
@@ -643,7 +643,7 @@ module.exports = function(RED) {
                   blind.blindPositionReasonDesc = getBlindPositionReasonDesc(
                     "06"
                   );
-                } else if (isLowUV) {
+                } else if (isHighUV) {
                   blind.blindPosition = blind.uvindexthresholdposition;
                   blind.blindPositionReasonCode = "08";
                   blind.blindPositionReasonDesc = getBlindPositionReasonDesc(
@@ -671,7 +671,7 @@ module.exports = function(RED) {
                     sunPosition.altitude >= blind.altitudethreshold) ||
                     !blind.altitudethreshold) &&
                   !isOvercast &&
-                  !isLowUV
+                  !isHighUV
                 ) {
                   var height =
                     Math.tan((sunPosition.altitude * Math.PI) / 180) *
@@ -716,7 +716,7 @@ module.exports = function(RED) {
                   blind.blindPositionReasonDesc = getBlindPositionReasonDesc(
                     "06"
                   );
-                } else if (isLowUV) {
+                } else if (isHighUV) {
                   blind.blindPosition = blind.uvindexthresholdposition;
                   blind.blindPositionReasonCode = "08";
                   blind.blindPositionReasonDesc = getBlindPositionReasonDesc(

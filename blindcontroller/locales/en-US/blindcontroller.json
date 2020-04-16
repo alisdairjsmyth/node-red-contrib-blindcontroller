@@ -121,7 +121,7 @@
             "05" : "Sun in window",
             "06" : "Overcast conditions",
             "07" : "Temperature forecast above threshold",
-            "08" : "UV Index below threshold"
+            "08" : "UV Index above threshold"
         }
     }
 }
