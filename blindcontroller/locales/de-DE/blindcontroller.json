@@ -1,0 +1,127 @@
+{
+    "blindcontroller" : {
+        "status" : {
+        },
+        "label" : {
+            "channel"              : "Kanal",
+            "dimensions"           : "Dimensionen",
+            "top"                  : "Oben",
+            "bottom"               : "Unten",
+            "depth"                : "Tiefe",
+            "mode"                 : "Modus",
+            "orientation"          : "Orientierung",
+            "noffset"              : "- Abweichung",
+            "poffset"              : "+ Abweichung",
+            "positions"            : "Positionen",
+            "increment"            : "Schrittweite",
+            "maxopen"              : "Max geöffnet",
+            "maxclosed"            : "Max geschlossen",
+            "nightposition"        : "Nachtposition",
+            "opposite"             : "0 ist geschlossen",
+            "altitude"             : "Höhe der Sonne",
+            "altitudethreshold"    : "Die Position der Sonne ignorieren, bis die Höhe größer ist als",
+            "temperature"          : "Temperatur",
+            "temperaturethreshold" : "Wenn die Temperatur größer ist als",
+            "temperaturethresholdposition"
+                                   : "stelle auf",
+            "clouds"               : "Wolkendichte",
+            "cloudsthreshold"      : "Wenn die Wolkendichte größer ist als",
+            "cloudsthresholdposition"
+                                   : "stelle auf",
+            "uvindex"              : "UV Index",
+            "uvindexthreshold"     : "Wenn der UV Index größer ist als",
+            "uvindexthresholdposition"
+                                   : "stelle auf",
+            "name"                 : "Name",
+            "manual"               : "Manuell",
+            "expiryperiod"         : "Manuell gesetzte Positionen laufen ab nach (Minuten)"
+        },
+        "placeholder" : {
+            "mode"                 : "Sommer",
+            "channel"              : "1",
+            "orientation"          : "0",
+            "noffset"              : "90",
+            "poffset"              : "90",
+            "top"                  : "1",
+            "bottom"               : "1",
+            "depth"                : "1",
+            "altitudethreshold"    : "0",
+            "increment"            : "1",
+            "maxopen"              : "0",
+            "maxclosed"            : "100",
+            "temperaturethreshold" : "0",
+            "temperaturethresholdposition" :
+                                     "100",
+            "cloudsthreshold"      : "0",
+            "cloudsthresholdposition" :
+                                     "0",
+            "uvindexthreshold"     : "0",
+            "uvindexthresholdposition"
+                                   : "100",
+            "name"                 : "Name",
+            "nightposition"        : "100",
+            "expiryperiod"         : "120",
+            "opposite"             : "false"
+        },
+        "error" : {
+            "invalid-msg-payload"  : "Ungültige msg.payload",
+            "unknown-msg-topic"    : "Unbekanntes msg.topic: ",
+            "sunPosition" : {
+                "missing-property"          : "Eigenschaft fehlt: ",
+                "invalid-sunInSky"          : "Eigenschaft sunInSky muss vom Typ boolean sein: ",
+                "invalid-altitude"          : "Eigenschaft Höhe muss numerisch sein und kleiner als 90: ",
+                "invalid-azimuth"           : "Eigenschaft Azimuth muss numerisch sein und zwischen 0 und 360 liegen: "
+            },
+            "blind" : {
+                "missing-property"          : "Eigenschaft fehlt: ",
+                "invalid-orientation"       : "Eigenschaft Orientierung muss numerisch sein und zwischen 0 und 360 liegen: ",
+                "invalid-mode"              : "Ungültiger Modus: ",
+                "invalid-noffset"           : "Negative Abweichung muss numerisch sein und zwischen 0 und 90 liegen: ",
+                "invalid-poffset"           : "Positive Abweichung muss numerisch sein und zwischen 0 und 90 liegen: ",
+                "invalid-top"               : "Oben muss numerisch sein und größer als 0: ",
+                "invalid-bottom"            : "Unten muss numerisch sein und größer oder gleich 0: ",
+                "invalid-depth"             : "Tiefe muss numerisch sein und größer oder gleich 0: ",
+                "invalid-dimensions"        : "Oben muss größer sein als Unten: ",
+                "invalid-increment"         : "Schrittweite muss zwischen 0 und 100 liegen und ein Teiler von 100 sein: ",
+                "invalid-maxopen"           : "Die Position Max geöffnet muss zwischen 0 und 100 liegen und ein Vielfaches der Schrittweite sein: ",
+                "invalid-maxclosed"         : "Die Position Max geschlossen muss zwischen 0 und 100 liegen und ein Vielfaches der Schrittweite sein: ",
+                "invalid-max-settings"      : "Die Position Max geöffnet muss kleiner als die Position Max geschlossen sein: ",
+                "invalid-altitudethreshold" : "Höhe der Sonne muss numerisch sein und zwischen 0 und 90 liegen: ",
+                "invalid-cloudsthreshold"   : "Wolkendichte muss numerisch sein und zwischen 0 und 1 liegen: ",
+                "invalid-cloudsthresholdposition"
+                                            : "Die Position Wolkendichte muss zwischen 0 und 100 liegen und ein Vielfaches der Schrittweite sein: ",
+                "invalid-uvindexthreshold"  : "UV Index muss numerisch sein und zwischen 0 und 20 liegen: ",
+                "invalid-uvindexthresholdposition"
+                                            : "Die Position UV Index muss zwischen 0 und 100 liegen und ein Vielfaches der Schrittweite sein: ",
+                "invalid-temperaturethresholdposition"
+                                            : "Die Position Temperatur muss zwischen 0 und 100 liegen und ein Vielfaches der Schrittweite sein: ",
+                "invalid-nightposition"     : "Die Nachtposition muss zwischen 0 und 100 liegen und ein Vielfaches der Schrittweite sein: ",
+                "invalid-expiryperiod"      : "Die Ablaufzeit muss größer als 0 sein: "
+            },
+            "blindPosition" : {
+                "missing-property"          : "Eigenschaft fehlt: ",
+                "invalid-blindPosition"     : "Ungültige Rollladenposition: ",
+                "invalid-expiryperiod"      : "Die Ablaufzeit muss größer als 0 sein: ",
+                "invalid-reset"             : "Reset muss vom Typ boolean sein: "
+            },
+            "weather" : {
+                "invalid-clouds"            : "Ungültiger Wert für Wolkendecke: ",
+                "invalid-uvindex"           : "Ungültiger UV Index: "
+            },
+            "mode" : {
+                "missing-property"          : "Eigenschaft fehlt: ",
+                "invalid-mode"              : "Ungültiger Modus: "
+            }
+        },
+        "positionReason" : {
+            "01" : "Manull festgelegt",
+            "02" : "Sonne unter Horizont",
+            "03" : "Sonne unter Höhenbeschränkung",
+            "04" : "Sonne nicht im Fenster",
+            "05" : "Sun im Fenster",
+            "06" : "Starke Wolkendecke",
+            "07" : "Vorhergesagte Temperatur über Temperaturbeschränkung",
+            "08" : "UV Index über Grenzwert"
+        }
+    }
+}
