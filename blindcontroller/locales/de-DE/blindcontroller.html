@@ -1,118 +1,118 @@
-<script type="text/x-red" data-help-name="blindcontroller">
-  <p>This node controls roller blind height based on the position of the sun in the sky.</p>
+<!-- <script type="text/x-red" data-help-name="blindcontroller"> -->
+  <p>Dieser Node steuert die Behanghöhe von Rollläden in Abhängigkeit vom Sonnenstand.</p>
 
-  <h3>Inputs</h3>
+  <h3>Eingehende Nachrichten</h3>
     <ol class="node-ports">
-      <li>Sun Position
+      <li>Sonnenstand
         <dl class="message-properties">
-          <dt>payload <span class="property-type">Object</span></dt>
-          <dd>the output of the Sun Position node</dd>
+          <dt>payload <span class="property-type">Objekt</span></dt>
+          <dd>Die Ausgabe des Sun Position node</dd>
         </dl>
         <dl class="message-properties">
-          <dt>topic <span class="property-type">string</span></dt>
-          <dd>set to <code>sun</code></dd>
-        </dl>
-      </li>
-      <li>Blind Position
-        <dl class="message-properties">
-          <dt class="optional">payload.channel <span class="property-type">string</span></dt>
-          <dd>the channel of the blind</dd>
-        </dl>
-        <dl class="message-properties">
-          <dt>payload.blindPosition <span class="property-type">number</span></dt>
-          <dd>the new position of the blind</dd>
-        </dl>
-        <dl class="message-properties">
-          <dt class="optional">payload.expiryperiod<span class="property-type">number</span></dt>
-          <dd>the duration in minutes a manual setting will remain is place</dd>
-        </dl>
-        <dl class="message-properties">
-          <dt>topic <span class="property-type">string</span></dt>
-          <dd>set to <code>blindPosition</code></dd>
+          <dt>topic <span class="property-type">Text</span></dt>
+          <dd>festgelegt auf <code>sun</code></dd>
         </dl>
       </li>
-      <li>Blind Position Reset
+      <li>Behanghöhe der Rolllade
         <dl class="message-properties">
-          <dt class="optional">payload.channel <span class="property-type">string</span></dt>
-          <dd>the channel of the blind</dd>
+          <dt class="optional">payload.channel <span class="property-type">Text</span></dt>
+          <dd>Der Kanal der Rolllade.</dd>
         </dl>
         <dl class="message-properties">
-          <dt>payload.reset<span class="property-type">boolean</span></dt>
-          <dd>indicator to expire manual position</dd>
+          <dt>payload.blindPosition <span class="property-type">Zahl</span></dt>
+          <dd>Die neue Behanghöhe (zwischen 0 und 100).</dd>
         </dl>
         <dl class="message-properties">
-          <dt>topic <span class="property-type">string</span></dt>
-          <dd>set to <code>blindPositionReset</code></dd>
+          <dt class="optional">payload.expiryperiod<span class="property-type">Zahl</span></dt>
+          <dd>Die Zeit in Minuten, für welche die manuelle Position gültig ist.</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>topic <span class="property-type">Text</span></dt>
+          <dd>festgelegt auf <code>blindPosition</code></dd>
+        </dl>
+      </li>
+      <li>Zurücksetzen der Rolllade
+        <dl class="message-properties">
+          <dt class="optional">payload.channel <span class="property-type">Text</span></dt>
+          <dd>Der Kanal der Rolllade.</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>payload.reset<span class="property-type">Wahrheitswert</span></dt>
+          <dd>Merkmal, um die manuelle Position zurückzusetzen.</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>topic <span class="property-type">Text</span></dt>
+          <dd>festgelegt auf <code>blindPositionReset</code></dd>
         </dl>
       </li>
       <li>Weather
         <dl class="message-properties">
-          <dt>payload.maxtemp <span class="property-type">number</span></dt>
-          <dd>the forecasted max temperature</dd>
+          <dt>payload.maxtemp <span class="property-type">Zahl</span></dt>
+          <dd>Die vorhergesagte maximale Temperatur.</dd>
         </dl>
         <dl class="message-properties">
-          <dt>payload.clouds <span class="property-type">number</span></dt>
-          <dd>extent to which sky is occuded by clouds</dd>
+          <dt>payload.clouds <span class="property-type">Zahl</span></dt>
+          <dd>Dichte der Wolkendecke (zwischen 0 und 1).</dd>
         </dl>
         <dl class="message-properties">
-          <dt>payload.uvindex <span class="property-type">number</span></dt>
-          <dd>current UV Index</dd>
+          <dt>payload.uvindex <span class="property-type">Zahl</span></dt>
+          <dd>Der aktuelle UV Index.</dd>
         </dl>
         <dl class="message-properties">
-          <dt>topic <span class="property-type">string</span></dt>
-          <dd>set to <code>weather</code></dd>
+          <dt>topic <span class="property-type">Text</span></dt>
+          <dd>festgelegt auf <code>weather</code></dd>
         </dl>
       </li>
-      <li>Mode
+      <li>Modus
         <dl class="message-properties">
-          <dt>payload.mode <span class="property-type">string</span></dt>
-          <dd>the mode of operation (Summer or Winter)</dd>
+          <dt>payload.mode <span class="property-type">Text</span></dt>
+          <dd>Der Modus der Steuerung (Sommer oder Winter)</dd>
         </dl>
         <dl class="message-properties">
-          <dt>topic <span class="property-type">string</span></dt>
-          <dd>set to <code>mode</code></dd>
+          <dt>topic <span class="property-type">Text</span></dt>
+          <dd>festgelegt auf <code>mode</code></dd>
         </dl>
       </li>
     </ol>
 
-  <h3>Outputs</h3>
+  <h3>Gesendete Nachrichten</h3>
     <ol class="node-ports">
       <li>payload
         <dl class="message-properties">
-          <dt>payload.channel <span class="property-type">string</span></dt>
-          <dd>the channel of the blind</dd>
+          <dt>payload.channel <span class="property-type">Text</span></dt>
+          <dd>Der Kanal der Rolllade.</dd>
         </dl>
         <dl class="message-properties">
-          <dt>payload.blindPosition <span class="property-type">number</span></dt>
-          <dd>the new position of the blind</dd>
+          <dt>payload.blindPosition <span class="property-type">Zahl</span></dt>
+          <dd>Die neue Behanghöhe der Rolllade.</dd>
         </dl>
         <dl class="message-properties">
-          <dt>payload.blindPositionReasonCode <span class="property-type">string</span></dt>
-          <dd>the rationale of the new position</dd>
+          <dt>payload.blindPositionReasonCode <span class="property-type">Text</span></dt>
+          <dd>Der Grund für den neuen Wert als Zahlencode.</dd>
         </dl>
         <dl class="message-properties">
-          <dt>payload.blindPositionReasonDesc <span class="property-type">string</span></dt>
-          <dd>description of the rationale of the new position</dd>
+          <dt>payload.blindPositionReasonDesc <span class="property-type">Text</span></dt>
+          <dd>Beschreibung des Grundes für die neue Position.</dd>
         </dl>
         <dl class="message-properties">
-          <dt>topic <span class="property-type">string</span></dt>
-          <dd>set to <code>blind</code></dd>
+          <dt>topic <span class="property-type">Text</span></dt>
+          <dd>festgelegt auf <code>blind</code></dd>
         </dl>
       </li>
     </ol>
 
-  <h3>References</h3>
+  <h3>Referenzen</h3>
     <ul>
-      <li><a href="https://github.com/alisdairjsmyth/node-red-contrib-blindcontroller">Github</a> - the nodes github repository</li>
-      <li><a href="https://www.npmjs.com/package/node-red-contrib-sunpos">sunpos node</a> - node that calculates sun position</li>
-      <li><a href="https://www.npmjs.com/package/node-red-node-darksky">darksky node</a> - node that gets the weather forecast from DarkSky</li>
+      <li><a href="https://github.com/alisdairjsmyth/node-red-contrib-blindcontroller">Github</a> - das Github Repository des nodes</li>
+      <li><a href="https://www.npmjs.com/package/node-red-contrib-sunpos">sunpos node</a> - ein node der den Sonnenstand berechnet</li>
+      <li><a href="https://www.npmjs.com/package/node-red-node-darksky">darksky node</a> - ein node der die Wettervorhersage von DarkSky holt</li>
     </ul>
 </script>
 
-<script type="text/x-red" data-help-name="multiblindcontroller">
+<!-- <script type="text/x-red" data-help-name="multiblindcontroller"> -->
   <p>This node controls the height of mutliple roller blinds based on the position of the sun in the sky.</p>
 
-  <h3>Inputs</h3>
+  <h3>Eingehende Nachrichten</h3>
     <ol class="node-ports">
       <li>Blind
         <dl class="message-properties">
@@ -197,111 +197,111 @@
         </dl>
         <dl class="message-properties">
           <dt>topic <span class="property-type">string</span></dt>
-          <dd>set to <code>blind</code></dd>
+          <dd>festgelegt auf <code>blind</code></dd>
         </dl>
       </li>
-      <li>Sun Position
+      <li>Sonnenstand
         <dl class="message-properties">
-          <dt>payload <span class="property-type">Object</span></dt>
-          <dd>the output of the Sun Position node</dd>
+          <dt>payload <span class="property-type">Objekt</span></dt>
+          <dd>Die Ausgabe des Sun Position node</dd>
         </dl>
         <dl class="message-properties">
-          <dt>topic <span class="property-type">string</span></dt>
-          <dd>set to <code>sun</code></dd>
-        </dl>
-      </li>
-      <li>Blind Position
-        <dl class="message-properties">
-          <dt>payload.channel <span class="property-type">string</span></dt>
-          <dd>the channel of the blind</dd>
-        </dl>
-        <dl class="message-properties">
-          <dt>payload.blindPosition <span class="property-type">number</span></dt>
-          <dd>the new position of the blind</dd>
-        </dl>
-        <dl class="message-properties">
-          <dt class="optional">payload.expiryperiod<span class="property-type">number</span></dt>
-          <dd>the duration in minutes a manual setting will remain is place</dd>
-        </dl>
-        <dl class="message-properties">
-          <dt>topic <span class="property-type">string</span></dt>
-          <dd>set to <code>blindPosition</code></dd>
+          <dt>topic <span class="property-type">Text</span></dt>
+          <dd>festgelegt auf <code>sun</code></dd>
         </dl>
       </li>
-      <li>Blind Position Reset
+      <li>Behanghöhe der Rolllade
         <dl class="message-properties">
-          <dt>payload.channel <span class="property-type">string</span></dt>
-          <dd>the channel of the blind</dd>
+          <dt class="optional">payload.channel <span class="property-type">Text</span></dt>
+          <dd>Der Kanal der Rolllade.</dd>
         </dl>
         <dl class="message-properties">
-          <dt>payload.reset<span class="property-type">number</span></dt>
-          <dd>the duration in minutes a manual setting will remain is place</dd>
+          <dt>payload.blindPosition <span class="property-type">Zahl</span></dt>
+          <dd>Die neue Behanghöhe (zwischen 0 und 100).</dd>
         </dl>
         <dl class="message-properties">
-          <dt>topic <span class="property-type">string</span></dt>
-          <dd>set to <code>blindPositionReset</code></dd>
+          <dt class="optional">payload.expiryperiod<span class="property-type">Zahl</span></dt>
+          <dd>Die Zeit in Minuten, für welche die manuelle Position gültig ist.</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>topic <span class="property-type">Text</span></dt>
+          <dd>festgelegt auf <code>blindPosition</code></dd>
+        </dl>
+      </li>
+      <li>Zurücksetzen der Rolllade
+        <dl class="message-properties">
+          <dt class="optional">payload.channel <span class="property-type">Text</span></dt>
+          <dd>Der Kanal der Rolllade.</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>payload.reset<span class="property-type">Wahrheitswert</span></dt>
+          <dd>Merkmal, um die manuelle Position zurückzusetzen.</dd>
+        </dl>
+        <dl class="message-properties">
+          <dt>topic <span class="property-type">Text</span></dt>
+          <dd>festgelegt auf <code>blindPositionReset</code></dd>
         </dl>
       </li>
       <li>Weather
         <dl class="message-properties">
-          <dt>payload.maxtemp <span class="property-type">number</span></dt>
-          <dd>the forecasted max temperature</dd>
+          <dt>payload.maxtemp <span class="property-type">Zahl</span></dt>
+          <dd>Die vorhergesagte maximale Temperatur.</dd>
         </dl>
         <dl class="message-properties">
-          <dt>payload.clouds <span class="property-type">number</span></dt>
-          <dd>extent to which sky is occuded by clouds</dd>
+          <dt>payload.clouds <span class="property-type">Zahl</span></dt>
+          <dd>Dichte der Wolkendecke (zwischen 0 und 1).</dd>
         </dl>
         <dl class="message-properties">
-          <dt>payload.uvindex <span class="property-type">number</span></dt>
-          <dd>current UV Index</dd>
+          <dt>payload.uvindex <span class="property-type">Zahl</span></dt>
+          <dd>Der aktuelle UV Index.</dd>
         </dl>
         <dl class="message-properties">
-          <dt>topic <span class="property-type">string</span></dt>
-          <dd>set to <code>weather</code></dd>
+          <dt>topic <span class="property-type">Text</span></dt>
+          <dd>festgelegt auf <code>weather</code></dd>
         </dl>
       </li>
-      <li>Mode
+      <li>Modus
         <dl class="message-properties">
-          <dt>payload.mode <span class="property-type">string</span></dt>
-          <dd>the mode of operation (Summer or Winter)</dd>
+          <dt>payload.mode <span class="property-type">Text</span></dt>
+          <dd>Der Modus der Steuerung (Sommer oder Winter)</dd>
         </dl>
         <dl class="message-properties">
-          <dt>topic <span class="property-type">string</span></dt>
-          <dd>set to <code>mode</code></dd>
+          <dt>topic <span class="property-type">Text</span></dt>
+          <dd>festgelegt auf <code>mode</code></dd>
         </dl>
       </li>
     </ol>
 
-  <h3>Outputs</h3>
+    <h3>Gesendete Nachrichten</h3>
     <ol class="node-ports">
       <li>payload
         <dl class="message-properties">
-          <dt>payload.channel <span class="property-type">string</span></dt>
-          <dd>the channel of the blind</dd>
+          <dt>payload.channel <span class="property-type">Text</span></dt>
+          <dd>Der Kanal der Rolllade.</dd>
         </dl>
         <dl class="message-properties">
-          <dt>payload.blindPosition <span class="property-type">number</span></dt>
-          <dd>the new position of the blind</dd>
+          <dt>payload.blindPosition <span class="property-type">Zahl</span></dt>
+          <dd>Die neue Behanghöhe der Rolllade.</dd>
         </dl>
         <dl class="message-properties">
-          <dt>payload.blindPositionReasonCode <span class="property-type">string</span></dt>
-          <dd>the rationale of the new position</dd>
+          <dt>payload.blindPositionReasonCode <span class="property-type">Text</span></dt>
+          <dd>Der Grund für den neuen Wert als Zahlencode.</dd>
         </dl>
         <dl class="message-properties">
-          <dt>payload.blindPositionReasonDesc <span class="property-type">string</span></dt>
-          <dd>description of the rationale of the new position</dd>
+          <dt>payload.blindPositionReasonDesc <span class="property-type">Text</span></dt>
+          <dd>Beschreibung des Grundes für die neue Position.</dd>
         </dl>
         <dl class="message-properties">
-          <dt>topic <span class="property-type">string</span></dt>
-          <dd>set to <code>blind</code></dd>
+          <dt>topic <span class="property-type">Text</span></dt>
+          <dd>festgelegt auf <code>blind</code></dd>
         </dl>
       </li>
     </ol>
 
-  <h3>References</h3>
+    <h3>Referenzen</h3>
     <ul>
-      <li><a href="https://github.com/alisdairjsmyth/node-red-contrib-blindcontroller">Github</a> - the nodes github repository</li>
-      <li><a href="https://www.npmjs.com/package/node-red-contrib-sunpos">sunpos node</a> - node that calculates sun position</li>
-      <li><a href="https://www.npmjs.com/package/node-red-node-darksky">darksky node</a> - node that gets the weather forecast from DarkSky</li>
+      <li><a href="https://github.com/alisdairjsmyth/node-red-contrib-blindcontroller">Github</a> - das Github Repository des nodes</li>
+      <li><a href="https://www.npmjs.com/package/node-red-contrib-sunpos">sunpos node</a> - ein node der den Sonnenstand berechnet</li>
+      <li><a href="https://www.npmjs.com/package/node-red-node-darksky">darksky node</a> - ein node der die Wettervorhersage von DarkSky holt</li>
     </ul>
 </script>
